@@ -1,0 +1,70 @@
+<div id="list_custom_script_templates_div">
+ <a><%= t(:Listing_custom_script_templates) %></a>
+
+  <table id="custom_script_templates-table">
+  <thead>
+    <tr>
+			<th rowspan="2" scope="col" class="head-left" style="vertical-align:middle"><%=t :Operations %></th>
+      <th rowspan="2" scope="col" class="head" style="vertical-align:middle"><%=t :Name %></th>
+      <th rowspan="2" scope="col" class="head" style="vertical-align:middle"><%=t :Cron_body %></th>
+			<th colspan="5" scope="col" class="head" style="text-align:center"><%=t :Cron_info %></th>
+      <th rowspan="2" scope="col" class="head-left" style="vertical-align:middle"><%=t :Notes %></th>
+    </tr>
+    <tr>
+      <th scope="col" class="head"><%=t :Cron_minute %></th>
+      <th scope="col" class="head"><%=t :Cron_hour %></th>
+      <th scope="col" class="head"><%=t :Cron_day %></th>
+      <th scope="col" class="head"><%=t :Cron_month %></th>
+      <th scope="col" class="head"><%=t :Cron_dayweek %></th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <td colspan="2" class="foot-left">&nbsp;</td>
+      <td colspan="5" class="foot">&nbsp;</td>
+      <td colspan="2" class="foot-right">&nbsp;</td>
+    </tr>
+  </tfoot>
+  <tbody>
+		<% @custom_script_templates.each do |custom_script_template| %>
+		<tr>
+      <td style="width:32px;">
+        <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+              :method => :get,
+              :url => edit_wisp_access_point_template_custom_script_template_path(@wisp, @access_point_template, custom_script_template),
+              :title => t(:Edit_info),
+              :update => { :success => "list_custom_script_templates_div", :failure => "list_custom_script_templates_div" }
+
+        %>
+        <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), 
+              :method => :delete,
+              :url => wisp_access_point_template_custom_script_template_path(@wisp, @access_point_template, custom_script_template),
+              :title => t(:Destroy_custom_script_template),
+              :confirm => t(:Are_you_sure_custom_script_template_destroy),
+              :update => { :success => "list_custom_script_templates_div", :failure => "list_custom_script_templates_div" }
+
+        %>
+      </td>
+    	<td rowspan="1"><%=h custom_script_template.name %></td>
+	  	<td><%= link_to image_tag("script.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+		                    :title => h(custom_script_template.body)
+		       %>
+			</td>
+			<td rowspan="1"><%=h custom_script_template.cron_minute %></td>
+      <td rowspan="1"><%=h custom_script_template.cron_hour %></td>
+     	<td rowspan="1"><%=h custom_script_template.cron_day %></td>
+			<td rowspan="1"><%=h custom_script_template.cron_month %></td>
+			<td rowspan="1"><%=h custom_script_template.cron_dayweek %></td>
+      <td>
+			<% if (custom_script_template.notes.nil? or custom_script_template.notes.length == 0) %>
+	        &nbsp;
+      <% else %>
+	      	<%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+	                    :title => h(custom_script_template.notes)
+					%>
+      <% end %>
+			</td>
+		<% end %>
+  </tbody>
+  </table>
+</div>

@@ -1,0 +1,35 @@
+<div id="list_l2vpn_clients_div">
+  <a><%=t :Listing_l2vpn_clients %></a>
+
+
+  <table id="l2vpn_clients-table">
+    <thead>
+      <tr>
+        <th scope="col" class="head-left"><%=t :L2vpn_server %></th>
+        <th scope="col" class="head-right"><%=t :Notes %></th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td colspan="1" class="foot-left">&nbsp;</td>
+        <td colspan="1" class="foot-right">&nbsp;</td>
+      </tr>
+    </tfoot>
+    <tbody>
+    <% @l2vpn_clients.each do |l2vpn| %>
+      <tr>
+        <td><%=h l2vpn.l2vpn_server.name %></td>
+        <td>
+          <% if (l2vpn.notes.nil? or l2vpn.notes.length == 0) %>
+            &nbsp;
+          <% else %>
+            <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                        :title => h(l2vpn.notes)
+            %>                    
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

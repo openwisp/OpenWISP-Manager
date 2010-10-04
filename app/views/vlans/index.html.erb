@@ -1,0 +1,48 @@
+<div id="list_vlans_div">
+  <a><%=t :Listing_vlans %></a>
+
+  <table id="vlans-table">
+    <thead>
+      <tr>
+        <th scope="col" class="head-left"><%=t :Device_name %></th>
+        <th scope="col" class="head"><%=t :Tag %></th>
+        <th scope="col" class="head-right"><%=t :Notes %></th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td colspan="1" class="foot-left">&nbsp;</td>
+        <td colspan="1" class="foot">&nbsp;</td>
+        <td colspan="1" class="foot-right">&nbsp;</td>
+      </tr>
+    </tfoot>
+    <tbody>
+    <% @devices.each do |device| %>
+      <% if device.vlans.length > 0 %>
+        <tr>
+          <td rowspan="<%= device.vlans.length %>"><%=h device.friendly_name %></td>
+          <% device.vlans.each do |vlan| %>
+            <% unless device.vlans[0] == vlan %>
+              <tr>
+            <% end %>
+            <td><%=h vlan.tag %></td>
+            <td>
+              <% if (vlan.notes.nil? or vlan.notes.length == 0) %>
+                &nbsp;
+              <% else %>
+                <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                            :title => h(vlan.notes)
+                %>                    
+              <% end %>
+            </td>
+            <% if device.vlans.length > 1 and device.vlans.last != vlan %>
+              </tr>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+
+</div>

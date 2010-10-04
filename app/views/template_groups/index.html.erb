@@ -1,0 +1,60 @@
+<div class="grid_16">
+  <div class="box">
+    <h4><a><%= t(:Access_point_templates_list) %> - <%=h @wisp.name %></a></h4>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+
+<div class="grid_10 prefix_3 suffix_3">
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:Listing_template_groups) %></a></h2>
+    <div class="block" id="template_groups_block">
+
+    <table id="template_groups-table">
+      <thead>
+        <tr>
+          <th scope="col" class="head-left"><%=t :Operations %></th>
+          <th scope="col" class="head"><%=t :Name %></th>
+          <th scope="col" class="head"><%=t :AccessPoint_templates %></th>
+          <th scope="col" class="head-right"><%=t :Notes %></th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+<!--            <td colspan="1" class="foot-left"></td> -->
+            <td colspan="4" class="foot" style="text-align: center;"><%= link_to t(:Create_New), new_wisp_template_group_path(@wisp) %></td>
+<!--            <td colspan="1" class="foot-right">&nbsp;</td> -->
+        </tr>
+      </tfoot>
+      <tbody>
+        <% @template_groups.each do |template_group| %>
+          <tr>
+            <td style="width:32px;">
+              <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_template_group_path(@wisp, template_group),
+                          :title => t(:Edit_template_group)
+              %>
+              <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_template_group_path(@wisp, template_group),
+                          :title => t(:Destroy_access_point_group),
+                          :confirm => t(:Are_you_sure_template_group_destroy),
+                          :method => :delete
+              %>
+            </td>              
+            <td><%=h template_group.name %></td>
+            <td><%= template_group.access_point_templates.length %></td>
+            <td>
+              <% if (template_group.notes.nil? or template_group.notes.length == 0) %>
+                &nbsp;
+              <% else %>
+                <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                            :title => h(template_group.notes)
+                %>                    
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>

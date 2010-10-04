@@ -1,0 +1,112 @@
+#!/bin/sh /etc/rc.common
+# Copyright Davide Guerri (CASPUR) - dguerri@caspur.it
+
+KERNEL_VERSION=`uname -r`
+KERNEL_MODULES="sch_htb sch_prio sch_prio sch_prio sch_sfq cls_fw"
+KERNEL_MPATH=/lib/modules/$KERNEL_VERSION/
+
+TC_COMMAND=/usr/sbin/tc
+EB_COMMAND=/usr/sbin/ebtables
+
+check_prereq() {
+  echo "Checking prerequisites..."
+
+  echo "Checking kernel modules..."  
+  for kmod in $KERNEL_MODULES; do
+    if [ \! -f $KERNEL_MPATH/$kmod.ko ]; then
+      echo "Prerequisite error: can't find kernel module '$kmod' in '$KERNEL_MPATH'"
+      exit 1
+    fi
+  done
+
+  echo "Checking tc tool..."  
+  if [ \! -x $TC_COMMAND ]; then
+    echo "Prerequisite error: can't find traffic control tool ($TC_COMMAND)"
+    exit 1
+  fi
+
+  echo "Checking ebtables..."  
+  if [ \! -x $EB_COMMAND ]; then
+    echo "Prerequisite error: can't find ebtables ($EB_COMMAND)"
+    exit 1
+  fi
+  
+  echo "Prerequisites satisfied."
+}
+
+load_modules() {
+  for kmod in $KERNEL_MODULES; do
+    insmod $KERNEL_MPATH/$kmod.ko  >/dev/null 2>&1
+  done
+}
+
+unload_modules() {
+  for kmod in $KERNEL_MODULES; do
+    rmmod $kmod  >/dev/null 2>&1
+  done
+}
+
+
+stop() {
+<% root_handle = 1 %>
+<% access_point.l2tcs.each do |l2tc| %>
+  <% unless l2tc.shapeable.output_band.nil? %>
+    <% root_class_id = 1 %>
+    <% class_id = root_class_id + 1 %>
+  # Removing tc configuration for <%= l2tc.shapeable.friendly_name %>
+  tc qdisc del dev <%= l2tc.shapeable.name %> root >/dev/null 2>&1
+  # Removing classificators for <%= l2tc.shapeable.friendly_name %>
+    <% l2tc.shapeable.subinterfaces.each do |sub_interface| %>
+      <% class_id += 1 %>
+  ebtables -D FORWARD -o <%= sub_interface.name %> -j mark --set-mark 0x<%= root_handle %><%= class_id %>
+    <% end %>
+    <% root_handle += 1 %>
+  <% end %>
+<% end %>
+
+  unload_modules
+}
+
+start() {
+
+  check_prereq
+  load_modules
+
+<% root_handle = 1 %>
+<% access_point.l2tcs.each do |l2tc| %>
+  <% unless l2tc.shapeable.output_band.nil? %>
+  # Root tc configuration for <%= l2tc.shapeable.friendly_name %>
+    <% root_class_id = 1 %>
+    <% class_id = root_class_id + 1 %>
+  tc qdisc add dev <%= l2tc.shapeable.name %> root handle <%= root_handle %>: htb default <%= root_handle %><%= class_id %> r2q <%= l2tc.optimal_r2q %>
+  
+  tc class add dev <%= l2tc.shapeable.name %> parent <%= root_handle %> classid <%= root_handle %>:<%= root_class_id %> htb rate <%= l2tc.shapeable.output_band %>kbit ceil <%= l2tc.shapeable.output_band %>kbit burst 30k
+  # Unclassified traffic for <%= l2tc.shapeable.friendly_name %>
+  tc class add dev <%= l2tc.shapeable.name %> parent <%= root_handle %>:<%= root_class_id %> classid <%= root_handle %>:<%= class_id %> htb rate <%= l2tc.unknown_output_band %>kbit ceil <%= l2tc.shapeable.output_band %>kbit burst 20k prio 1
+  tc qdisc add dev <%= l2tc.shapeable.name %> parent <%= root_handle %>:<%= class_id %> handle <%= root_handle %><%= class_id %>: pfifo
+  
+  # Subinterfaces traffic for <%= l2tc.shapeable.friendly_name %>
+    <% l2tc.shapeable.subinterfaces.each do |sub_interface| %>
+      <% class_id += 1 %>
+      <% unless sub_interface.output_band.nil? %>
+  # Configuration for <%= l2tc.shapeable.friendly_name %> (subinterface <%= sub_interface.friendly_name %>)
+  tc class add dev <%= l2tc.shapeable.name %> parent <%= root_handle %>:<%= root_class_id %> classid <%= root_handle %>:<%= class_id %> htb rate <%= sub_interface.output_band %>kbit ceil <%= l2tc.shapeable.output_band %>kbit burst 20k prio 0
+  tc qdisc add dev <%= l2tc.shapeable.name %> parent <%= root_handle %>:<%= class_id %> handle <%= root_handle %><%= class_id %>: sfq perturb 10
+  tc filter add dev <%= l2tc.shapeable.name %> parent <%= root_handle %>: protocol <%= sub_interface.tc_protocol %> prio 1 handle 0x<%= root_handle %><%= class_id %> fw classid <%= root_handle %>:<%= class_id %>
+  # Classificator for <%= l2tc.shapeable.friendly_name %> (subinterface <%= sub_interface.friendly_name %>)
+  ebtables -I FORWARD 1 -o <%= sub_interface.name %> -j mark --set-mark 0x<%= root_handle %><%= class_id %>
+      <% end %>
+    <% end %>  
+    <% root_handle += 1 %>
+  <% end %>
+<% end %>
+}
+
+boot() {
+        start
+}
+
+restart() {
+        stop
+        start
+}

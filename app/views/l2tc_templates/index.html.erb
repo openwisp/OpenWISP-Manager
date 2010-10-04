@@ -1,0 +1,104 @@
+<div id="list_l2tc_templates_div">
+  <a><%= t(:Listing_l2tc_templates) %></a>
+
+  <table id="l2tc_templates-table">
+    <thead>
+      <tr>
+        <th scope="col" class="head-right"><%=t :Operations %></th>
+        <th scope="col" class="head"><%=t :Interface %></th>
+        <th scope="col" class="head"><%=t :Output_band %> (Kbps)</th>
+        <th scope="col" class="head"><%=t :Subinterface %></th>
+        <th scope="col" class="head"><%=t :Output_band %> (%)</th>
+        <th scope="col" class="head-right"><%=t :Notes %></th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td colspan="1" class="foot-left">&nbsp;</td>
+        <td colspan="4" class="foot">&nbsp;</td>
+        <td colspan="1" class="foot-right">&nbsp;</td>
+      </tr>
+    </tfoot>
+    <tbody>
+    <% @l2tc_templates.each do |l2tc_template| %>
+      <tr>
+        <% if l2tc_template.shapeable_template.subinterfaces.length == 0 %>
+          <td style="width:32px;">
+            <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                  :method => :get,
+                  :url => edit_wisp_access_point_template_l2tc_template_path(@wisp, @access_point_template, l2tc_template),
+                  :title => t(:Edit),
+                  :update => { :success => "list_l2tc_templates_div", :failure => "list_l2tc_templates_div" }
+
+            %>
+            <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Clear)), 
+                  :method => :delete,
+                  :url => wisp_access_point_template_l2tc_template_path(@wisp, @access_point_template, l2tc_template),
+                  :title => t(:Clear_l2tc_template),
+                  :confirm => t(:Are_you_sure_l2tc_template_clear),
+                  :update => { :success => "list_l2tc_templates_div", :failure => "list_l2tc_templates_div" }
+
+            %>
+          </td>
+          <td><%=h l2tc_template.shapeable_template.friendly_name %></td>
+          <td><%=h l2tc_template.shapeable_template.output_band %></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>
+            <% if (l2tc_template.notes.nil? or l2tc_template.notes.length == 0) %>
+              &nbsp;
+            <% else %>
+              <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                          :title => h(l2tc_template.notes)
+              %>                    
+            <% end %>
+          </td>
+        <% else %>
+          <td rowspan="<%= l2tc_template.shapeable_template.subinterfaces.length %>" style="width:32px;">
+            <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                  :method => :get,
+                  :url => edit_wisp_access_point_template_l2tc_template_path(@wisp, @access_point_template, l2tc_template),
+                  :title => t(:Edit),
+                  :update => { :success => "list_l2tc_templates_div", :failure => "list_l2tc_templates_div" }
+
+            %>
+            <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Clear)), 
+                  :method => :delete,
+                  :url => wisp_access_point_template_l2tc_template_path(@wisp, @access_point_template, l2tc_template),
+                  :title => t(:Clear_l2tc_template),
+                  :confirm => t(:Are_you_sure_l2tc_template_clear),
+                  :update => { :success => "list_l2tc_templates_div", :failure => "list_l2tc_templates_div" }
+
+            %>
+          </td>
+          <td rowspan="<%= l2tc_template.shapeable_template.subinterfaces.length %>">
+            <%=h l2tc_template.shapeable_template.friendly_name %>
+          </td>
+          <td rowspan="<%= l2tc_template.shapeable_template.subinterfaces.length %>">
+            <%=h l2tc_template.shapeable_template.output_band %>
+          </td>
+          <td><%=h l2tc_template.shapeable_template.subinterfaces[0].friendly_name %></td>
+          <td><%=h l2tc_template.shapeable_template.subinterfaces[0].output_band_percent %></td>
+          <td rowspan="<%= l2tc_template.shapeable_template.subinterfaces.length %>">
+            <% if (l2tc_template.notes.nil? or l2tc_template.notes.length == 0) %>
+              &nbsp;
+            <% else %>
+              <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                          :title => h(l2tc_template.notes)
+              %>                    
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+      <% if l2tc_template.shapeable_template.subinterfaces.length > 1 %> 
+        <% l2tc_template.shapeable_template.subinterfaces.values_at(1..l2tc_template.shapeable_template.subinterfaces.length-1).each do |s| %>
+          <tr>
+            <td><%=h s.friendly_name %></td>
+            <td><%=h s.output_band_percent %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+</div>

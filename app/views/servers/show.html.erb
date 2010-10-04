@@ -1,0 +1,145 @@
+<div class="grid_16">
+  <div class="box">
+    <h4><a><%=h @server.name %></a></h4>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+
+<div class="grid_4">
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:Stats) %> - <%=h @server.name %></a></h2>
+    <div class="block" id="server_stats-block">
+        <%= render :partial => "stats", :object =>  @server %>
+    </div>
+  </div>
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:General_infos) %> - <%=h @server.name %></a></h2>
+    <ul class="nav main">
+      <li>
+        <%= link_to t(:Edit), edit_server_path(@server) %>
+      </li>
+      <li>
+        <%= link_to t(:Back), :back %>
+      </li>
+    </ul>
+    <div class="block" id="server_info-block">
+      <table>
+        <tr>
+          <td><a><%= t(:Name) %></a></td>
+          <td><%=h @server.name %></td>
+        </tr>
+        <tr>
+          <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="2"><a><%= t(:Notes) %></a></td>
+        </tr>
+        <tr>
+          <td colspan="2"><%= h(@server.notes).gsub(/\n/, "<br>") %></td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<%= periodically_call_remote( :url => { :action => 'ajax_stats', :id => @server.id }, 
+                              :frequency => '5', 
+                              :update => 'server_stats-block') 
+%>
+
+<div class="grid_12">
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:Edit) %></a></h2>
+    <ul class="nav main">
+      <li>
+        <%= link_to_remote t(:Ethernets) %>
+        <ul>
+           <li>
+             <%= link_to_remote t(:List), :method => :get,
+               :url => server_ethernets_url(@server),
+               :update => { :success => "server_block" },
+               :loading => "new Effect.BlindUp('server_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('server_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+           <li>
+             <%= link_to_remote t(:Add), :method => :get,
+               :url => new_server_ethernet_url(@server),
+               :update => { :success => "server_block" },
+               :loading => "new Effect.BlindUp('server_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('server_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+        </ul>
+      </li>
+      <li>
+        <%= link_to_remote t(:L2vpn_servers) %>
+        <ul>
+           <li>
+             <%= link_to_remote t(:List), :method => :get,
+               :url => server_l2vpn_servers_url(@server),
+               :update => { :success => "server_block" },
+               :before => "new Effect.BlindUp('server_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('server_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+           <li>
+             <%= link_to_remote t(:Add), :method => :get,
+               :url => new_server_l2vpn_server_url(@server),
+               :update => { :success => "server_block" },
+               :before => "new Effect.BlindUp('server_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('server_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+        </ul>
+      </li>
+      <li>
+        <%= link_to_remote t(:Vlans) %>
+        <ul>
+           <li>
+             <%= link_to_remote t(:List), :method => :get,
+               :url => server_vlans_url(@server),
+               :update => { :success => "server_block" },
+               :loading => "new Effect.BlindUp('server_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('server_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+           <li>
+             <%= link_to_remote t(:Add), :method => :get,
+               :url => new_server_vlan_url(@server),
+               :update => { :success => "server_block" },
+               :loading => "new Effect.BlindUp('server_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('server_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+        </ul>
+      </li>
+      <li>
+        <%= link_to_remote t(:Bridges) %>
+        <ul>
+           <li>
+             <%= link_to_remote t(:List), :method => :get,
+               :url =>server_bridges_url(@server),
+               :update => { :success => "server_block" },
+               :loading => "new Effect.BlindUp('server_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('server_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+           <li>
+             <%= link_to_remote t(:Add), :method => :get,
+               :url => new_server_bridge_url(@server),
+               :update => { :success => "server_block" },
+               :loading => "new Effect.BlindUp('server_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('server_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+        </ul>
+      </li>
+    </ul>
+    <div class="block" id="server_block">
+      <%= t(:Select_operation_from_menu) %>
+    </div>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>

@@ -1,0 +1,15 @@
+<% bridgeable_templates.each do |bridgeable_template| %>
+    <tr>
+      <td><%= check_box_tag("#{bridgeable_templates_param_name}[]", bridgeable_template.id, selected_bridgeable_templates.include?(bridgeable_template.id)) %></td>
+      <td><%=h bridgeable_template.friendly_name %></td>
+      <td>
+        <% if (bridgeable_template.notes.nil? or bridgeable_template.notes.length == 0) %>
+          &nbsp;
+        <% else %>
+          <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                      :title => h(bridgeable_template.notes)
+          %>                    
+        <% end %>
+      </td>
+    </tr>
+<% end %>

@@ -1,0 +1,42 @@
+<table id="access_points-table">
+  <thead>
+    <tr>
+      <th scope="col" class="head-left"><%=t :Name %></th>
+      <th scope="col" class="head"><%=t :AccessPoint_template %></th>
+      <th scope="col" class="head"><%=t :Mac_address %></th>
+      <th scope="col" class="head"><%=t :Internal %></th>
+      <th scope="col" class="head"><%=t :Address %></th>
+      <th scope="col" class="head"><%=t :City %></th>
+      <th scope="col" class="head"><%=t :Zip %></th>
+      <th scope="col" class="head-right"><%=t :Notes %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% access_points.each do |access_point| %>
+        <tr>
+          <td><%= link_to h(access_point.name), wisp_access_point_path(access_point.wisp, access_point) %></td>
+          <td>
+            <% if !access_point.access_point_template.nil? %>
+              <%= link_to h(access_point.access_point_template.name), wisp_access_point_template_path(access_point.wisp, access_point.access_point_template) %>
+            <% else%>
+              &nbsp;
+            <% end %>
+          </td>
+          <td><%=h access_point.mac_address %></td>
+          <td><%= access_point.internal == true ? t(:_yes) : t(:_no) %></td>
+          <td><%=h access_point.address %></td>
+          <td><%=h access_point.city %></td>
+          <td><%=h access_point.zip %></td>
+          <td>
+            <% if (access_point.notes.nil? or access_point.notes.length == 0) %>
+              &nbsp;
+            <% else %>
+              <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                          :title => h(access_point.notes)
+              %>                    
+            <% end %>
+          </td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,26 @@
+package 'network'
+<% access_point.bridges.each do |bridge| %>
+  config 'interface' '<%=h bridge.name %>'
+  <% ifnames = bridge.bridgeables.select { |b| b.class != Vap }.map { |b| b.name } %>
+  <% if ifnames.length > 0 %>
+    option 'ifname' '<%=h ifnames.join(' ')%>'
+  <% end %>
+    option 'type' 'bridge'
+  <% if bridge.addressing_mode == 'dynamic' %>
+    option 'proto' 'dhcp'
+  <% else %>
+    option 'proto' 'static'
+  <% end %>
+  <% if bridge.ip and bridge.ip != '' %>
+    option 'ipaddr' '<%=h bridge.ip %>'
+  <% end %>
+  <% if bridge.netmask and bridge.netmask != '' %>
+    option 'netmask' '<%=h bridge.netmask %>'
+  <% end %>
+  <% if bridge.gateway and bridge.gateway != '' %>
+    option 'gateway' '<%=h bridge.gateway %>'
+  <% end %>
+  <% if bridge.dns and bridge.dns != '' %>
+    option 'dns' '<%=h bridge.dns %>'
+  <% end %>
+<% end %>

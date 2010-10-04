@@ -1,0 +1,56 @@
+<div class="grid_16">
+  <div class="box">
+    <h4><a><%= t(:Servers_list) %></a></h4>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+
+<div class="grid_14 prefix_1 suffix_1">
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:Listing_servers) %></a></h2>
+    <div class="block" id="servers_block">
+
+      <table id="servers-table">
+        <thead>
+          <tr>
+            <th scope="col" class="head-left"><%=t :Operations %></th>
+            <th scope="col" class="head"><%=t :Name %></th>
+            <th scope="col" class="head-right"><%=t :Notes %></th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td colspan="5" class="foot" style="text-align: center;"><%= link_to t(:Create_New), new_server_path() %></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <% @servers.each do |server| %>
+            <tr>
+                <td style="width:32px;">
+                  <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_server_path(server),
+                              :title => t(:Edit_server)
+                  %>
+                  <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), server_path(server),
+                              :title => t(:Destroy_server),
+                              :confirm => t(:Are_you_sure_server_destroy),
+                              :method => :delete
+                  %>
+                </td>
+                <td><%= link_to h(server.name), server_path(server) %></td>
+                <td>
+                  <% if (server.notes.nil? or server.notes.length == 0) %>
+                    &nbsp;
+                  <% else %>
+                    <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                                :title => h(server.notes)
+                    %>
+                  <% end %>
+                </td>
+            </tr>  
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>

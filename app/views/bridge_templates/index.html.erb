@@ -1,0 +1,114 @@
+<div id="list_bridge_templates_div">
+  <a><%= t(:Listing_bridge_templates) %></a>
+
+  <table id="bridge_templates-table">
+  <thead>
+    <tr>
+      <th scope="col" class="head-left"><%= t(:Operations) %></th>
+      <th scope="col" class="head"><%= t(:Name) %></th>
+      <th scope="col" class="head"><%= t(:Bridgeables) %></th>
+      <th scope="col" class="head"><%= t(:Addressing_mode) %></th>
+<!--      <th scope="col" class="head"><%= t(:Ip_range_begin) %></th>
+      <th scope="col" class="head"><%= t(:Ip_range_end) %></th>
+      <th scope="col" class="head"><%= t(:Netmask) %></th>
+      <th scope="col" class="head"><%= t(:Gateway) %></th>
+      <th scope="col" class="head"><%= t(:Dns) %></th> -->
+      <th scope="col" class="head-right"><%= t(:Notes) %></th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <td colspan="1" class="foot-left">&nbsp;</td>
+      <td colspan="3" class="foot">&nbsp;</td>
+      <td colspan="1" class="foot-right">&nbsp;</td>
+    </tr>
+  </tfoot>
+  <tbody>
+  <% @bridge_templates.each do |bridge_template| %>
+    <tr>
+      <% if bridge_template.bridgeable_templates.length == 0 %> 
+      <td style="width:32px;">
+        <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+              :method => :get,
+              :url => edit_wisp_access_point_template_bridge_template_path(@wisp, @access_point_template, bridge_template),
+              :title => t(:Edit_info),
+              :update => { :success => "list_bridge_templates_div", :failure => "list_bridge_templates_div" }
+        
+        %>
+        <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), 
+              :method => :delete,
+              :url => wisp_access_point_template_bridge_template_path(@wisp, @access_point_template, bridge_template),
+              :title => t(:Destroy_bridge_template),
+              :confirm => t(:Are_you_sure_bridge_template_destroy),
+              :update => { :success => "list_bridge_templates_div", :failure => "list_bridge_templates_div" }
+        
+        %>
+      </td>
+      <td><%=h bridge_template.name %></td>
+      <td>&nbsp;</td>
+      <td><%=h t(bridge_template.addressing_mode) %></td>
+<!--      <td><%=h bridge_template.ip_range_begin %></td>
+      <td><%=h bridge_template.ip_range_end %></td>
+      <td><%=h bridge_template.netmask %></td>
+      <td><%=h bridge_template.gateway %></td>
+      <td><%=h bridge_template.dns %></td>      -->
+      <td>
+        <% if (bridge_template.notes.nil? or bridge_template.notes.length == 0) %>
+          &nbsp;
+        <% else %>
+          <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                      :title => h(bridge_template.notes)
+          %>                    
+        <% end %>
+      </td>
+    <% else %>
+      <td rowspan="<%= bridge_template.bridgeable_templates.length %>" style="width:32px;">
+        <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+              :method => :get,
+              :url => edit_wisp_access_point_template_bridge_template_path(@wisp, @access_point_template, bridge_template),
+              :title => t(:Edit_info),
+              :update => { :success => "list_bridge_templates_div", :failure => "list_bridge_templates_div" }
+      
+        %>
+        <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), 
+              :method => :delete,
+              :url => wisp_access_point_template_bridge_template_path(@wisp, @access_point_template, bridge_template),
+              :title => t(:Destroy_bridge_template),
+              :confirm => t(:Are_you_sure_bridge_template_destroy),
+              :update => { :success => "list_bridge_templates_div", :failure => "list_bridge_templates_div" }
+      
+        %>
+      </td>
+      <td rowspan="<%= bridge_template.bridgeable_templates.length %>"><%=h bridge_template.name %></td>
+      <td>
+        <%=h bridge_template.bridgeable_templates[0].friendly_name %>
+      </td>
+      <td rowspan="<%= bridge_template.bridgeable_templates.length %>"><%=h t(bridge_template.addressing_mode) %></td>
+<!--
+      <td rowspan="<%= bridge_template.bridgeable_templates.length %>"><%=h bridge_template.ip_range_begin %></td>
+      <td rowspan="<%= bridge_template.bridgeable_templates.length %>"><%=h bridge_template.ip_range_end %></td>
+      <td rowspan="<%= bridge_template.bridgeable_templates.length %>"><%=h bridge_template.netmask %></td>
+      <td rowspan="<%= bridge_template.bridgeable_templates.length %>"><%=h bridge_template.gateway %></td>
+      <td rowspan="<%= bridge_template.bridgeable_templates.length %>"><%=h bridge_template.dns %></td>      -->
+      <td rowspan="<%= bridge_template.bridgeable_templates.length %>">
+        <% if (bridge_template.notes.nil? or bridge_template.notes.length == 0) %>
+          &nbsp;
+        <% else %>
+          <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                      :title => h(bridge_template.notes)
+          %>                    
+        <% end %>
+      </td>
+    <% end %>
+    </tr>
+    <% if bridge_template.bridgeable_templates.length > 1 %> 
+      <% bridge_template.bridgeable_templates.values_at(1..bridge_template.bridgeable_templates.length-1).each do |b| %>
+        <tr>
+          <td><%=h b.friendly_name %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+  </tbody>
+  </table>
+</div>

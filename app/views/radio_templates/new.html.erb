@@ -1,0 +1,35 @@
+<div id="new_radio_template_div">
+  <fieldset>
+    <legend><%=t :New_radio_template %></legend>
+    <% remote_form_for([@wisp, @access_point_template, @radio_template],
+            :update => { :success => "new_radio_template_div", :failure => "new_radio_template_div" }
+      ) do |f| %>
+      <p><%= f.error_messages %></p>
+
+      <p>
+        <%= f.label t(:Name) %><br />
+        <%= f.text_field :name %>
+      </p>
+      <p>
+        <%= f.label t(:Mode) %><br />
+        <%= f.select(:mode, RadioTemplate::MODES) %>
+      </p>
+      <p>
+        <%= f.label t(:Default_Channel) %><br />
+        <%= f.text_field :channel %>
+      </p>
+
+      <p>
+        <%= f.label t(:Notes) %><br />
+        <%= f.text_area :notes, :rows => 3 %>
+      </p>
+    
+      <% f.fields_for :vap_templates do |vf| %>
+        <%= render :partial => 'vap', :locals => { :vap_template_form => vf }  %>
+      <% end %>
+      <p>
+        <%= f.submit t(:Create) %>
+      </p>
+    <% end %>
+  </fieldset>
+</div>

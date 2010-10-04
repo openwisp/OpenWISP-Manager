@@ -1,0 +1,56 @@
+<div id="list_l2vpn_servers_div">
+  <a href="#" id="toggle-forms"><%= t(:Listing_l2vpn_servers) %></a>
+  <table id="vpn_servers-table">
+    <thead>
+      <tr>
+        <th scope="col" class="head-left"><%=t :Operations %></th>
+        <th scope="col" class="head"><%=t :Wisp %></th>
+        <th scope="col" class="head"><%=t :L2vpn_server_name %></th>
+        <th scope="col" class="head"><%=t :L2vpn_server_port %></th>
+        <th scope="col" class="head"><%=t :L2vpn_server_cipher %></th>
+        <th scope="col" class="head-right"><%=t :L2vpn_server_protocol %></th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td colspan="1" class="foot-left"></td>
+        <td colspan="4" class="foot" style="text-align: center;">&nbsp;</td>
+        <td colspan="1" class="foot-right">&nbsp;</td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <% @l2vpn_servers.each do |l2vpn_server| %>
+        <tr>
+            <td style="width:32px;">
+              <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                    :method => :get,
+                    :url => edit_server_l2vpn_server_path(@server, l2vpn_server),
+                    :title => t(:Edit),
+                    :update => { :success => "list_l2vpn_servers_div", :failure => "list_l2vpn_servers_div" }
+
+              %>
+              <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), 
+                    :method => :delete,
+                    :url =>server_l2vpn_server_path(@server, l2vpn_server),
+                    :title => t(:Destroy_l2vpn_server),
+                    :confirm => t(:Are_you_sure_l2vpn_server_destroy),
+                    :update => { :success => "list_l2vpn_servers_div", :failure => "list_l2vpn_servers_div" }
+
+              %>
+            </td>
+            <td><%=h l2vpn_server.wisp.name %></td>
+      			<td><%= link_to_remote l2vpn_server.name, 
+                        :method => :get,
+       				  :url => server_l2vpn_server_path(@server, l2vpn_server),
+                        :title => t(:Show),
+      				  :update => { :success => "list_l2vpn_servers_div", :failure => "list_l2vpn_servers_div" }
+       				%>
+      			</td>
+            <td><%=h l2vpn_server.port %></td>
+            <td><%=h l2vpn_server.cipher %></td>
+            <td><%=h l2vpn_server.protocol %></td>
+        </tr>  
+      <% end %>
+    </tbody>
+  </table>
+</div>

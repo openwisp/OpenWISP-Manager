@@ -1,0 +1,18 @@
+<p>
+  <b>Name:</b>
+  <%=h @radio_template.name %>
+</p>
+
+<p>
+  <b>Mode:</b>
+  <%=h @radio_template.mode %>
+</p>
+
+<p>
+  <b>Channel:</b>
+  <%=h @radio_template.channel %>
+</p>
+
+
+<%= link_to 'Edit', edit_wisp_access_point_template_radio_template_path(@wisp, @access_point_template, @radio_template) %> |
+<%= link_to 'Back', wisp_access_point_template_radio_templates_path(@wisp, @access_point_template) %>

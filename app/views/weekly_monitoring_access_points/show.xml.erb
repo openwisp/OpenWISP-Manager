@@ -1,0 +1,7 @@
+<graph caption='Access Point Weekly Uptime Summary' xAxisName='Days' yAxisMaxValue='100' yAxisMinValue='0' yAxisName='Uptime' decimalPrecision='0' formatNumberScale='0' numberSuffix='%25' showNames='1' showValues='0'  showAlternateHGridColor='1' AlternateHGridColor='ff5904' divLineColor='ff5904' divLineAlpha='20' alternateHGridAlpha='5'>
+
+<% @graph_data.each do |g| %>
+  <set name='<%=h g.date.strftime("%d-%m") %>' value='<%=h g.percentage %>' hoverText='<%=h g.date.strftime("%d-%m") %>'/>
+<% end %>
+
+</graph>

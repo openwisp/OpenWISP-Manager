@@ -1,0 +1,14 @@
+
+if @map and @latlon and @marker and @marker_variable and @zoom
+  
+  page << @map.clear_overlays
+  page << @marker_variable << "=" << @marker.create
+
+  page << "
+  #{@map_variable}.addOverlay(#{@marker_variable});
+  #{@map_variable}.setCenter(new GLatLng(" + @latlon.join(',') + "), #{@zoom});
+  GEvent.addListener(#{@marker_variable},\"dragend\",gmap_update_position);
+  gmap_update_position();
+  "
+
+end

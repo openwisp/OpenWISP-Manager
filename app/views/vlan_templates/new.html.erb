@@ -1,0 +1,27 @@
+<div id="new_vlan_template_div">
+  <fieldset>
+    <legend><%=t :New_vlan_template %></legend>
+    <% remote_form_for([@wisp, @access_point_template, @vlan_template],
+            :update => { :success => "new_vlan_template_div", :failure => "new_vlan_template_div" }
+      ) do |f| %>
+      <p><%= f.error_messages %></p>
+      <p>
+        <%=
+          select_tag('interface_template_select', options_for_select(@interface_template_select, @interface_template_select_selected), :multiple => false)
+        %>
+      </p>
+      <p>
+        <%= f.label t(:Tag) %><br />
+        <%= f.text_field :tag %>
+      </p>
+      <p>
+        <%= f.label t(:Notes) %><br />
+        <%= f.text_area :notes, :rows => 3 %>
+      </p>
+      
+      <p>
+        <%= f.submit t(:Create) %>
+      </p>
+    <% end %>
+  </fieldset>
+</div>

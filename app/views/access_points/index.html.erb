@@ -1,0 +1,92 @@
+<div class="grid_16">
+  <div class="box">
+    <h4><a><%= t(:Access_points_list) %> - <%=h @wisp.name %></a></h4>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+
+<div class="grid_14 prefix_1 suffix_1">
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:Listing_access_points) %></a></h2>
+    <div class="block" id="access_points_block">
+      <table id="access_points-table">
+        <thead>
+          <tr>
+            <th scope="col" class="head-leftt"><%=t :Operations %></th>
+            <th scope="col" class="head"><%=t :Name %></th>
+            <th scope="col" class="head"><%=t :AccessPoint_template %></th>
+            <th scope="col" class="head"><%=t :Mac_address %></th>
+            <th scope="col" class="head"><%=t :Internal %></th>
+            <th scope="col" class="head"><%=t :Activation_date %></th>
+            <th scope="col" class="head"><%=t :Address %></th>
+            <th scope="col" class="head"><%=t :City %></th>
+            <th scope="col" class="head"><%=t :Zip %></th>
+            <th scope="col" class="head-right"><%=t :Notes %></th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+<!--            <td colspan="1" class="foot-left"></td> -->
+            <td colspan="10" class="foot" style="text-align: center;"><%= link_to t(:Create_New), new_wisp_access_point_path(@wisp) %></td>
+<!--            <td colspan="1" class="foot-right">&nbsp;</td> -->
+          </tr>
+        </tfoot>
+        <tbody>
+    
+          <% @access_points.each do |access_point| %>
+              <tr>
+								<td style="width:32px;">
+									<% if current_operator and ( current_operator.has_role? 'admin' or current_operator.has_role? 'wisp_admin' or current_operator.has_role? 'wisp_operator' ) %>
+	                  <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_access_point_path(@wisp, access_point),
+	                              :title => t(:Edit_access_point)
+	                  %>
+	                  <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_access_point_path(@wisp, access_point),
+	                              :title => t(:Destroy_access_point),
+	                              :confirm => t(:Are_you_sure_access_point_destroy),
+	                              :method => :delete
+	                  %>
+									<% else %>
+										<%= link_to image_tag("revoke.png", :border=>0, :size => "16x16") %>
+									<% end %>
+                </td>
+                <td><%= link_to access_point.name, wisp_access_point_path(@wisp, access_point) %></td>
+                <td>
+                  <% if !access_point.access_point_template.nil? %>
+										<% if current_operator and ( current_operator.has_role? 'admin' or current_operator.has_role? 'wisp_admin' or current_operator.has_role? 'wisp_operator' ) %>
+                    	<%= link_to h(access_point.access_point_template.name), wisp_access_point_template_path(@wisp, access_point.access_point_template) %>
+										<% else %> 
+											<%= link_to h(access_point.access_point_template.name) %>
+										<% end%>
+                  <% else%>
+                    &nbsp;
+                  <% end %>
+                </td>
+                <td><%=h access_point.mac_address %></td>
+                <td><%=  access_point.internal? ? t(:_yes) : t(:_no) %></td>
+                <td><%=h access_point.activation_date %></td>
+                <td><%=h access_point.address %></td>
+                <td><%=h access_point.city %></td>
+                <td><%=h access_point.zip %></td>
+                <td>
+                  <% if (access_point.notes.nil? or access_point.notes.length == 0) %>
+                    &nbsp;
+                  <% else %>
+                    <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                                :title => h(access_point.notes)
+                    %>                    
+                  <% end %>
+                </td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+<!-- <div class="grid_14 prefix_1 suffix_1">
+  <div class="box">
+    < %= @map ? @map.div(:width => '100%', :height => 320) : '' %>
+  </div>
+</div
+<div class="clear">&nbsp;</div> -->

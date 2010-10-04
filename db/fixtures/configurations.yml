@@ -1,0 +1,15 @@
+--- 
+configurations_001: 
+  created_at: 2010-02-08 11:57:13
+  updated_at: 2010-02-08 11:57:13
+  id: "64810937"
+  value: ABQIAAAAhpuZaSkRZ7k3yBZIQqpovhRBoeyw3-k2BIRtkoqxHlQ8WUg_YRSwug8_6ySRncav6ivRR-Mm1-ihsQ
+  system_key: "0"
+  key: gmaps_api_key
+configurations_002: 
+  created_at: 2010-02-08 11:57:13
+  updated_at: 2010-02-08 11:57:13
+  id: "450215437"
+  value: sample value
+  system_key: "0"
+  key: sample key

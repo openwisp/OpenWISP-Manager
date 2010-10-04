@@ -1,0 +1,62 @@
+<div class="grid_16">
+  <div class="box">
+    <h4><a><%= t(:Access_point_groups_list) %> - <%=h @wisp.name %></a></h4>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+
+<div class="grid_10 prefix_3 suffix_3">
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:Listing_access_point_groups) %></a></h2>
+    <div class="block" id="access_point_groups_block">
+
+      <table id="access_point_groups-table">
+        <thead>
+          <tr>
+            <th scope="col" class="head-left"><%=t :Operations %></th>
+            <th scope="col" class="head"><%=t :Name %></th>
+            <th scope="col" class="head"><%=t :AccessPoints %></th>
+            <th scope="col" class="head-right"><%=t :Notes %></th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+<!--            <td colspan="1" class="foot-left"></td> -->
+						<% if current_operator and ( current_operator.has_role? 'admin' or current_operator.has_role? 'wisp_admin' or current_operator.has_role? 'wisp_operator' ) %>
+            	<td colspan="4" class="foot" style="text-align: center;"><%= link_to t(:Create_New), new_wisp_access_point_group_path() %></td>
+						<%end%>
+<!--            <td colspan="1" class="foot-right">&nbsp;</td> -->
+          </tr>
+        </tfoot>
+        <tbody>
+          <% @access_point_groups.each do |access_point_group| %>
+            <tr>
+              <td style="width:32px;">
+                <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_access_point_group_path(@wisp, access_point_group),
+                            :title => t(:Edit_access_point_group)
+                %>
+                <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_access_point_group_path(@wisp, access_point_group),
+                            :title => t(:Destroy_access_point_group),
+                            :confirm => t(:Are_you_sure_access_point_group_destroy),
+                            :method => :delete
+                %>
+              </td>              
+              <td><%= link_to h(access_point_group.name), wisp_access_point_group_path(@wisp, access_point_group) %></td>
+              <td><%=h access_point_group.access_points.length %></td>
+              <td>
+                <% if (access_point_group.notes.nil? or access_point_group.notes.length == 0) %>
+                  &nbsp;
+                <% else %>
+                  <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                              :title => h(access_point_group.notes)
+                  %>                    
+                <% end %>
+              </td>            
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>

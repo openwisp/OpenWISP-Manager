@@ -1,0 +1,23 @@
+<div id="edit_l2vpn_template_div">
+  <fieldset>
+    <legend><%=t :Editing_l2vpn_template %></legend>
+    <% remote_form_for([@wisp, @access_point_template, @l2vpn_template],
+            :update => { :success => "edit_l2vpn_template_div", :failure => "edit_l2vpn_template_div" }
+      ) do |f| %>
+      <p><%= f.error_messages %></p>
+      <p>
+        <%= f.label t(:L2vpn_server) %><br />
+        <%= f.select(:l2vpn_server_id, @servers_select) %>
+      </p>
+
+      <p>
+        <%= f.label t(:Notes) %><br />
+        <%= f.text_area :notes, :rows => 3 %>
+      </p>
+
+      <p>
+        <%= f.submit t(:Update) %>
+      </p>
+    <% end %>
+  </fieldset>
+</div>

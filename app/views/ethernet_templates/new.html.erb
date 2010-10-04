@@ -1,0 +1,23 @@
+<div id="new_ethernet_template_div">
+  <fieldset>
+    <legend><%=t :New_ethernet_template %></legend>
+    <% remote_form_for([@wisp, @access_point_template, @ethernet_template],
+            :update => { :success => "new_ethernet_template_div", :failure => "new_ethernet_template_div" }
+       ) do |f| %>
+      <p><%= f.error_messages %></p>
+
+      <p>
+        <%= f.label t(:Name) %><br />
+        <%= f.text_field :name %>
+      </p>
+      <p>
+        <%= f.label t(:Notes) %><br />
+        <%= f.text_area :notes, :rows => 3 %>
+      </p>
+      <p>
+      <%= f.submit t(:Create) %>
+      </p>
+    <% end %>
+  </fieldset>
+</div>
+

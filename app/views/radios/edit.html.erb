@@ -1,0 +1,29 @@
+<div id="edit_radio_div">
+  <fieldset>
+    <legend><%=t :Editing_radio %></legend>
+    <% remote_form_for([@wisp, @access_point, @radio],
+            :update => { :success => "edit_radio_div", :failure => "edit_radio_div" }
+      ) do |f| %>
+      <p><%= f.error_messages %></p>
+
+      <p>
+				<%= f.label t(:Name) %> : <b> <%= @radio.name %> </b> <br />
+      </p>
+      <p>
+        <%= f.label t(:Mode) %> : <b> <%= @radio.mode %> </b> <br />
+      </p>
+      <p>
+        <%= f.label t(:Channel) %> <br />
+        <%= f.text_field :channel, :value => @radio.channel %>
+      </p>
+
+      <p>
+        <%= f.label t(:Notes) %><br />
+        <%= f.text_area :notes, :rows => 3, :value => @radio.notes 	%>
+      </p>
+      <p>
+        <%= f.submit t(:Update) %>
+      </p>
+    <% end %>
+  </fieldset>
+</div>

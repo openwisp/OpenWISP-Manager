@@ -1,0 +1,52 @@
+<div id="list_ethernets_div">
+  <a><%=t :Listing_ethernets %></a>
+
+  <table id="ethernets-table">
+    <thead>
+      <tr>
+        <th scope="col" class="head-left"><%=t :Operations %></th>
+        <th scope="col" class="head"><%=t :Name %></th>
+        <th scope="col" class="head-right"><%=t :Notes %></th>
+    </thead>
+    <tfoot>
+      <tr>
+        <td colspan="1" class="foot-left">&nbsp;</td>
+        <td colspan="1" class="foot">&nbsp;</td>
+        <td colspan="1" class="foot-right">&nbsp;</td>
+      </tr>
+    </tfoot>
+    <tbody>
+    <% @ethernets.each do |ethernet| %>
+      <tr>
+        <td style="width:32px;">
+          <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                :method => :get,
+                :url => edit_server_ethernet_path(@server, ethernet),
+                :title => t(:Edit),
+                :update => { :success => "list_ethernets_div", :failure => "list_ethernets_div" }
+          %>
+          <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), 
+                :method => :delete,
+                :url => server_ethernet_path(@server, ethernet),
+                :title => t(:Destroy_ethernet),
+                :confirm => t(:Are_you_sure_ethernet_destroy),
+                :update => { :success => "list_ethernets_div", :failure => "list_ethernets_div" }
+          %>
+        </td>
+        <td><%=h ethernet.name %></td>
+        <td>
+          <% if (ethernet.notes.nil? or ethernet.notes.length == 0) %>
+            &nbsp;
+          <% else %>
+            <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                        :title => h(ethernet.notes)
+            %>                    
+          <% end %>
+        </td>
+
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+

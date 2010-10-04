@@ -1,0 +1,61 @@
+<div class="grid_16">
+  <div class="box">
+    <h4><a><%= t(:Wisps_list) %></a></h4>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+
+<div class="grid_14 prefix_1 suffix_1">
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:Listing_wisps) %></a></h2>
+    <div class="block" id="wisps_block">
+      <table id="wisps-table">
+        <thead>
+          <tr>
+            <th scope="col" class="head-left"><%=t :Operations %></th>
+            <th scope="col" class="head"><%=t :Name %></th>
+            <th scope="col" class="head-right"><%=t :Notes %></th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+<!--            <td colspan="1" class="foot-left"></td> -->
+            <td colspan="3" class="foot" style="text-align: center;"><%= link_to t(:Create_New), new_wisp_path() %></td>
+<!--            <td colspan="1" class="foot-right">&nbsp;</td> -->
+          </tr>
+        </tfoot>
+        <tbody>
+          <% @wisps.each do |wisp| %>
+            <tr>
+              <td style="width:48px;">
+                <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_path(wisp),
+                            :title => t(:Edit_info)
+                %>
+                <%= link_to image_tag("configure.png", :border=>0, :size => "16x16", :alt => t(:Configure)), wisp,
+                            :title => t(:Configure)
+                %>
+                <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp,
+                            :title => t(:Destroy_wisp),
+                            :confirm => t(:Are_you_sure_wisp_destroy),
+                            :method => :delete
+                %>
+              </td>
+              <td><%= link_to wisp.name, wisp_path(wisp) %></td>
+              <td>
+                <% if (wisp.notes.nil? or wisp.notes.length == 0) %>
+                  &nbsp;
+                <% else %>
+                  <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                              :title => h(wisp.notes)
+                  %>                    
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+

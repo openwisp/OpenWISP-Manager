@@ -1,0 +1,227 @@
+<div class="grid_16">
+  <div class="box">
+    <h4><a><%= t(:Access_point_template) %> - <%= @access_point_template.name %> - <%=h @wisp.name %></a></h4>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+
+<div class="grid_4">
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:Stats) %></a></h2>
+
+    <div class="block" id="access_point_templates_stats-block">
+    	<%= render :partial => "stats", :object =>  @access_point_template, :locals => { :flag => @modified_flag } %>
+    </div>
+  </div>
+
+	<div class="box">
+		<h2><a href="#" id="toggle-forms"><%= t(:AccessPoint_template_Status_Configuration) %></a></h2>
+		<div class="block" id="update_access_points_block">		
+			<%= render :partial => "template_update_block", :object =>  @access_point_template %>
+		</div>
+	</div>
+
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:General_infos) %></a></h2>
+    <ul class="nav main">
+      <li>
+        <%= link_to t(:Edit), edit_wisp_access_point_template_path(@wisp, @access_point_template) %>
+      </li>
+      <li>
+        <%= link_to t(:List_all_access_point_templates), wisp_access_point_templates_path(@wisp) %>
+      </li>
+    </ul>
+    <div class="block" id="access_point_templates_info-block">
+      <table>
+        <tr>
+          <td><a><%= t(:Name) %></a></td>
+          <td><%=h @access_point_template.name %></td>
+        </tr>
+        <tr>
+          <% if @access_point_template.template_groups.length == 0 %>
+            <td><a><%= t(:Template_groups) %></a></td>
+            <td><%= t(:None) %></td>
+          <% else %>
+            <td rowspan="<% @access_point_template.template_groups.length %>"><a><%= t(:Template_groups) %></a></td>
+            <% @access_point_template.template_groups.each do |tg| %>
+              <td><%=h tg.name %></td>
+            <% end %>
+          <% end %>
+        </tr>
+        <tr>
+          <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="2"><a><%= t(:Notes) %></a></td>
+        </tr>
+        <tr>
+          <td colspan="2"><%= h(@access_point_template.notes).gsub(/\n/, "<br>") %></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%= periodically_call_remote( :url => { :action => 'ajax_stats', :id => @access_point_template.id}, 
+                              :frequency => '5', 
+                              :update => 'access_point_templates_stats-block') 
+%>
+
+<%= periodically_call_remote( :url => {:action => 'ajax_update', :id => @access_point_template.id},
+  														:frequency => '5', 
+  														:update => 'update_access_points_block') 
+%>
+
+<div class="grid_12">
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:Edit) %></a></h2>
+    <ul class="nav main">
+      <li>
+        <a><%=t :Radios %></a>
+        <ul>
+           <li>
+             <%= link_to_remote t(:List), :method => :get,
+               :url => wisp_access_point_template_radio_templates_url(@wisp, @access_point_template),
+               :update => { :success => "access_point_template_block" },
+               :before => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+               :after => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+           <li>
+             <%= link_to_remote t(:Add), :method => :get,
+               :url => new_wisp_access_point_template_radio_template_url(@wisp, @access_point_template),
+               :update => { :success => "access_point_template_block" },
+               :before => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+               :after => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+        </ul>
+      </li>
+      <li>
+        <a><%=t :Ethernets %></a>
+        <ul>
+           <li>
+             <%= link_to_remote t(:List), :method => :get,
+               :url => wisp_access_point_template_ethernet_templates_url(@wisp, @access_point_template),
+               :update => { :success => "access_point_template_block" },
+               :loading => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+           <li>
+             <%= link_to_remote t(:Add), :method => :get,
+               :url => new_wisp_access_point_template_ethernet_template_url(@wisp, @access_point_template),
+               :update => { :success => "access_point_template_block" },
+               :loading => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+        </ul>
+      </li>
+      <li>
+        <a><%=t :L2vpns %></a>
+        <ul>
+           <li>
+             <%= link_to_remote t(:List), :method => :get,
+               :url => wisp_access_point_template_l2vpn_templates_url(@wisp, @access_point_template),
+               :update => { :success => "access_point_template_block" },
+               :before => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+           <li>
+             <%= link_to_remote t(:Add), :method => :get,
+               :url => new_wisp_access_point_template_l2vpn_template_url(@wisp, @access_point_template),
+               :update => { :success => "access_point_template_block" },
+               :before => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+        </ul>
+      </li>
+      <li>
+        <a><%=t :Vlans %></a>
+        <ul>
+           <li>
+             <%= link_to_remote t(:List), :method => :get,
+               :url => wisp_access_point_template_vlan_templates_url(@wisp, @access_point_template),
+               :update => { :success => "access_point_template_block" },
+               :loading => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+           <li>
+             <%= link_to_remote t(:Add), :method => :get,
+               :url => new_wisp_access_point_template_vlan_template_url(@wisp, @access_point_template),
+               :update => { :success => "access_point_template_block" },
+               :loading => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+        </ul>
+      </li>
+      <li>
+        <a><%=t :Bridges %></a>
+        <ul>
+           <li>
+             <%= link_to_remote t(:List), :method => :get,
+               :url => wisp_access_point_template_bridge_templates_url(@wisp, @access_point_template),
+               :update => { :success => "access_point_template_block" },
+               :loading => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+           <li>
+             <%= link_to_remote t(:Add), :method => :get,
+               :url => new_wisp_access_point_template_bridge_template_url(@wisp, @access_point_template),
+               :update => { :success => "access_point_template_block" },
+               :loading => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+        </ul>
+      </li>
+      <li>
+        <a><%=t :L2tcs %></a>
+        <ul>
+           <li>
+             <%= link_to_remote t(:List), :method => :get,
+               :url => wisp_access_point_template_l2tc_templates_url(@wisp, @access_point_template),
+               :update => { :success => "access_point_template_block" },
+               :loading => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+               :loaded => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+             %>
+           </li>
+        </ul>
+      </li>
+			<li>
+			  <a><%=t :Custom_scripts %></a>
+			  <ul>
+			     <li>
+			       <%= link_to_remote t(:List), :method => :get,
+			         :url => wisp_access_point_template_custom_script_templates_url(@wisp, @access_point_template),
+			         :update => { :success => "access_point_template_block" },
+			         :loading => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+			         :loaded => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+			       %>
+			     </li>
+			     <li>
+			       <%= link_to_remote t(:Add), :method => :get,
+			         :url => new_wisp_access_point_template_custom_script_template_url(@wisp, @access_point_template),
+			         :update => { :success => "access_point_template_block" },
+			         :loading => "new Effect.BlindUp('access_point_template_block', { duration: 0.2, queue: 'front' })",
+			         :loaded => "new Effect.BlindDown('access_point_template_block', { duration: 0.2, queue: 'end' })"
+			       %>
+			     </li>
+			  </ul>
+			</li>
+    </ul>
+    <div class="block" id="access_point_template_block">
+      <%= t(:Select_operation_from_menu) %>
+    </div>
+  </div>
+</div>
+
+<div class="clear">&nbsp;</div>
+
+

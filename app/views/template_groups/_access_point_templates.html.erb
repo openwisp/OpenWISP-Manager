@@ -1,0 +1,28 @@
+<table id="access_point_templates-table">
+  <thead>
+    <tr>
+      <th scope="col" class="head-left"><%=t :Select %></th>
+      <th scope="col" class="head"><%=t :Name %></th>
+      <th scope="col" class="head"><%=t :Linked_access_point %></th>
+      <th scope="col" class="head-right"><%=t :Notes %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% access_point_templates.each do |access_point_template| %>
+        <tr>
+          <td><%= check_box_tag("access_point_templates[]", access_point_template.id, selected_access_point_templates.include?(access_point_template.id)) %></td>
+          <td><%=h access_point_template.name %></td>
+          <td><%=h access_point_template.access_points.length %></td>
+          <td>
+            <% if (access_point_template.notes.nil? or access_point_template.notes.length == 0) %>
+              &nbsp;
+            <% else %>
+              <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                          :title => h(access_point_template.notes)
+              %>                    
+            <% end %>
+          </td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>

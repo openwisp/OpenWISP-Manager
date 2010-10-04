@@ -1,0 +1,23 @@
+<div id="new_ethernet_div">
+  <fieldset>
+    <legend><%=t :New_ethernet %></legend>
+    <% remote_form_for([@server, @ethernet],
+            :update => { :success => "new_ethernet_div", :failure => "new_ethernet_div" }
+       ) do |f| %>
+      <p><%= f.error_messages %></p>
+
+      <p>
+        <%= f.label t(:Name) %><br />
+        <%= f.text_field :name %>
+      </p>
+      <p>
+        <%= f.label t(:Notes) %><br />
+        <%= f.text_area :notes, :rows => 3 %>
+      </p>
+      <p>
+      <%= f.submit t(:Create) %>
+      </p>
+    <% end %>
+  </fieldset>
+</div>
+

@@ -1,0 +1,10 @@
+# --- File: <%=h access_point.wisp.ca.identifier %>.pem
+<%= h(access_point.wisp.ca.x509_certificate.certificate) %>
+
+<% access_point.l2vpn_clients.each do |l2vpn_client| %>
+  <% if l2vpn_client.x509_certificate %>
+# --- File: '<%=h l2vpn_client.identifier %>.pem'
+<%= h(l2vpn_client.x509_certificate.certificate) %>
+<%= h(l2vpn_client.x509_certificate.key) %>
+  <% end %>
+<% end %>

@@ -1,0 +1,48 @@
+<div id="new_custom_script_div">
+  <fieldset>
+    <legend><%=t :Custom_script %></legend>
+    <% remote_form_for([@wisp, @access_point, @custom_script],
+            :update => { :success => "new_custom_script_div", :failure => "new_custom_script_div" }
+       ) do |f| %>
+      <p><%= f.error_messages %></p>
+
+		  <p>
+				<%= f.label t(:Name) %><br />
+        <%= f.text_field :name, :maxlength => 32%>
+		  </p>
+			<fieldset>
+			<legend><%=t :Cron_info %></legend>
+		  <p>
+     		<table>
+					<tr>
+						<td style="text-align:center"> <%= f.label t :Cron_minute %> </td>
+						<td style="text-align:center"> <%= f.label t :Cron_hour %> </td>
+						<td style="text-align:center"> <%= f.label t :Cron_day %> </td>
+						<td style="text-align:center"> <%= f.label t :Cron_month %> </td>		    	
+						<td style="text-align:center"> <%= f.label t :Cron_dayweek %> </td>
+					</tr>
+					<tr>	
+						<td style="text-align:center"> <%= f.text_field :cron_minute, :size => 6 %> </td>
+						<td style="text-align:center"> <%= f.text_field :cron_hour, :size => 6 %> </td>
+						<td style="text-align:center"> <%= f.text_field :cron_day, :size => 6 %></td>
+						<td style="text-align:center"> <%= f.text_field :cron_month, :size => 6 %> </td>
+						<td style="text-align:center"> <%= f.text_field :cron_dayweek, :size => 6 %> </td>																							
+					</tr>
+				</tbody>
+				</table>					
+		  </p>
+			</fieldset>
+		  <p>
+				<%= f.label t(:Cron_body) %>
+		    <%= f.text_area :body, :rows => 10 %>
+		  </p>
+		  <p>
+		    <%= f.label :notes %><br />
+		    <%= f.text_area :notes, :rows => 3  %>
+		  </p>
+      <p>
+      <%= f.submit t(:Create) %>
+      </p>
+    <% end %>
+  </fieldset>
+</div>

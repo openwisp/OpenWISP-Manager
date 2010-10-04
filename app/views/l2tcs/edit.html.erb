@@ -1,0 +1,39 @@
+<div id="edit_l2tc_div">
+  <fieldset>
+    <legend><%=t (:Editing_l2tc) %></legend>
+    <% remote_form_for([@wisp, @access_point, @l2tc],
+            :update => { :success => "edit_l2tc_div", :failure => "edit_l2tc_div" }
+      ) do |f| %>
+      <p><%= f.error_messages %></p>
+
+      <p>
+        <%= f.label t(:Output_band_for) + " #{@l2tc.shapeable.friendly_name}" %><br />
+        <%= text_field "shapeables", :output_band, :value => params[:shapeables][:output_band] %>
+      </p>
+
+      <p>
+        <%= f.label t(:Notes) %><br />
+        <%= f.text_area :notes, :rows => 3 %>
+      </p>
+
+    
+      <% i = 0 %>
+      <% @l2tc.shapeable.subinterfaces.each do |s| %>
+        <% fields_for "subinterfaces[#{i}]" do |sf| %>
+          <%= render :partial => 'subinterface', 
+                     :locals => { :subinterface_form => sf, 
+                                  :subinterface => s,
+                                  :iteration => i,
+                                  :value => params[:subinterfaces]["#{i}"][:output_band_percent] 
+                                }  
+          %>
+        <% end %>
+        <% i = i + 1 %>
+      <% end %>
+
+      <p>
+        <%= f.submit t(:Update) %>
+      </p>
+    <% end %>
+  </fieldset>
+</div>

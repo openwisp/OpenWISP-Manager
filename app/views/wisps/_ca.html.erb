@@ -1,0 +1,19 @@
+<fieldset>
+  <legend><%=t :Certification_authority_infos %></legend>
+  <p>
+    <%= ca_form.label t(:Country) %><br />
+    <%= ca_form.text_field :c %>
+  </p>
+  <p>
+    <%= ca_form.label t(:State_or_province) %><br />
+    <%= ca_form.text_field :st %>
+  </p>
+  <p>
+    <%= ca_form.label t(:Locality) %><br />
+    <%= ca_form.text_field :l %>
+  </p>
+  <p>
+    <%= ca_form.label t(:Organization) %><br />
+    <%= ca_form.text_field :o %>
+  </p>
+</fieldset>

@@ -1,0 +1,32 @@
+<div class="grid_16">
+  <div class="box">
+    <h4><a><%= t(:Editing_access_point_template) %> - <%=h @access_point_template.name %> - <%=h @wisp.name %></a></h4>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+
+<div class="grid_10 prefix_3 suffix_3">
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:Editing_access_point_template) %></a></h2>
+    <ul class="nav main">
+      <li>
+        <%= link_to t(:Back),:back %>
+      </li>
+    </ul>
+    <div class="block" id="edit_access_point_template-block">
+      
+      <% form_for([@wisp, @access_point_template]) do |f| %>
+      <p><%= f.error_messages %></p>
+        <fieldset>
+          <legend><%=t :General_infos %></legend>
+            <p><%= f.label t(:Name)  %><br>
+            <%= f.text_field :name, :maxlength => 32 %></p>
+            <p><%= f.label t(:Notes) %><br>
+            <%= f.text_area :notes, :rows => 3 %></p>
+            <%= f.submit t(:Update) %>
+        </fieldset>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>

@@ -1,0 +1,40 @@
+<div class="grid_16">
+  <div class="box">
+    <h4><a><%= t(:Editing_wisp) %> - <%=h @wisp.name %></a></h4>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+
+<div class="grid_10 prefix_3 suffix_3">
+  <div class="box">
+    <h2><a href="#" id="toggle-forms"><%= t(:Editing_wisp) %></a></h2>
+    <ul class="nav main">
+      <li>
+        <%= link_to t(:Back),:back %>
+      </li>
+    </ul>
+    <div class="clear">&nbsp;</div>
+    <div class="block" id="wisps-block">
+      <fieldset>
+        <legend><%=t :General_infos %></legend>
+        <% form_for(@wisp) do |f| %>
+          <p><%= f.error_messages %></p>
+
+          <p>
+            <%= f.label :Name %><br />
+            <%= f.text_field :name, :maxlength => 32 %>
+          </p>
+          <p>
+            <%= f.label :Notes %><br />
+            <%= f.text_area :notes, :rows => 3 %>
+          </p>
+          
+          <p>
+            <%= f.submit t(:Update) %>
+          </p>
+        <% end %>
+      </fieldset>
+    </div>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>

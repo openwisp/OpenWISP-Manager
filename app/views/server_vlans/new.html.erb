@@ -1,0 +1,27 @@
+<div id="new_vlan_div">
+  <fieldset>
+    <legend><%=t :New_vlan %></legend>
+    <% remote_form_for([@server, @vlan],
+            :update => { :success => "new_vlan_div", :failure => "new_vlan_div" }
+      ) do |f| %>
+      <p><%= f.error_messages %></p>
+      <p>
+        <%=
+          select_tag('interface_select', options_for_select(@interface_select, @interface_select_selected), :multiple => false)
+        %>
+      </p>
+      <p>
+        <%= f.label t(:Tag) %><br />
+        <%= f.text_field :tag %>
+      </p>
+      <p>
+        <%= f.label t(:Notes) %><br />
+        <%= f.text_area :notes, :rows => 3 %>
+      </p>
+      
+      <p>
+        <%= f.submit t(:Create) %>
+      </p>
+    <% end %>
+  </fieldset>
+</div>

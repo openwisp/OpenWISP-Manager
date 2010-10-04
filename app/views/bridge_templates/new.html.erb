@@ -1,0 +1,139 @@
+<div id="new_bridge_template_div">
+  <fieldset>
+    <legend><%=t :New_bridge_template %></legend>
+    
+    <% remote_form_for([@wisp, @access_point_template, @bridge_template],
+            :update => { :success => "new_bridge_template_div", :failure => "new_bridge_template_div" }
+      ) do |f| %>
+
+      <p><%= f.error_messages %></p>
+
+      <p>
+        <%= f.label t(:Name) %><br />
+        <%= f.text_field :name %>
+      </p>
+      <p> 
+        <table>
+          <thead>
+            <tr>
+              <th colspan="3"><%= t(:Network_parameters_acquiring) %></th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>
+        <%= f.radio_button :addressing_mode, :none,  
+              { :onclick => "document.getElementById('_address').style.display='none'", 
+                :checked => @addressing_mode == 'none' 
+              } 
+        %> <%= t(:none) %>
+            </td>
+            <td>
+        <%= f.radio_button :addressing_mode, "static", 
+              { :onclick => "document.getElementById('_address').style.display='';
+                             document.getElementById('_address_legend').innerHTML = '#{t(:Network_parameters)}'", 
+                :checked => @addressing_mode == 'static' 
+              } 
+        %>
+        <%= t(:static) %>
+            </td>
+            <td>
+        <%= f.radio_button :addressing_mode, "dynamic", 
+              { :onclick => "document.getElementById('_address').style.display='';
+                             document.getElementById('_address_legend').innerHTML = '#{t(:Default_network_parameters)}'", 
+                :checked => @addressing_mode == 'dynamic'
+              }
+        %>
+        <%= t(:dynamic) %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </p>
+
+      <fieldset id="_address" <%= 'style="display:none;"' if @addressing_mode == 'none' %>>
+        <legend id="_address_legend">
+          <%= @addressing_mode == 'static' ? t(:Network_parameters) : t(:Default_network_parameters) %>
+        </legend>
+        <p>
+          <%= f.label t(:Ip_range_begin) %><br />
+          <%= f.text_field :ip_range_begin %>
+        </p>
+        <p>
+          <%= f.label t(:Ip_range_end) %><br />
+          <%= f.text_field :ip_range_end %>
+        </p>
+        <p>
+          <%= f.label t(:Netmask) %><br />
+          <%= f.text_field :netmask %>
+        </p>
+        <p>
+          <%= f.label t(:Gateway) %><br />
+          <%= f.text_field :gateway %>
+        </p>
+        <p>
+          <%= f.label t(:Dns) %><br />
+          <%= f.text_field :dns %>
+        </p>
+      </fieldset>
+
+      <p>
+        <%= f.label t(:Bridged_interfaces) %><br />
+        <table id="bridgeable_templates-table">
+          <thead>
+            <tr>
+              <th scope="col" class="head-left"><%=t :Select %></th>
+              <th scope="col" class="head"><%=t :Name %></th>
+              <th scope="col" class="head-right"><%=t :Notes %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% unless @tap_templates.nil? or @tap_templates.length == 0  %>
+              <%= render :partial => 'bridgeable_templates_select', 
+                         :locals => { :title => t(:TapTemplates),
+                                      :selected_bridgeable_templates => @selected_tap_templates, 
+                                      :bridgeable_templates => @tap_templates,
+                                      :bridgeable_templates_param_name => 'tap_templates'
+                                    } 
+              %>
+            <% end %>
+            <% unless @ethernet_templates.nil? or @ethernet_templates.length == 0  %>
+              <%= render :partial => 'bridgeable_templates_select', 
+                         :locals => { :title => t(:EthernetTemplates),  
+                                      :selected_bridgeable_templates => @selected_ethernet_templates, 
+                                      :bridgeable_templates => @ethernet_templates,
+                                      :bridgeable_templates_param_name => 'ethernet_templates'
+                                    } 
+              %>
+            <% end %>
+            <% unless @vap_templates.nil? or @vap_templates.length == 0  %>
+              <%= render :partial => 'bridgeable_templates_select', 
+                         :locals => { :title => t(:VapTemplates),
+                                      :selected_bridgeable_templates => @selected_vap_templates, 
+                                      :bridgeable_templates => @vap_templates,
+                                      :bridgeable_templates_param_name => 'vap_templates'
+                                    } 
+              %>
+            <% end %>
+            <% unless @vlan_templates.nil? or @vlan_templates.length == 0  %>
+                <%= render :partial => 'bridgeable_templates_select', 
+                           :locals => { :title => t(:VlanTemplates),
+                                        :selected_bridgeable_templates => @selected_vlan_templates, 
+                                        :bridgeable_templates => @vlan_templates,
+                                        :bridgeable_templates_param_name => 'vlan_templates'
+                                      } 
+                %>
+            <% end %>
+          </tbody>
+        </table>
+      </p>
+      <p>
+        <%= f.label t(:Notes) %><br />
+        <%= f.text_area :notes, :rows => 3 %>
+      </p>
+      <p>
+        <%= f.submit t(:Create) %>
+      </p>
+    <% end %>
+  </fieldset>
+</div>

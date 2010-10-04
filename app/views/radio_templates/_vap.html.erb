@@ -1,0 +1,53 @@
+<fieldset>
+  <legend><%=t :Vap_template %></legend>
+  <p>
+    <%= vap_template_form.label t(:Essid) %><br />
+    <%= vap_template_form.text_field :essid %>
+  </p>
+  <p>
+    <%= vap_template_form.label t(:Visibility)%><br />
+    <% if vap_template_form.object.new_record? %>
+      <%= vap_template_form.select(:visibility,  VapTemplate::VISIBILITIES_SELECT, {:include_blank => true}) %>
+    <% else %>
+      <%= vap_template_form.select(:visibility,  VapTemplate::VISIBILITIES_SELECT) %>
+    <% end %>
+  </p>
+  <p>
+    <%= vap_template_form.label t(:Encryption) %><br />
+    <% if vap_template_form.object.new_record? %>
+      <%= vap_template_form.select(:encryption, VapTemplate::ENC_TYPES_SELECT, {:include_blank => true}) %>
+    <% else %>
+      <%= vap_template_form.select(:encryption, VapTemplate::ENC_TYPES_SELECT) %>
+    <% end %>
+  </p>
+  <div id="_key_div">
+  <p>
+    <%= vap_template_form.label t(:Key_or_radius_secret) %><br />
+    <%= vap_template_form.text_field :key %>
+  </p>
+  </div>  <div id="_radius_auth_div">
+  <p>
+    <%= vap_template_form.label t(:Radius_auth_server) %><br />
+    <%= vap_template_form.text_field :radius_auth_server %> 
+  </p>
+  <p>
+    <%= vap_template_form.label t(:Radius_auth_server_port) %><br />
+    <%= vap_template_form.text_field :radius_auth_server_port %> 
+  </p>
+  <p>
+    <%= vap_template_form.label t(:Radius_acct_server) %><br />
+    <%= vap_template_form.text_field :radius_acct_server %>    
+  </p>
+  <p>
+    <%= vap_template_form.label t(:Radius_acct_server_port) %><br />
+    <%= vap_template_form.text_field :radius_acct_server_port %>    
+  </p>
+  </div>
+
+  <% unless vap_template_form.object.new_record? %>
+    <div>
+      <%= vap_template_form.label :_delete, t(:Remove_Vap) %>
+      <%= vap_template_form.check_box :_delete %>
+    </div>
+  <% end %>
+</fieldset>

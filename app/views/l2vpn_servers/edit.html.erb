@@ -1,0 +1,49 @@
+<div id="edit_l2vpn_server_div">
+  <fieldset>
+    <legend><%=t :General_infos %></legend>
+    <% remote_form_for([@server, @l2vpn_server], 
+        :update => { :success => "edit_l2vpn_server_div", :failure => "edit_l2vpn_server_div" }
+       ) do |f| %>
+      <p><%= f.error_messages %></p>
+      <p>
+        <%= f.label t(:Wisp) %><br />
+        <%= f.select( :wisp_id, @wisps.map{ |w| [w.name, w.id] } ) %>
+      </p>
+      <p>
+        <%= f.label t(:L2vpn_server_name) %><br />
+        <%= f.text_field :name %>
+      </p>
+	  <p>
+        <%= f.label t(:L2vpn_server_ip) %><br />
+        <%= f.text_field :ip %>
+      </p>
+      <p>
+        <%= f.label t(:L2vpn_server_port) %><br />
+        <%= f.text_field :port %>
+      </p>
+      <p>
+        <%= f.label t(:L2vpn_server_cipher) %><br /> 
+        <%= f.select( :cipher, L2vpnServer::CIPHERSUITES_SELECT ) %>
+      </p>
+      <p>
+        <%= f.label t(:L2vpn_server_protocol) %><br /> 
+        <%= f.select( :protocol, L2vpnServer::PROTOCOLS_SELECT ) %>
+      </p>
+      <p>
+        <%= f.label t(:L2vpn_server_mtu) %><br />
+        <%= f.text_field :mtu %>
+      </p>
+      <p>
+        <%= f.label t(:L2vpn_server_mtu_discovery) %><br /> 
+        <%= f.select( :mtu_disc, L2vpnServer::MTU_DISCOVERIES_SELECT) %>
+      </p>
+      <p>
+        <%= f.label t(:Notes) %><br />
+        <%= f.text_area :notes, :rows => 3 %>
+      </p>
+      <p>
+        <%= f.submit t(:Update) %>
+      </p>
+    <% end %>
+  </fieldset>
+</div>

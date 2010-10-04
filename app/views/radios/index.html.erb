@@ -1,0 +1,94 @@
+<div id="list_radios_div">
+  <a><%= t(:Listing_radios) %></a>
+
+  <table id="radios-table">
+    <thead>
+      <tr>
+        <th rowspan="2" scope="col" class="head-left" style="vertical-align:middle"><%=t :Operations %></th>
+        <th rowspan="2" scope="col" class="head" style="vertical-align:middle"><%=t :Name %></th>
+        <th rowspan="2" scope="col" class="head" style="vertical-align:middle"><%=t :Mode %></th>
+        <th rowspan="2" scope="col" class="head" style="vertical-align:middle"><%=t :Default_Channel %></th>
+        <th colspan="3" scope="col" class="head" style="text-align:center"><%=t :Vaps %></th>
+        <th rowspan="2" scope="col" class="head-left" style="vertical-align:middle"><%=t :Notes %></th>
+      </tr>
+      <tr>
+        <th scope="col" class="head"><%=t :Essid %></th>
+        <th scope="col" class="head"><%=t :Visibility %></th>
+        <th scope="col" class="head"><%=t :Encryption %></th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td colspan="1" class="foot-left">&nbsp;</td>
+        <td colspan="6" class="foot">&nbsp;</td>
+        <td colspan="1" class="foot-right">&nbsp;</td>
+      </tr>
+    </tfoot>
+    <tbody>
+    <% @radios.each do |radio| %>
+      <tr>
+        <% if radio.vaps.length == 0 %> 
+          <td style="width:32px;">
+            <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                  :method => :get,
+                  :url => edit_wisp_access_point_radio_path(@wisp, @access_point, radio),
+                  :title => t(:Edit_info),
+                  :update => { :success => "list_radios_div", :failure => "list_radios_div" }
+            
+            %>
+          </td>
+          <td><%=h radio.name %></td>
+          <td><%=h radio.mode %></td>
+          <td><%=h radio.channel %></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>
+            <% if (radio.notes.nil? or radio.notes.length == 0) %>
+              &nbsp;
+            <% else %>
+              <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                          :title => h(radio.notes)
+              %>                    
+            <% end %>
+          </td>
+        <% else %>
+          <td rowspan="<%= radio.vaps.length %>" style="width:32px;">
+            <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                  :method => :get,
+                  :url => edit_wisp_access_point_radio_path(@wisp, @access_point, radio),
+                  :title => t(:Edit_info),
+                  :update => { :success => "list_radios_div", :failure => "list_radios_div" }
+          
+            %>
+          </td>
+          <td rowspan="<%= radio.vaps.length %>"><%=h radio.name %></td>
+          <td rowspan="<%= radio.vaps.length %>"><%=h radio.mode %></td>
+          <td rowspan="<%= radio.vaps.length %>"><%=h radio.channel %></td>
+          <td><%=h radio.vaps[0].essid %></td>
+          <td><%=h Vap::VISIBILITIES_FSELECT[radio.vaps[0].visibility] %></td>
+          <td><%=h Vap::ENC_TYPES_FSELECT[radio.vaps[0].encryption] %></td>
+          <td rowspan="<%= radio.vaps.length %>">
+            <% if (radio.notes.nil? or radio.notes.length == 0) %>
+              &nbsp;
+            <% else %>
+              <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                          :title => h(radio.notes)
+              %>                    
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+      <% if radio.vaps.length > 1 %>
+        <% radio.vaps.values_at(1..radio.vaps.length-1).each do |v| %>
+          <tr>
+            <td><%=h v.essid %></td>
+            <td><%=h Vap::VISIBILITIES_FSELECT[v.visibility] %></td>
+            <td><%=h Vap::ENC_TYPES_FSELECT[v.encryption] %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,24 @@
+<table>
+  <tbody>
+    <tr>
+      <td><a><%= t(:Linked_access_point) %></a></td>
+      <td><%= @access_point_template.access_points.length %></td>
+    </tr>
+    <tr>
+      <td><a><%= t(:Radios) %></a></td>
+      <td><%= @access_point_template.radio_templates.length %></td>
+    </tr>
+    <tr>
+      <td><a><%= t(:Ethernets) %></a></td>
+      <td><%= @access_point_template.ethernet_templates.length %></td>
+    </tr>
+    <tr>
+      <td><a><%= t(:L2vpns) %></a></td>
+      <td><%= @access_point_template.l2vpn_templates.length %></td>
+    </tr>
+    <tr>
+      <td><a><%= t(:Bridges) %></a></td>
+      <td><%= @access_point_template.bridge_templates.length %></td>
+   </tr>
+  </tbody>
+</table>
