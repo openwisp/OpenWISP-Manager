@@ -78,7 +78,7 @@ start() {
   # Root tc configuration for <%= l2tc.shapeable.friendly_name %>
     <% root_class_id = 1 %>
     <% class_id = root_class_id + 1 %>
-  tc qdisc add dev <%= l2tc.shapeable.name %> root handle <%= root_handle %>: htb default <%= root_handle %><%= class_id %> r2q <%= l2tc.optimal_r2q %>
+  tc qdisc add dev <%= l2tc.shapeable.name %> root handle <%= root_handle %>: htb default <%= class_id %> r2q <%= l2tc.optimal_r2q %>
   
   tc class add dev <%= l2tc.shapeable.name %> parent <%= root_handle %> classid <%= root_handle %>:<%= root_class_id %> htb rate <%= l2tc.shapeable.output_band %>kbit ceil <%= l2tc.shapeable.output_band %>kbit burst 30k
   # Unclassified traffic for <%= l2tc.shapeable.friendly_name %>
