@@ -1,48 +1,46 @@
 package 'openvpn'
 <% access_point.l2vpn_clients.each do |l2vpn_client| %>
-  config 'openvpn' '<%=h l2vpn_client.id %>'
-    option 'enable' '1'
-    option 'client' '1'
-    option 'dev' '<%=h l2vpn_client.tap.name %>'
-    option 'dev_type' 'tap'
+config 'openvpn' '<%=h l2vpn_client.id %>'
+option 'enable' '1'
+option 'client' '1'
+option 'dev' '<%=h l2vpn_client.tap.name %>'
+option 'dev_type' 'tap'
 <% if l2vpn_client.l2vpn_template.l2vpn_server.protocol == 'tcp' %>
-    option 'proto' 'tcp-client'
+option 'proto' 'tcp-client'
 <% else %>
-    option 'proto' 'udp'
+option 'proto' 'udp'
 <% end %>
-<% unless l2vpn_client.l2vpn_template.l2vpn_server.ip == "all" %>
-    option 'remote' '<%=h l2vpn_client.l2vpn_template.l2vpn_server.ip %> <%=h l2vpn_client.l2vpn_template.l2vpn_server.port %>'
-<% else %>
-    option 'remote' 'TBD <%=h l2vpn_client.l2vpn_template.l2vpn_server.port %>'
+<% if l2vpn_client.l2vpn_template.l2vpn_server.ip %>
+option 'remote' '<%=h l2vpn_client.l2vpn_template.l2vpn_server.ip %> <%=h l2vpn_client.l2vpn_template.l2vpn_server.port %>'
 <% end %>
 <% if l2vpn_client.l2vpn_template.l2vpn_server.protocol == 'udp' and !l2vpn_client.l2vpn_template.l2vpn_server.mtu.nil? %>
-    option 'fragment' <%=h l2vpn_client.l2vpn_template.l2vpn_server.mtu - 8 %>
+option 'fragment' <%=h l2vpn_client.l2vpn_template.l2vpn_server.mtu - 8 %>
 <% end %>
-<% if !l2vpn_client.l2vpn_template.l2vpn_server.mtu_disc.nil? %>
-    option 'mtu_disc' <%=h l2vpn_client.l2vpn_template.l2vpn_server.mtu_disc %>
+<% if !l2vpn_client.l2vpn_template.l2vpn_server.mtu_disc.nil? or !l2vpn_client.l2vpn_template.l2vpn_server.mtu_disc.blank? %>
+option 'mtu_disc' <%=h l2vpn_client.l2vpn_template.l2vpn_server.mtu_disc %>
 <% end %>
 <% if l2vpn_client.mtu_test %>
-    option 'mtu_test'
+option 'mtu_test'
 <% end %>
-    option 'nobind'
-    option 'keepalive' '5 40'
-    option 'ns_cert_type' 'server'
-    option 'resolv_retry' 'infinite'
-    option 'comp_lzo' '1'
-    option 'tls_client' '1'
-    option 'ca' '/tmp/owispmanager/openvpn/x509/<%=h l2vpn_client.x509_certificate.ca.identifier %>.pem'
-    option 'key' '/tmp/owispmanager/openvpn/x509/<%=h l2vpn_client.identifier %>.pem'
-    option 'cert' '/tmp/owispmanager/openvpn/x509/<%=h l2vpn_client.identifier %>.pem'
-    option 'cipher' '<%=h l2vpn_client.l2vpn_template.l2vpn_server.cipher %>'
-    option 'up' '/tmp/owispmanager/openvpn/vpn_<%=h l2vpn_client.identifier %>_script.sh'
-    option 'down' '/tmp/owispmanager/openvpn/vpn_<%=h l2vpn_client.identifier %>_script.sh'
-    option 'up_delay'
-    option 'up_restart' '1'
-    option 'persist_tun' '1'
-    option 'mute_replay_warnings' '1'
-    option 'verb' '1'
-    option 'mute' '10'
-    option 'script_security' '3'
-    #option 'tls_auth' './tls-auth.psk 1'
-    #option 'fast_io'
+option 'nobind'
+option 'keepalive' '5 40'
+option 'ns_cert_type' 'server'
+option 'resolv_retry' 'infinite'
+option 'comp_lzo' '1'
+option 'tls_client' '1'
+option 'ca' '/tmp/owispmanager/openvpn/x509/<%=h l2vpn_client.x509_certificate.ca.identifier %>.pem'
+option 'key' '/tmp/owispmanager/openvpn/x509/<%=h l2vpn_client.identifier %>.pem'
+option 'cert' '/tmp/owispmanager/openvpn/x509/<%=h l2vpn_client.identifier %>.pem'
+option 'cipher' '<%=h l2vpn_client.l2vpn_template.l2vpn_server.cipher %>'
+option 'up' '/tmp/owispmanager/openvpn/vpn_<%=h l2vpn_client.identifier %>_script.sh'
+option 'down' '/tmp/owispmanager/openvpn/vpn_<%=h l2vpn_client.identifier %>_script.sh'
+option 'up_delay'
+option 'up_restart' '1'
+option 'persist_tun' '1'
+option 'mute_replay_warnings' '1'
+option 'verb' '1'
+option 'mute' '10'
+option 'script_security' '3'
+#option 'tls_auth' './tls-auth.psk 1'
+#option 'fast_io'
 <% end %>

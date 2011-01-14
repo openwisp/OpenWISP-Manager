@@ -13,36 +13,36 @@ echo "<%=h access_point.name %>" > /proc/sys/kernel/hostname
 echo "Applying network configuration"
 # VPNs
 <% access_point.l2vpn_clients.each do |v| %>
-echo "Creating tap <%=h v.tap.name %>"
-openvpn --mktun --dev <%=h v.tap.name %> --dev-type tap
+    echo "Creating tap <%=h v.tap.name %>"
+    openvpn --mktun --dev <%=h v.tap.name %> --dev-type tap
 <% end %>
 <% if access_point.bridges.length > 0 %>
-echo "Creating bridges"
-uci -m import network -f ./uci/network.conf
-<% access_point.bridges.each do |b| %>
-echo "Enabling bridge <%=h b.name %>"
-ifup <%=h b.name %>
-# OpenWRT Bug.. :(
-ifup <%=h b.name %> 
-<% end %>
+    echo "Creating bridges"
+    uci -m import network -f ./uci/network.conf
+    <% access_point.bridges.each do |b| %>
+        echo "Enabling bridge <%=h b.name %>"
+        ifup <%=h b.name %>
+        # OpenWRT Bug.. :(
+        ifup <%=h b.name %>
+    <% end %>
 <% end %>
 
 # Wifi
 echo "Applying wifi configuration"
 <% if access_point.radios.length > 0 %>
-echo "Disabling wifi"
-wifi down
-uci -m import wireless -f ./uci/wireless.conf
-echo "Enabling wifi"
-wifi up
+    echo "Disabling wifi"
+    wifi down
+    uci -m import wireless -f ./uci/wireless.conf
+    echo "Enabling wifi"
+    wifi up
 <% end %>
 
 # VPNs
 echo "Applying l2 vpn(s) configuration"
 <% if access_point.l2vpn_clients.length > 0 %>
-uci -m import openvpn -f ./uci/openvpn.conf
-echo "Enabling l2 vpn(s)"
-/etc/init.d/openvpn start
+    uci -m import openvpn -f ./uci/openvpn.conf
+    echo "Enabling l2 vpn(s)"
+    /etc/init.d/openvpn start
 <% end %>
 
 # L2TCs
@@ -52,23 +52,26 @@ $PROGDIR/l2tc_script.sh start
 # Cron Scripts
 
 ## Inherited from template
-<% access_point.access_point_template.custom_script_templates.each do |c| -%>
-echo "<%=c.cron_minute %> <%=c.cron_hour %> <%=c.cron_day %> <%=c.cron_month %> <%=c.cron_dayweek %> $PROGDIR/cron_scripts/T_<%= c.name %>" >> cron.info
+<% unless access_point.access_point_template.nil? %>
+
+    <% access_point.access_point_template.custom_script_templates.each do |c| -%>
+        echo "<%=c.cron_minute %> <%=c.cron_hour %> <%=c.cron_day %> <%=c.cron_month %> <%=c.cron_dayweek %> $PROGDIR/cron_scripts/T_<%= c.name %>" >> cron.info
+    <% end %>
 <% end %>
 
-## Owned by access point 
+## Owned by access point
 <% access_point.custom_scripts.each do |c| -%>
-echo "<%=c.cron_minute %> <%=c.cron_hour %> <%=c.cron_day %> <%=c.cron_month %> <%=c.cron_dayweek %> $PROGDIR/cron_scripts/<%= c.name %>" >> cron.info
+    echo "<%=c.cron_minute %> <%=c.cron_hour %> <%=c.cron_day %> <%=c.cron_month %> <%=c.cron_dayweek %> $PROGDIR/cron_scripts/<%= c.name %>" >> cron.info
 <% end %>
 
 # Add info to crontab
-<% if access_point.access_point_template.custom_script_templates.length > 0 ||  access_point.custom_scripts.length > 0 -%>
-echo "Applying Cron Scripts"
-crontab cron.info
-echo "Running Cron"
-crond
-# Cleaning cron.info
-rm cron.info
+<% if (!access_point.access_point_template.nil? and access_point.access_point_template.custom_script_templates.length > 0) or  access_point.custom_scripts.length > 0 -%>
+    echo "Applying Cron Scripts"
+    crontab cron.info
+    echo "Running Cron"
+    crond
+    # Cleaning cron.info
+    rm cron.info
 <% end %>
 
 

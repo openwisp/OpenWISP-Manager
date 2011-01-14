@@ -22,7 +22,11 @@
       </p>
 	  	<p>
         <%= f.label t(:L2vpn_server_ip) %><br />
-        <%= f.text_field :ip, :value => "all" %>
+        <%= f.text_field :ip %>
+      </p>
+      <p>
+        <%= f.label t(:L2vpn_server_bindall) %>
+        <%= f.check_box :bindall %>
       </p>
       <p>
         <%= f.label t(:L2vpn_server_port) %><br />

@@ -1,8 +1,8 @@
 class AccessPoint < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_mappable :default_units => :kms, 
-                   :default_formula => :sphere, 
+  acts_as_mappable :default_units => :kms,
+                   :default_formula => :sphere,
                    :distance_field_name => :distance,
                    :lat_column_name => :lat,
                    :lng_column_name => :lon
@@ -13,7 +13,6 @@ class AccessPoint < ActiveRecord::Base
   validates_numericality_of :lon, :allow_nil => true
   validates_uniqueness_of :name, :mac_address
   validates_format_of :mac_address, :with => /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
-
   belongs_to :wisp
   has_and_belongs_to_many :access_point_groups
 
@@ -33,7 +32,7 @@ class AccessPoint < ActiveRecord::Base
 
 
   def generate_configuration
-    
+
     @uci_system     = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "access_points/uci_system", :locals => { :access_point => self} )
     @uci_network    = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "access_points/uci_network", :locals => { :access_point => self} )
     @uci_wireless   = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "access_points/uci_wireless", :locals => { :access_point => self} )
@@ -44,7 +43,7 @@ class AccessPoint < ActiveRecord::Base
     @vpn_scripts = {}
 
     @tarname = "ap-#{self.wisp.id}-#{self.id}.tar.gz"
-    entries_date = Time.now 
+    entries_date = Time.now
 
     Archive.write_open_filename("#{RAILS_ROOT}/private/access_points_configurations/#{@tarname}", Archive::COMPRESSION_GZIP, Archive::FORMAT_TAR) do |tar|
       tar.new_entry do |entry|
@@ -125,18 +124,20 @@ class AccessPoint < ActiveRecord::Base
           tar.write_data(@vpn_scripts["vpn_#{l2vpn_client.identifier}_script.sh"])
         end
       end
-      
-      self.access_point_template.custom_script_templates.each do |custom_script_template|
-        tar.new_entry do |entry|
-          entry.pathname = "cron_scripts/T_#{custom_script_template.name}"
-          entry.mode = 33128
-          entry.mtime = entry.ctime = entry.atime = entries_date
-          entry.size = custom_script_template.body.length
-          tar.write_header(entry)
-          tar.write_data(custom_script_template.body)
+
+      unless self.access_point_template.nil?
+        self.access_point_template.custom_script_templates.each do |custom_script_template|
+          tar.new_entry do |entry|
+            entry.pathname = "cron_scripts/T_#{custom_script_template.name}"
+            entry.mode = 33128
+            entry.mtime = entry.ctime = entry.atime = entries_date
+            entry.size = custom_script_template.body.length
+            tar.write_header(entry)
+            tar.write_data(custom_script_template.body)
+          end
         end
       end
-      
+
       self.custom_scripts.each do |custom_script|
         tar.new_entry do |entry|
           entry.pathname = "cron_scripts/#{custom_script.name}"
@@ -147,7 +148,7 @@ class AccessPoint < ActiveRecord::Base
           tar.write_data(custom_script.body)
         end
       end
-      
+
       tar.new_entry do |entry|
         entry.pathname = "install.sh"
         entry.mode = 33128
@@ -178,61 +179,61 @@ class AccessPoint < ActiveRecord::Base
 
   def generate_configuration_md5
     configuration_file_name_and_path = "#{RAILS_ROOT}/private/access_points_configurations/ap-#{self.wisp.id}-#{self.id}.tar.gz"
-    self.update_attributes(:configuration_md5 => OpenSSL::Digest::MD5.new(File.read(configuration_file_name_and_path)).to_s) 
+    self.update_attributes(:configuration_md5 => OpenSSL::Digest::MD5.new(File.read(configuration_file_name_and_path)).to_s)
   end
-  
+
   # Re-generation of configuration and re-computation of md5
   def update_configuration
     self.generate_configuration
     self.generate_configuration_md5
   end
-  
+
   def link_to_template(t)
     return_value = false
 
     AccessPoint.transaction do
-     self.template = t
+      self.template = t
 
-     template.radio_templates.each do |rt|
-       # This will also create (and link to appropriate templates) vaps
-       nr = self.radios.build( { :access_point => self } )
-       nr.link_to_template( rt )
-       unless nr.save!
-         raise ActiveRecord::Rollback
-       end
-     end
+      template.radio_templates.each do |rt|
+        # This will also create (and link to appropriate templates) vaps
+        nr = self.radios.build( { :access_point => self } )
+        nr.link_to_template( rt )
+        unless nr.save!
+          raise ActiveRecord::Rollback
+        end
+      end
 
-     template.l2vpn_templates.each do |vt|
-       # This will also create (and link to appropriate templates) taps and theirs vlans
-       nv = self.l2vpn_clients.build( { :access_point => self } )
-       nv.link_to_template( vt )
-       unless nv.save!
-         raise ActiveRecord::Rollback
-       end
-     end
+      template.l2vpn_templates.each do |vt|
+        # This will also create (and link to appropriate templates) taps and theirs vlans
+        nv = self.l2vpn_clients.build( { :access_point => self } )
+        nv.link_to_template( vt )
+        unless nv.save!
+          raise ActiveRecord::Rollback
+        end
+      end
 
-     template.ethernet_templates.each do |et|
-       # This will also create (and link to appropriate templates) vlans
-       ne = self.ethernets.build( { :machine => self } )
-       ne.link_to_template( et )
-       unless ne.save!
-         raise ActiveRecord::Rollback
-       end
-     end
+      template.ethernet_templates.each do |et|
+        # This will also create (and link to appropriate templates) vlans
+        ne = self.ethernets.build( { :machine => self } )
+        ne.link_to_template( et )
+        unless ne.save!
+          raise ActiveRecord::Rollback
+        end
+      end
 
-     template.bridge_templates.each do |bt|
-       nb = self.bridges.build( { :machine => self } )
-       nb.link_to_template( bt )
-       unless nb.save!
-         raise ActiveRecord::Rollback
-       end
-     end
+      template.bridge_templates.each do |bt|
+        nb = self.bridges.build( { :machine => self } )
+        nb.link_to_template( bt )
+        unless nb.save!
+          raise ActiveRecord::Rollback
+        end
+      end
 
-     unless self.save!
-       raise ActiveRecord::Rollback
-     end
+      unless self.save!
+        raise ActiveRecord::Rollback
+      end
 
-     return_value = true
+      return_value = true
     end
 
     return_value
@@ -257,11 +258,11 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def is_committed?
-	  if ( self.committed_at < self.updated_at)
-		return false
-	  else
-		return true
-	  end
+    if ( self.committed_at < self.updated_at)
+      return false
+    else
+      return true
+    end
   end
 
 end

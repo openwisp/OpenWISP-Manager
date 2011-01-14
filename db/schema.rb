@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100416141506) do
+ActiveRecord::Schema.define(:version => 20100413104408) do
 
   create_table "access_point_groups", :force => true do |t|
     t.string   "name",       :null => false
@@ -119,10 +119,10 @@ ActiveRecord::Schema.define(:version => 20100416141506) do
     t.string   "l",          :null => false
     t.string   "o",          :null => false
     t.string   "cn",         :null => false
+    t.text     "crl_list"
     t.integer  "wisp_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "crl_list"
   end
 
   create_table "configurations", :force => true do |t|
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(:version => 20100416141506) do
     t.text     "dh"
     t.text     "notes"
     t.string   "ip"
+    t.boolean  "bindall",    :null => false
     t.integer  "mtu"
     t.string   "mtu_disc"
     t.integer  "server_id"

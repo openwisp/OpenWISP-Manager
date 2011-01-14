@@ -39,7 +39,8 @@ class L2vpnServer < ActiveRecord::Base
   validates_inclusion_of :mtu_disc, :in => L2vpnServer::MTU_DISCOVERIES, :allow_blank => true
   validates_presence_of :server_id
   validates_presence_of :wisp_id
-  
+  validates_presence_of :ip
+
   has_one :tap, :as => :l2vpn, :dependent => :destroy
   has_one :x509_certificate, :as => :certificable, :dependent => :destroy
 

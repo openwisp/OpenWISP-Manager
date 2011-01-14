@@ -1,37 +1,41 @@
 mode  server
 proto <%=h l2vpn_server.protocol %>
 
-<% if !(l2vpn_server.ip == "all") %>
-local <%=h l2vpn_server.ip %>
-<% end %>
+<%# check if boolean is all
+<% if !(l2vpn_server.ip == "all")
+local <%=h l2vpn_server.ip
+<% end
+%>
+
+
 port  <%=h l2vpn_server.port %>
+<% if !l2vpn_server.bindall %>
+ local <%=h l2vpn_server.ip %>
+<% end %>
 
 <% if l2vpn_server.protocol == 'udp' and !l2vpn_server.mtu.nil? %>
-fragment <%=h l2vpn_server.mtu - 8 %>
+ fragment <%=h l2vpn_server.mtu - 8 %>
 <% end %>
-<% if !l2vpn_server.mtu_disc.nil? %>
-mtu-disc <%=h l2vpn_server.mtu_disc %>
+<% if !l2vpn_server.mtu_disc.nil? and !l2vpn_server.mtu_disc.blank? %>
+ mtu-disc <%=h l2vpn_server.mtu_disc %>
 <% end %>
 
 dev   <%=h l2vpn_server.tap.name %>
 dev-type  tap
 
-log-append  /path/to/log/<%=h l2vpn_server.name.gsub(" ", "_") + '.log' %>
-status      /path/to/log/<%=h l2vpn_server.name.gsub(" ", "_") + '.stats' %>
+log-append  /var/log/openvpn/<%=h l2vpn_server.name.gsub(" ", "_") + '.log' %>
+status      /var/log/openvpn/<%=h l2vpn_server.name.gsub(" ", "_") + '.stats' %>
 
 <% if l2vpn_server.cipher != 'none' %>
 tls-server
 cipher      <%=h l2vpn_server.cipher %>
-ca          /path/to/<%=h ca_name  + '-ca-crt.pem' %>
-#crl-verify /path/to/<%=h ca_name  + '-crl.pem ' %>
-cert        /path/to/<%=h ca_name  + '-server-crt.pem ' %>
-key         /path/to/<%=h ca_name  + '-server-key.pem ' %>
-dh          /path/to/<%=h ca_name  + '-dh1024.pem' %>
-tls-auth    /path/to/<%=h ca_name  + '-tls-data-key.pem 0' %>
-duplicate-cn
+ca          /etc/openvpn/<%=h ca_name  + '-ca-crt.pem' %>
+#crl-verify /etc/openvpn/<%=h ca_name  + '-crl.pem ' %>
+cert        /etc/openvpn/<%=h ca_name  + '-server-crt.pem ' %>
+key         /etc/openvpn/<%=h ca_name  + '-server-key.pem ' %>
+dh          /etc/openvpn/<%=h ca_name  + '-dh1024.pem' %>
+tls-auth    /etc/openvpn/<%=h ca_name  + '-tls-data-key.pem 0' %>
 <% end %>
-
-crl-verify /path/to/<%=h ca_name  + '-crl.pem' %>
 
 keepalive    5 15
 

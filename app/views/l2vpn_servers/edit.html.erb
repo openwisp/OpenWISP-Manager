@@ -13,6 +13,10 @@
         <%= f.label t(:L2vpn_server_name) %><br />
         <%= f.text_field :name %>
       </p>
+      <p>
+        <%= f.label t(:L2vpn_server_bindall) %><br />
+        <%= f.check_box :bindall %>
+      </p>
 	  <p>
         <%= f.label t(:L2vpn_server_ip) %><br />
         <%= f.text_field :ip %>

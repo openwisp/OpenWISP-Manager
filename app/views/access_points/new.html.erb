@@ -1,11 +1,11 @@
 <script type="text/javascript">
 
-  function gmap_update_position(){
-     lat = document.getElementById('_latitude');
-     lon = document.getElementById('_longitude');
-     lat.value = ''+ <%= @marker_variable %>.getPoint().lat();
-     lon.value = ''+ <%= @marker_variable %>.getPoint().lng();
-  }
+    function gmap_update_position(){
+        lat = document.getElementById('_latitude');
+        lon = document.getElementById('_longitude');
+        lat.value = '' + <%= @marker_variable %>.getPoint().lat();
+        lon.value = '' + <%= @marker_variable %>.getPoint().lng();
+    }
 
 </script>
 
@@ -27,98 +27,98 @@
     <div class="clear">&nbsp;</div>
     <div class="block" id="access_point_block">
       <% form_for([@wisp, @access_point]) do |f| %>
-        <p><%= f.error_messages %></p>
-        <fieldset>
-          <legend><%=t :General_infos %></legend>
-          <p>
-            <%= f.label t(:Name)  %>
-            <%= f.text_field :name, :maxlength => 32 %>
-            <br>
-          </p>
-          <p>
-            <%= f.label t(:AccessPoint_template)  %>
-            <br>
-            <%= 
-              select( 'access_point_template', 
-                      :id, 
-                      @access_point_templates.collect { |ht| [ ht.name, ht.id.to_s ] }, 
-                      :selected => @selected_access_point_template,
-                      :include_blank => ''
-              )
-            %>
-          </p>
-          <p>
-            <%= f.label t(:AccessPoint_groups)  %>
-            <br>
-            <%= 
-              select_tag( 'access_point_groups[]', 
-                      options_for_select(@access_point_groups.collect { |hg| [ hg.name, hg.id.to_s ] }, 
-                      @selected_access_point_groups),
-                      :multiple => true
-              )
-            %>
-          </p>
-          <p>
-            <%= f.label t(:Mac_address)  %>
-            <br>
-            <%= f.text_field :mac_address, :maxlength => 17 %>
-          </p>
-          <p>
-            <%= f.label t(:internal), t(:Internal_qm) %>
-            <br>
-            <%= f.check_box :internal %>
-          </p>
-          <p>
-            <%= f.label t(:Activation_date) %>
-            <br>
-            <%= f.date_select :activation_date %>
-          </p>
-          <p>
-            <%= f.label t(:Notes) %>
-            <br>
-            <%= f.text_area :notes, :rows => 3 %>
-          </p>
+          <p><%= f.error_messages %></p>
+          <fieldset>
+            <legend><%=t :General_infos %></legend>
+            <p>
+              <%= f.label t(:Name)  %>
+              <%= f.text_field :name, :maxlength => 32 %>
+              <br>
+            </p>
+            <p>
+              <%= f.label t(:AccessPoint_template)  %>
+              <br>
+              <%=
+                  select( 'access_point_template',
+                          :id,
+                          @access_point_templates.collect { |ht| [ ht.name, ht.id.to_s ] },
+                          :selected => @selected_access_point_template,
+                          :include_blank => ''
+                  )
+              %>
+            </p>
+            <p>
+              <%= f.label t(:AccessPoint_groups)  %>
+              <br>
+              <%=
+                  select_tag( 'access_point_groups[]',
+                              options_for_select(@access_point_groups.collect { |hg| [ hg.name, hg.id.to_s ] },
+                                                 @selected_access_point_groups),
+                              :multiple => true
+                  )
+              %>
+            </p>
+            <p>
+              <%= f.label t(:Mac_address)  %>
+              <br>
+              <%= f.text_field :mac_address, :maxlength => 17 %>
+            </p>
+            <p>
+              <%= f.label t(:internal), t(:Internal_qm) %>
+              <br>
+              <%= f.check_box :internal %>
+            </p>
+            <p>
+              <%= f.label t(:Activation_date) %>
+              <br>
+              <%= f.date_select :activation_date %>
+            </p>
+            <p>
+              <%= f.label t(:Notes) %>
+              <br>
+              <%= f.text_area :notes, :rows => 3 %>
+            </p>
 
-        </fieldset>
+          </fieldset>
 
-        <fieldset>
-          <legend>
-            <%=t :Position_infos %>
-          </legend>
-          <p>
-            <%= f.label t(:City) %>
-            <br>
-            <%= f.text_field :city, :id => '_city', :maxlength => 20 %>
-          </p>
-          <p>
-            <%= f.label t(:Address) %>
-            <br>
-            <%= f.text_field :address, :id => '_address', :maxlength => 45 %>
-          </p>
-          <p>
-            <%= f.label t(:Zip) %>
-            <br>
-            <%= f.text_field :zip, :id => '_zip', :maxlength => 15 %>
-          </p>
-          <p>
-            <%=t :Adjust_position %>
-            <br>
-            <%= @map ? @map.div(:width => '100%', :height => 320) : '' %>
-          </p>
-          <p>
-            <%= f.submit t(:Create) %>
-          </p>
-        </fieldset>
-        <%= f.hidden_field :lat, :id => '_latitude' %>
-        <%= f.hidden_field :lon, :id => '_longitude' %>
+          <fieldset>
+            <legend>
+              <%=t :Position_infos %>
+            </legend>
+            <p>
+              <%= f.label t(:City) %>
+              <br>
+              <%= f.text_field :city, :id => '_city', :maxlength => 20 %>
+            </p>
+            <p>
+              <%= f.label t(:Address) %>
+              <br>
+              <%= f.text_field :address, :id => '_address', :maxlength => 45 %>
+            </p>
+            <p>
+              <%= f.label t(:Zip) %>
+              <br>
+              <%= f.text_field :zip, :id => '_zip', :maxlength => 15 %>
+            </p>
+            <p>
+              <%=t :Adjust_position %>
+              <br>
+              <%= @map ? @map.div(:width => '100%', :height => 320) : '' %>
+            </p>
+            <p>
+              <%= f.submit t(:Create) %>
+            </p>
+          </fieldset>
+          <%= f.hidden_field :lat, :id => '_latitude' %>
+          <%= f.hidden_field :lon, :id => '_longitude' %>
       <% end %>
     </div>
   </div>
 </div>
 <div class="clear">&nbsp;</div>
-    
-<%= 
-  observe_fields ['_city', '_address', '_zip'], 
-    :frequency => 2,
-    :url => { :action => :ajax_update_gmap }
+
+<%=
+    observe_fields ['_city', '_address', '_zip'],
+                   :frequency => 2,
+                   :url => { :action => :ajax_update_gmap }
 %>

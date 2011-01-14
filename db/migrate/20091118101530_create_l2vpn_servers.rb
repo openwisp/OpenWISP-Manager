@@ -9,6 +9,7 @@ class CreateL2vpnServers < ActiveRecord::Migration
       t.text :dh
       t.text :notes
       t.string :ip
+      t.boolean :bindall, :null => false
       t.integer :mtu
       t.string :mtu_disc
 

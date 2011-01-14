@@ -14,8 +14,8 @@ uci changes openvpn | grep "=openvpn" | cut -d'.' -f2 | cut -d'=' -f1 | awk '{"r
 uci revert openvpn
 
 <% access_point.l2vpn_clients.each do |v| %>
-echo "Removing tap <%=h v.tap.name %>"
-openvpn --rmtun --dev <%=h v.tap.name %> --dev-type tap
+    echo "Removing tap <%=h v.tap.name %>"
+    openvpn --rmtun --dev <%=h v.tap.name %> --dev-type tap
 <% end %>
 
 # Ugly!
@@ -27,18 +27,18 @@ echo "Reverting network configuration and removing its configuration"
 uci changes network | grep interface | cut -d'=' -f1 | cut -d'.' -f2 | awk '{"ifdown "$1|getline;print}'
 uci revert network
 <% if access_point.bridges.length > 0 %>
-<% access_point.bridges.each do |b| %>
-echo "Disabling bridge <%=h b.name %>"
-ifdown <%=h b.name %>
-<% end %>
+    <% access_point.bridges.each do |b| %>
+        echo "Disabling bridge <%=h b.name %>"
+        ifdown <%=h b.name %>
+    <% end %>
 <% end %>
 wifi up
 
-<% if access_point.access_point_template.custom_script_templates.length > 0 ||  access_point.custom_scripts.length > 0 -%>
-echo "Stopping Cron"
-crond
-echo "Removing Cron Scripts"
-crontab -r
+<% if (!access_point.access_point_template.nil? and access_point.access_point_template.custom_script_templates.length > 0) or  access_point.custom_scripts.length > 0 -%>
+    echo "Stopping Cron"
+    crond
+    echo "Removing Cron Scripts"
+    crontab -r
 <% end %>
 
 echo "Configuration un-installed"

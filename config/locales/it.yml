@@ -147,6 +147,7 @@ it:
   L2vpn_server_cipher: Cifrario
   L2vpn_server_created: Server
   L2vpn_server_ip: IP Server vpn layer 2
+  L2vpn_server_bindall: Bind all
   L2vpn_server_name: Nome
   L2vpn_server_port: Porta
   L2vpn_server_protocol: Protocollo
