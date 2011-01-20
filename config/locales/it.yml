@@ -294,7 +294,7 @@ it:
   none: nessuno
   static: statico
   OWISPManager_servers: Server del vWISP manager
-  vWisps_manager: vWISP manager
+  vWisps_manager: OWM
 
   number:
     format:
