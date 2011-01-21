@@ -4,8 +4,6 @@ require 'yaml'
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  layout "main"
-
   before_filter :configure_gmap_key
 
   helper_method :current_operator_session, :current_operator
@@ -48,7 +46,7 @@ class ApplicationController < ActionController::Base
         store_location
         flash[:notice] = t(:You_must_be_logged_in_to_access_this_page)
         redirect_to new_operator_session_url
-        return false
+        false
       end
     end
 
@@ -61,7 +59,7 @@ class ApplicationController < ActionController::Base
         else
           redirect_to wisp_url(current_operator.wisp)
         end
-        return false
+        false
       end
     end
     

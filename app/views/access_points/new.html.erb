@@ -1,13 +1,11 @@
-<script type="text/javascript">
-
-    function gmap_update_position(){
-        lat = document.getElementById('_latitude');
-        lon = document.getElementById('_longitude');
-        lat.value = '' + <%= @marker_variable %>.getPoint().lat();
-        lon.value = '' + <%= @marker_variable %>.getPoint().lng();
-    }
-
-</script>
+<%= javascript_tag("
+function gmap_update_position() {
+    lat = document.getElementById('_latitude');
+    lon = document.getElementById('_longitude');
+    lat.value = '' + #{@marker_variable}.getPoint().lat();
+    lon.value = '' + #{@marker_variable}.getPoint().lng();
+}"
+    ) %>
 
 <div class="grid_16">
   <div class="box">
@@ -47,8 +45,9 @@
                   )
               %>
             </p>
+<%#
             <p>
-              <%= f.label t(:AccessPoint_groups)  %>
+              <%= f.label t(:AccessPoint_groups)  % >
               <br>
               <%=
                   select_tag( 'access_point_groups[]',
@@ -56,8 +55,9 @@
                                                  @selected_access_point_groups),
                               :multiple => true
                   )
-              %>
+              % >
             </p>
+%>
             <p>
               <%= f.label t(:Mac_address)  %>
               <br>

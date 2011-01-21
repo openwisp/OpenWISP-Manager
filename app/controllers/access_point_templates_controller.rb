@@ -1,14 +1,14 @@
 class AccessPointTemplatesController < ApplicationController
 
-  before_filter :load_wisp, :except => [:ajax_stats, :list_access_points, :commit_configuration, :ajax_update]
-  before_filter :load_access_point_template, :except => [:index, :new, :create, :ajax_stats, :list_access_points, :commit_configuration, :ajax_update ]
+  before_filter :load_wisp, :except => [:ajax_stats, :list_access_points]
+  before_filter :load_access_point_template, :except => [:index, :new, :create, :ajax_stats, :list_access_points]
 
   access_control :subject_method => :current_operator do
     default :deny
 
     allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :update, :destroy, :commit_configuration, :list_access_points, :ajax_stats, :ajax_update]
-    allow :wisp_operator, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :update, :destroy, :commit_configuration, :list_access_points, :ajax_stats, :ajax_update]
+    allow :wisp_admin, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :update, :destroy, :list_access_points, :ajax_stats, :ajax_update]
+    allow :wisp_operator, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :update, :destroy, :list_access_points, :ajax_stats, :ajax_update]
   end
   
   def load_wisp
@@ -98,20 +98,6 @@ class AccessPointTemplatesController < ApplicationController
     render :partial => "access_points_list", :locals => { :access_point_template_id => template_id }
   end
 
-  def commit_configuration
-    template_id =  params[:template_id]
-    MiddleMan.worker(:configuration_update_worker).async_update_template_configuration(:arg => template_id)
-    access_point_template = AccessPointTemplate.find(template_id)
-    access_point_template.touch(:committed_at)
-    render :partial => "access_points_list", :locals => { :access_point_template_id => template_id }
-  end
-
-  def ajax_update
-    @access_point_template = AccessPointTemplate.find(params[:id])
-    respond_to do |format|
-      format.html { render :partial => "template_update_block", :object =>  @access_point_template }
-    end
-  end
   # Ajax Methods
   def ajax_stats
     @access_point_template = AccessPointTemplate.find(params[:id])

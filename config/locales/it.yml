@@ -26,6 +26,7 @@ it:
   Access_point_templates_list: Lista dei template di access point
   Access_points_in_group: Access point nel gruppo
   Access_points_list: Lista degli access point
+  Access_points_updated: "Tutti gli access point sono aggiornati"
   Account_registered: Account creato
   Account_updated:  Account aggiornato
   Activation_date: Data di attivazione
@@ -168,6 +169,7 @@ it:
   Listing_access_point_groups: Gruppi di access point definiti
   Listing_access_point_templates: Template di access point definiti
   Listing_access_points: Access point definiti
+  Listing_access_points_for_template: "Access point per il template %{template}"
   Listing_bridge_templates: Template di bridge definiti
   Listing_bridges: Bridge presenti
   Listing_custom_script_templates: Template di Custom Script definiti
@@ -180,6 +182,7 @@ it:
   Listing_l2vpn_servers: Server vpn layer 2 presenti
   Listing_l2vpn_templates: Template di vpn layer 2 presenti
   Listing_operators: Operatori presenti
+  Listing_outdated_access_points: "Elenco degli access point da aggiornare"
   Listing_radios: Interfacce radio presenti
   Listing_radio_templates: Template di interfacce radio presenti
   Listing_servers: Server presenti
@@ -224,6 +227,7 @@ it:
   Operators: Operatori
   Operators_list: Lista operatori
   Organization: Organizzazione
+  Outdated_access_points_list: "Lista degli access point da aggiornare"
   Output_band: Banda di output
   Output_band_for: Banda di output per
   Owner: Possessore
@@ -243,6 +247,7 @@ it:
   Revoked: Revocato
   Roles: Ruoli
   Select: Seleziona
+  Select_location: Seleziona la posizione
   Select_operation_from_menu: Seleziona l'operazione dal menù
   Server_created: Server creato
   Server_name: Nome del server
@@ -266,6 +271,7 @@ it:
   Template_updated: Stato aggiornamento
   Update: Aggiorna
   Update_configuration: Aggiornamento Configurazione
+  Update_access_point_warning: "Attenzione, saranno modificati i seguenti access point"
   Valid: Valido
   VapTemplates: Template di vap
   Vap_template: Template di vap
@@ -273,6 +279,7 @@ it:
   Visibility: Visibilità
   VlanTemplates: Template di vlan
   Vlans: Vlan
+  Warning: Attenzione
   Wisp: wISP
   Wisp_name: Nome wISP 
   Wisp_access_points: Access point del wISP
@@ -364,34 +371,34 @@ it:
       half_a_minute: "mezzo minuto"
       less_than_x_seconds:
         one:  "meno di un secondo"
-        other: "meno di {{count}} secondi"
+        other: "meno di %{count} secondi"
       x_seconds:
         one:  "1 secondo"
-        other: "{{count}} secondi"
+        other: "%{count} secondi"
       less_than_x_minutes:
         one:  "meno di un minuto"
-        other: "meno di {{count}} minuti"
+        other: "meno di %{count} minuti"
       x_minutes:
         one:  "1 minuto"
-        other: "{{count}} minuti"
+        other: "%{count} minuti"
       about_x_hours:
         one:  "circa un'ora"
-        other: "circa {{count}} ore"
+        other: "circa %{count} ore"
       x_days:
         one:  "1 giorno"
-        other: "{{count}} giorni"
+        other: "%{count} giorni"
       about_x_months:
         one:  "circa un mese"
-        other: "circa {{count}} mesi"
+        other: "circa %{count} mesi"
       x_months:
         one:  "1 mese"
-        other: "{{count}} mesi"
+        other: "%{count} mesi"
       about_x_years:
         one:  "circa un anno"
-        other: "circa {{count}} anni"
+        other: "circa %{count} anni"
       over_x_years:
         one:  "oltre un anno"
-        other: "oltre {{count}} anni"
+        other: "oltre %{count} anni"
     prompts:
       year:   "Anno"
       month:  "Mese"
@@ -410,8 +417,8 @@ it:
     errors:
       template:
         header: 
-          one: "Non posso salvare questo {{model}}: 1 errore"
-          other: "Non posso salvare questo {{model}}: {{count}} errori."
+          one: "Non posso salvare questo %{model}: 1 errore"
+          other: "Non posso salvare questo %{model}: %{count} errori."
         body: "Per favore ricontrolla i seguenti campi:"
       messages:
         inclusion: "non è incluso nella lista"
@@ -421,16 +428,16 @@ it:
         accepted: "deve essere accettata"
         empty: "non può essere vuoto"
         blank: "non può essere lasciato in bianco"
-        too_long: "è troppo lungo (il massimo è {{count}} lettere)"
-        too_short: "è troppo corto (il minimo è {{count}} lettere)"
-        wrong_length: "è della lunghezza sbagliata (deve essere di {{count}} lettere)"
+        too_long: "è troppo lungo (il massimo è %{count} lettere)"
+        too_short: "è troppo corto (il minimo è %{count} lettere)"
+        wrong_length: "è della lunghezza sbagliata (deve essere di %{count} lettere)"
         taken: "è già in uso"
         not_a_number: "non è un numero"
-        greater_than: "deve essere superiore a {{count}}"
-        greater_than_or_equal_to: "deve essere superiore o uguale a {{count}}"
-        equal_to: "deve essere uguale a {{count}}"
-        less_than: "deve essere meno di {{count}}"
-        less_than_or_equal_to: "deve essere meno o uguale a {{count}}"
+        greater_than: "deve essere superiore a %{count}"
+        greater_than_or_equal_to: "deve essere superiore o uguale a %{count}"
+        equal_to: "deve essere uguale a %{count}"
+        less_than: "deve essere meno di %{count}"
+        less_than_or_equal_to: "deve essere meno o uguale a %{count}"
         odd: "deve essere dispari"
         even: "deve essere pari"
         not_valid_f: "non valida"
@@ -489,9 +496,9 @@ it:
         shape_down: shape down
       
       radio:
-        name: nome
-        mode: modalità
-        channel: canale
+        name: "nome"
+        mode: "modalità"
+        channel: "canale"
 
   authlogic:
     error_messages:
@@ -511,8 +518,8 @@ it:
     attributes:
       operator_session:
         login: "nome utente"
-        email: email
-        password: password
+        email: "email"
+        password: "password"
         remember_me: "ricorda il mio login"
 
         

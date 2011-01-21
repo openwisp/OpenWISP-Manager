@@ -1,13 +1,11 @@
-require 'libarchive_ruby'
-
 class AccessPointsController < ApplicationController
   include MappablesAddons
-  
+
   helper :Fusioncharts, :Xml
-  
+
   before_filter :load_wisp, :except => [:ajax_update_gmap, :get_configuration, :get_configuration_md5]
-  before_filter :load_access_point, :except => [:index, :new, :create, :ajax_update_gmap, :get_configuration, :get_configuration_md5]
-  
+  before_filter :load_access_point, :except => [:index, :new, :create, :ajax_update_gmap, :get_configuration, :get_configuration_md5, :outdated_access_points_update]
+
   access_control :subject_method => :current_operator do
     default :deny
 
@@ -21,45 +19,45 @@ class AccessPointsController < ApplicationController
   def load_wisp
     @wisp = Wisp.find(params[:wisp_id])
   end
-  
+
   def load_access_point
     @access_point = @wisp.access_points.find(params[:id])
   end
-  
+
   def get_configuration
-    
+
     mac_address = params[:mac_address]
-    
+
     if mac_address =~ /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
-    
+
       mac_address.downcase!
-    
+
       access_point = AccessPoint.find_by_mac_address(mac_address)
       #Updating configuration files if old
       if !access_point.nil?
-      #Sending configuration files for the access point  
-        send_file "#{RAILS_ROOT}/private/access_points_configurations/ap-#{access_point.wisp.id}-#{access_point.id}.tar.gz"    
+        #Sending configuration files for the access point
+        send_file "#{RAILS_ROOT}/private/access_points_configurations/ap-#{access_point.wisp.id}-#{access_point.id}.tar.gz"
       else
         send_file "public/404.html", :status => 404
       end
     else
       send_file "public/404.html", :status => 404
     end
-    
+
   end
-  
+
   def get_configuration_md5
-    
+
     mac_address = params[:mac_address]
-    
+
     if mac_address =~ /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
       mac_address.downcase!
       access_point = AccessPoint.find_by_mac_address(mac_address)
 
-      if !access_point.nil? 
-				if ( HourlyMonitoringAccessPoint.find_by_access_point_id_and_hour_and_date(access_point.id, DateTime.now.hour, Date.today).nil? )
-					HourlyMonitoringAccessPoint.new( :access_point_id => access_point.id ).save!
-				end
+      if !access_point.nil?
+        if ( HourlyMonitoringAccessPoint.find_by_access_point_id_and_hour_and_date(access_point.id, DateTime.now.hour, Date.today).nil? )
+          HourlyMonitoringAccessPoint.new( :access_point_id => access_point.id ).save!
+        end
 
         if !access_point.configuration_md5.nil?
           #Sending md5 digest of configuration files
@@ -71,13 +69,13 @@ class AccessPointsController < ApplicationController
     else
       send_file "public/404.html", :status => 404
     end
-    
+
   end
-  
+
   # GET /wisps/:wisp_id/access_points
   def index
-     @access_points = @wisp.access_points.find(:all)
-  
+    @access_point_templates = @wisp.access_point_templates
+
     respond_to do |format|
       format.html # index.html.erb
     end
@@ -85,7 +83,7 @@ class AccessPointsController < ApplicationController
 
   # GET /wisps/:wisp_id/access_points/1
   def show
-    
+
     @map_variable = "map_new"
     @marker_variable = "marker_new"
     @div_variable = "div_new"
@@ -112,7 +110,7 @@ class AccessPointsController < ApplicationController
 ENI
     @marker = GMarker.new(@latlon, :title => @access_point.name, :draggable => false, :info_window => info )
     @map.overlay_global_init(@marker, @marker_variable)
-    
+
     respond_to do |format|
       format.html # show.html.erb
     end
@@ -135,12 +133,12 @@ ENI
     llz = get_center_zoom(@wisp.access_points)
     @latlon = llz[0,2]
     @zoom = llz[2]
-    
+
     @map = GMap.new(@div_variable, @map_variable)
     @map.control_init(:large_map => true,:map_type => true)
     @map.set_map_type_init(GMapType::G_HYBRID_MAP)
     @map.center_zoom_init(@latlon, @zoom)
-    @marker = GMarker.new(@latlon, :title => t(:scegli_posizione), :draggable => true )
+    @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true )
     @map.overlay_global_init(@marker,@marker_variable)
     @map.record_init @marker.on_dragend("gmap_update_position")
 
@@ -166,7 +164,7 @@ ENI
     @map.control_init(:large_map => true,:map_type => true)
     @map.set_map_type_init(GMapType::G_HYBRID_MAP)
     @map.center_zoom_init(@latlon, @zoom)
-    @marker = GMarker.new(@latlon, :title => t(:scegli_posizione), :draggable => true )
+    @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true )
     @map.overlay_global_init(@marker,@marker_variable)
     @map.record_init @marker.on_dragend("gmap_update_position")
 
@@ -175,17 +173,17 @@ ENI
   # POST /wisps/:wisp_id/access_points
   def create
     @access_point = @wisp.access_points.build(params[:access_point])
-    
+
     # MAC Address in lowercase 
     @access_point.mac_address.downcase!
-    
+
     @access_point_groups = @wisp.access_point_groups
     if params[:access_point_groups].nil?
       @selected_access_point_groups = []
     else
       @selected_access_point_groups = params[:access_point_groups]
     end
-    
+
     @access_point_templates = @wisp.access_point_templates
     @selected_access_point_template = params[:access_point_template][:id]
 
@@ -203,9 +201,9 @@ ENI
     link_success = true
     AccessPoint.transaction do
       # We have to generate access_point.id to permit templates instantiations (access_point.id)
-	
+
       if @access_point.save
-        
+
         unless @access_point_template.nil?
           unless @access_point.link_to_template(@access_point_template)
             link_success = false
@@ -215,13 +213,13 @@ ENI
         #Generation of the configuration files for the Access Point just saved
         @access_point.generate_configuration
         #Generation of md5 digest for new configuration
-        @access_point.generate_configuration_md5		
+        @access_point.generate_configuration_md5
         @access_point.touch(:committed_at)
       else
         save_success = false
       end
     end
-    
+
     if save_success and link_success
       respond_to do |format|
         flash[:notice] = t(:AccessPoint_was_successfully_created)
@@ -238,7 +236,7 @@ ENI
       @map.control_init(:large_map => true,:map_type => true)
       @map.set_map_type_init(GMapType::G_HYBRID_MAP)
       @map.center_zoom_init(@latlon, @zoom)
-      @marker = GMarker.new(@latlon, :title => t(:scegli_posizione), :draggable => true )
+      @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true )
       @map.overlay_global_init(@marker,@marker_variable)
       @map.record_init @marker.on_dragend("gmap_update_position")
 
@@ -249,7 +247,7 @@ ENI
 
       respond_to do |format|
         format.html { render :action => "new" }
-      end    
+      end
     end
   end
 
@@ -269,21 +267,21 @@ ENI
     end
 
     if @access_point.update_attributes(params[:access_point])
-      
+
       # Delete old Configuration
       @conf_fileName = "#{RAILS_ROOT}/private/access_points_configurations/ap-#{@access_point.wisp.id}-#{@access_point.id}.tar.gz"
       File.delete(@conf_fileName)
-      
+
       # Updating of the configuration files for the Access Point just edited
       @access_point.generate_configuration
-      
+
       # Generation of md5 digest for new configuration
-      @access_point.generate_configuration_md5		
+      @access_point.generate_configuration_md5
       @access_point.touch(:committed_at)
-      
+
       respond_to do |format|
-          flash[:notice] = t(:AccessPoint_was_successfully_updated)
-          format.html { redirect_to(wisp_access_point_url(@wisp, @access_point)) }
+        flash[:notice] = t(:AccessPoint_was_successfully_updated)
+        format.html { redirect_to(wisp_access_point_url(@wisp, @access_point)) }
       end
     else
       @hselected_access_point_template = @access_point.access_point_template.id.to_s
@@ -298,50 +296,60 @@ ENI
       @map.control_init(:large_map => true,:map_type => true)
       @map.set_map_type_init(GMapType::G_HYBRID_MAP)
       @map.center_zoom_init(@latlon, @zoom)
-      @marker = GMarker.new(@latlon, :title => t(:scegli_posizione), :draggable => true )
+      @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true )
       @map.overlay_global_init(@marker,@marker_variable)
       @map.record_init @marker.on_dragend("gmap_update_position")
 
       respond_to do |format|
         format.html { render :action => "edit" }
-      end    
+      end
     end
   end
 
   # DELETE /wisps/:wisp_id/access_points/1
   def destroy
-    
+
     @conf_fileName = "#{RAILS_ROOT}/private/access_points_configurations/ap-#{@access_point.wisp.id}-#{@access_point.id}.tar.gz"
-    File.delete(@conf_fileName) 
-    
+    File.delete(@conf_fileName)
+
     @access_point.destroy
 
     respond_to do |format|
       format.html { redirect_to(wisp_access_points_url(@wisp)) }
     end
   end
-  
+
+  # Outdated access point update and summary
+  def outdated_access_points_update
+    @access_points = @wisp.access_points.select {|ap| ap.is_outdated? }
+    if params[:update]
+      worker = MiddleMan.worker(:configuration_update_worker)
+      worker.outdated_access_points_update(:arg => { :access_point_ids => @access_points.map{ |ap| ap.id } })
+      @access_points = []
+    end
+  end
+
   # Ajax Methods
   def ajax_update_gmap
     @map = GMap.new(@div_variable, @map_variable)
     @map_variable = "map_new"
     @marker_variable = "marker_new"
     @div_variable = "div_new"
-    
+
     location = (params['_address'].nil? ? '' : params['_address']) + ' ' + (params['_zip'].nil? ? '' : params['_zip']) + ' ' + (params['_city'].nil? ? '' : params['_city'])
 
     req_location = Geokit::Geocoders::GoogleGeocoder.geocode(location)
     if req_location.success
       @latlon = [req_location.lat, req_location.lng]
       @map = Variable.new(@map_variable)
-      @marker = GMarker.new(@latlon, :title => t(:scegli_posizione), :draggable => true)
+      @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true)
       @map.overlay_global_init(@marker,@marker_variable)
       @map.record_init @marker.on_dragend("gmap_update_position")
-      @zoom = (req_location.accuracy * 2.3).floor 
+      @zoom = (req_location.accuracy * 2.3).floor
     else
       @zoom = 12
     end
-    
+
   end
-  
+
 end

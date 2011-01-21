@@ -1,0 +1,75 @@
+<div class="grid_16">
+  <div class="box">
+    <h4><a><%= t(:Outdated_access_points_list) %> - <%=h @wisp.name %></a></h4>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+
+<% if @access_points.nil? or @access_points.empty? %>
+    <div class="grid_14 prefix_1 suffix_1">
+      <div class="box">
+        <h2><a href="#" id="toggle-infos">&nbsp;</a></h2>
+        <div class="block info" id="infos_block">
+          <p><%=t :Access_points_updated %></p>
+        </div>
+      </div>
+    </div>
+    <div class="clear">&nbsp;</div>
+<% else %>
+    <div class="grid_14 prefix_1 suffix_1">
+      <div class="box">
+        <h2><a href="#" id="toggle-warnings"><%= t(:Warning) %></a></h2>
+        <div class="block warn" id="warnings_block">
+          <p><%=t :Update_access_point_warning %></p>
+          <% form_tag outdated_access_points_update_path(@wisp) do %>
+              <%= hidden_field_tag :update, 'true' %>
+              <%= submit_tag t(:Update) %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="clear">&nbsp;</div>
+
+    <div class="grid_14 prefix_1 suffix_1">
+      <div class="box">
+        <h2><a href="#" id="toggle-forms"><%= t(:Listing_outdated_access_points, :count => @access_points.count) %></a></h2>
+        <div class="block" id="access_points_block">
+          <table id="access_points-table">
+            <thead>
+            <tr>
+              <th scope="col" class="head"><%=t :Name %></th>
+              <th scope="col" class="head"><%=t :AccessPoint_template %></th>
+              <th scope="col" class="head"><%=t :Address %></th>
+              <th scope="col" class="head"><%=t :City %></th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+              <td colspan="10" class="foot" style="text-align: center;">
+                &nbsp;
+              </td>
+            </tr>
+            </tfoot>
+            <tbody>
+
+            <% @access_points.each do |access_point| %>
+                <tr>
+                  <td><%=h access_point.name %></td>
+                  <td>
+                    <% unless access_point.access_point_template.nil? %>
+                        <%=h access_point.access_point_template.name %>
+                    <% else %>
+                        &nbsp;
+                    <% end %>
+                  </td>
+                  <td><%=h access_point.address %></td>
+                  <td><%=h access_point.city %></td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="clear">&nbsp;</div>
+<% end %>

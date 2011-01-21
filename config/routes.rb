@@ -19,7 +19,6 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'get_config/:mac_address.md5', :controller => 'access_points', :action => 'get_configuration_md5'
   
   map.connect 'wisps/:id/get_crl_list', :controller => 'wisps', :action => 'get_crl_list'
-  
 
   map.resources :servers do |server|
     server.resources :l2vpn_servers
@@ -63,6 +62,9 @@ ActionController::Routing::Routes.draw do |map|
     end
 
   end
+
+  # Outdated access point update and summary
+  map.outdated_access_points_update 'wisps/:wisp_id/outdated_access_points_update', :controller => 'access_points', :action => 'outdated_access_points_update'
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

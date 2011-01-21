@@ -257,12 +257,8 @@ class AccessPoint < ActiveRecord::Base
     (self.ethernets.map { | e | e.vlans } + self.taps.map { |t| t.vlans }).flatten
   end
 
-  def is_committed?
-    if ( self.committed_at < self.updated_at)
-      return false
-    else
-      return true
-    end
+  def is_outdated?
+    self.access_point_template.updated_at > self.updated_at
   end
 
 end

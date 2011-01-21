@@ -37,12 +37,4 @@ class AccessPointTemplate < ActiveRecord::Base
       self.tap_templates.map { |t| t.vlan_templates }).flatten
   end
 
-  def is_committed?
-    if self.committed_at < self.updated_at
-      return false
-    else
-      return true
-    end
-  end
-
 end
