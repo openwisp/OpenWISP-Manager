@@ -23,7 +23,7 @@
 
 <div class="grid_5">
   <div class="box">
-    <h2><a href="#" id="toggle-forms"><%=h t(:General_infos) %></a></h2>
+    <h2><a href="#" class="toggle-forms"><%=h t(:General_infos) %></a></h2>
     <ul class="nav main">
       <li>
         <%= link_to t(:Edit), edit_wisp_access_point_path(@wisp, @access_point) %>
@@ -102,17 +102,7 @@
 
 <div class="grid_11">
   <div class="box">
-    <h2><a href="#" id="toggle-forms"><%=h t(:Access_point_statistics) %></a></h2>
-    <div class="block" style="text-align:center;">
-      <% render_chart_html root_path + 'FusionCharts/FCF_Line.swf', wisp_access_point_hourly_monitoring_access_point_path(@wisp, @access_point, :format => :xml), '', 'AccessPointUptimeStats', 320, 240, false do %>
-      <% end %>
-      <% render_chart_html root_path + 'FusionCharts/FCF_Line.swf', wisp_access_point_weekly_monitoring_access_point_path(@wisp, @access_point, :format => :xml), '', 'AccessPointUptimeStats', 320, 240, false do %>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="box">
-    <h2><a href="#" id="toggle-forms"><%= t(:Detailed_info) %></a></h2>
+    <h2><a href="#" class="toggle-forms"><%= t(:Detailed_info) %></a></h2>
     <ul class="nav main">
       <li>
         <%= link_to_remote t(:Radios), :method => :get,

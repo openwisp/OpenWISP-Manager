@@ -1,8 +1,6 @@
 class AccessPointsController < ApplicationController
   include MappablesAddons
 
-  helper :Fusioncharts, :Xml
-
   before_filter :load_wisp, :except => [:ajax_update_gmap, :get_configuration, :get_configuration_md5]
   before_filter :load_access_point, :except => [:index, :new, :create, :ajax_update_gmap, :get_configuration, :get_configuration_md5, :outdated_access_points_update]
 
