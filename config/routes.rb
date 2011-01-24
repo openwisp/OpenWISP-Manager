@@ -64,7 +64,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   # Outdated access point update and summary
-  map.outdated_access_points_update 'wisps/:wisp_id/outdated_access_points_update', :controller => 'access_points', :action => 'outdated_access_points_update'
+  map.outdated_access_points_update 'wisps/:wisp_id/outdated_access_points_update/:id', :controller => 'access_points', :action => 'outdated_access_points_update'
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

@@ -320,12 +320,21 @@ ENI
   end
 
   # Outdated access point update and summary
+  # Actions redirects to a single ap when invoked on an ap show view (a single ap gets updated)
   def outdated_access_points_update
-    @access_points = @wisp.access_points.select {|ap| ap.is_outdated? }
+    @access_points = params[:id] ? [load_access_point] : @wisp.access_points.select {|ap| ap.is_outdated? }
+
     if params[:update]
       worker = MiddleMan.worker(:configuration_update_worker)
       worker.outdated_access_points_update(:arg => { :access_point_ids => @access_points.map{ |ap| ap.id } })
       @access_points = []
+    end
+
+    # Redirect if called on a single AP
+    # Otherwise render the outdated_access_points_update view
+    if params[:id]
+      flash[:notice] = I18n.t(:AccessPoint_was_successfully_updated)
+      redirect_to(wisp_access_point_url(@wisp, @access_point))
     end
   end
 
