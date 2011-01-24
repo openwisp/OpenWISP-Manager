@@ -5,19 +5,21 @@
 </div>
 <div class="clear">&nbsp;</div>
 
-<div class="grid_16">
-  <div class="box">
-    <h2><a href="#" id="toggle-warnings"><%= t(:Warning) %></a></h2>
-    <div class="block warn" id="warnings_block">
-      <p><%=t :Update_one_access_point_warning, :template => @access_point.template.name %></p>
-      <% form_tag outdated_access_points_update_path(@wisp, @access_point) do %>
-          <%= hidden_field_tag :update, 'true' %>
-          <%= submit_tag t(:Update) %>
-      <% end %>
+<% if @access_point.is_outdated? %>
+    <div class="grid_16">
+      <div class="box">
+        <h2><a href="#" id="toggle-warnings"><%= t(:Warning) %></a></h2>
+        <div class="block warn" id="warnings_block">
+          <p><%=t :Update_one_access_point_warning, :template => @access_point.template.name %></p>
+          <% form_tag outdated_access_points_update_path(@wisp, @access_point) do %>
+              <%= hidden_field_tag :update, 'true' %>
+              <%= submit_tag t(:Update) %>
+          <% end %>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-<div class="clear">&nbsp;</div>
+    <div class="clear">&nbsp;</div>
+<% end %>
 
 <div class="grid_5">
   <div class="box">
