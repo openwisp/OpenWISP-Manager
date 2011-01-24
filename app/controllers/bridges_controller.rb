@@ -30,4 +30,10 @@ class BridgesController < ApplicationController
     end
   end
 
+  # TODO: Write edit action (route and view are defined but
+  # the controller is missing)
+  def edit
+    render :nothing => true
+  end
+
 end
