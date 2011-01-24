@@ -38,9 +38,7 @@
   <div class="clear">&nbsp;</div>
 
   <div class="grid_8" id="_flash_bar"style="color:green">
-    <div id="_flash_bar">
-      <strong><%= flash[:notice] ? flash[:notice] : "&nbsp;" %></strong>
-    </div>
+    <strong><%= flash[:notice] ? flash[:notice] : "&nbsp;" %></strong>
   </div>
   <div class="grid_8" style="text-align:right">
     <a>
@@ -58,13 +56,13 @@
       <% if current_operator and current_operator.has_role? 'admin' %>
           <!-- Super admin menus -->
           <li>
-            <%= link_to t(:Super_admin), wisps_path() %>
+            <%= link_to t(:Super_admin), '#', :class => 'nohand' %>
             <ul>
               <li>
-                <%= link_to t(:Wisps), wisps_path() %>
+                <%= link_to t(:Wisps), wisps_path %>
               </li>
               <li>
-                <%= link_to t(:OWISPManager_servers), servers_path() %>
+                <%= link_to t(:OWISPManager_servers), servers_path %>
               </li>
             </ul>
           </li>
@@ -73,7 +71,7 @@
       <% if @wisp and @wisp.id %>
           <% if current_operator and ( current_operator.has_role? 'admin' or current_operator.has_role? 'wisp_admin' or current_operator.has_role? 'wisp_operator' ) %>
               <li>
-                <%= link_to t(:Templates) %>
+                <%= link_to t(:Templates), '#', :class => 'nohand' %>
                 <ul>
 <%# TODO: to be restored when a usage for access point template groups will be found 
 
@@ -82,14 +80,14 @@
                   </li>
 %>
                   <li>
-                    <%= link_to t(:AccessPoint_templates), wisp_access_point_templates_path(@wisp) %>
+                    <%= link_to t(:All), wisp_access_point_templates_path(@wisp) %>
                   </li>
 
                 </ul>
               </li>
           <% end %>
           <li>
-            <%= link_to t(:AccessPoints) %>
+            <%= link_to t(:AccessPoints), '#', :class => 'nohand' %>
             <ul>
               <li>
                 <%= link_to t(:All), wisp_access_points_path(@wisp) %>
@@ -108,7 +106,7 @@
 
           <% if current_operator and ( current_operator.has_role? 'admin' or current_operator.has_role? 'wisp_admin' ) %>
               <li>
-                <%= link_to t(:Wisp_services) %>
+                <%= link_to t(:Wisp_services), '#', :class => 'nohand' %>
                 <ul>
                   <li>
                     <%= link_to t(:Certification_authority), wisp_ca_path(@wisp) %>
@@ -123,7 +121,7 @@
       <!-- logout -->
       <% if current_operator %>
           <li>
-            <%= link_to t(:Logout), operator_session_path(), :method => :delete %>
+            <%= link_to t(:Logout), operator_session_path, :method => :delete %>
           </li>
       <% end %>
     </ul>

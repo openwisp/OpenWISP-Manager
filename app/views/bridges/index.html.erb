@@ -2,7 +2,7 @@
   <a><%= t(:Listing_bridges) %></a>
 
   <table id="bridges-table">
-  <thead>
+    <thead>
     <tr>
       <th scope="col" class="head-left"><%= t(:Operations) %></th>
       <th scope="col" class="head"><%= t(:Name) %></th>
@@ -10,74 +10,74 @@
       <th scope="col" class="head"><%= t(:Addressing_mode) %></th>
       <th scope="col" class="head-right"><%= t(:Notes) %></th>
     </tr>
-  </thead>
-  <tfoot>
+    </thead>
+    <tfoot>
     <tr>
       <td colspan="1" class="foot-left">&nbsp;</td>
       <td colspan="3" class="foot">&nbsp;</td>
       <td colspan="1" class="foot-right">&nbsp;</td>
     </tr>
-  </tfoot>
-  <tbody>
-  <% @bridges.each do |bridge| %>
-    <tr>
-      <% if bridge.bridgeables.length == 0 %> 
-      <td style="width:32px;">
-        <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
-              :method => :get,
-              :url => edit_wisp_access_point_bridge_path(@wisp, @access_point, bridge),
-              :title => t(:Edit_info),
-              :update => { :success => "list_bridges_div", :failure => "list_bridges_div" }
-        
-        %>
-
-      </td>
-      <td><%=h bridge.name %></td>
-      <td>&nbsp;</td>
-      <td><%=h t(bridge.addressing_mode) %></td>
-      <td>
-        <% if (bridge.notes.nil? or bridge.notes.length == 0) %>
-          &nbsp;
-        <% else %>
-          <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
-                      :title => h(bridge.notes)
-          %>                    
-        <% end %>
-      </td>
-    <% else %>
-      <td rowspan="<%= bridge.bridgeables.length %>" style="width:32px;">
-        <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
-              :method => :get,
-              :url => edit_wisp_access_point_bridge_path(@wisp, @access_point, bridge),
-              :title => t(:Edit_info),
-              :update => { :success => "list_bridges_div", :failure => "list_bridges_div" }
-      
-        %>
-      </td>
-      <td rowspan="<%= bridge.bridgeables.length %>"><%=h bridge.name %></td>
-      <td>
-        <%=h bridge.bridgeables[0].friendly_name %>
-      </td>
-      <td rowspan="<%= bridge.bridgeables.length %>"><%=h t(bridge.addressing_mode) %></td>
-      <td rowspan="<%= bridge.bridgeables.length %>">
-        <% if (bridge.notes.nil? or bridge.notes.length == 0) %>
-          &nbsp;
-        <% else %>
-          <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
-                      :title => h(bridge.notes)
-          %>                    
-        <% end %>
-      </td>
-    <% end %>
-    </tr>
-    <% if bridge.bridgeables.length > 1 %> 
-      <% bridge.bridgeables.values_at(1..bridge.bridgeables.length-1).each do |b| %>
+    </tfoot>
+    <tbody>
+    <% @bridges.each do |bridge| %>
         <tr>
-          <td><%=h b.friendly_name %></td>
+          <% if bridge.bridgeables.length == 0 %>
+              <td style="width:32px;">
+                <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                                   :method => :get,
+                                   :url => edit_wisp_access_point_bridge_path(@wisp, @access_point, bridge),
+                                   :title => t(:Edit_info),
+                                   :update => { :success => "list_bridges_div", :failure => "list_bridges_div" }
+
+                %>
+
+              </td>
+              <td><%=h bridge.name %></td>
+              <td>&nbsp;</td>
+              <td><%=h t(bridge.addressing_mode) %></td>
+              <td>
+                <% if (bridge.notes.nil? or bridge.notes.length == 0) %>
+                    &nbsp;
+                <% else %>
+                    <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                                :title => h(bridge.notes)
+                    %>
+                <% end %>
+              </td>
+          <% else %>
+              <td rowspan="<%= bridge.bridgeables.length %>" style="width:32px;">
+                <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                                   :method => :get,
+                                   :url => edit_wisp_access_point_bridge_path(@wisp, @access_point, bridge),
+                                   :title => t(:Edit_info),
+                                   :update => { :success => "list_bridges_div", :failure => "list_bridges_div" }
+
+                %>
+              </td>
+              <td rowspan="<%= bridge.bridgeables.length %>"><%=h bridge.name %></td>
+              <td>
+                <%=h bridge.bridgeables[0].friendly_name %>
+              </td>
+              <td rowspan="<%= bridge.bridgeables.length %>"><%=h t(bridge.addressing_mode) %></td>
+              <td rowspan="<%= bridge.bridgeables.length %>">
+                <% if (bridge.notes.nil? or bridge.notes.length == 0) %>
+                    &nbsp;
+                <% else %>
+                    <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                                :title => h(bridge.notes)
+                    %>
+                <% end %>
+              </td>
+          <% end %>
         </tr>
-      <% end %>
+        <% if bridge.bridgeables.length > 1 %>
+            <% bridge.bridgeables.values_at(1..bridge.bridgeables.length-1).each do |b| %>
+                <tr>
+                  <td><%=h b.friendly_name %></td>
+                </tr>
+            <% end %>
+        <% end %>
     <% end %>
-  <% end %>
-  </tbody>
+    </tbody>
   </table>
 </div>

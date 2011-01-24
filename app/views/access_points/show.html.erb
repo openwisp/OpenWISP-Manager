@@ -107,75 +107,59 @@
       <li>
         <%= link_to_remote t(:Radios), :method => :get,
                            :url => wisp_access_point_radios_url(@wisp, @access_point),
-                           :update => { :success => "access_point_block" },
-                           :before => "new Effect.BlindUp('access_point_block', { duration: 0.2, queue: 'front' })",
-                           :after => "new Effect.BlindDown('access_point_block', { duration: 0.2, queue: 'end' })"
+                           :update => { :success => "access_point_block" }
         %>
       </li>
       <li>
         <%= link_to_remote t(:Ethernets), :method => :get,
                            :url => wisp_access_point_ethernets_url(@wisp, @access_point),
-                           :update => { :success => "access_point_block" },
-                           :loading => "new Effect.BlindUp('access_point_block', { duration: 0.2, queue: 'front' })",
-                           :loaded => "new Effect.BlindDown('access_point_block', { duration: 0.2, queue: 'end' })"
+                           :update => { :success => "access_point_block" }
         %>
       </li>
       <li>
         <%= link_to_remote t(:L2vpns), :method => :get,
                            :url => wisp_access_point_l2vpn_clients_url(@wisp, @access_point),
-                           :update => { :success => "access_point_block" },
-                           :before => "new Effect.BlindUp('access_point_block', { duration: 0.2, queue: 'front' })",
-                           :loaded => "new Effect.BlindDown('access_point_block', { duration: 0.2, queue: 'end' })"
+                           :update => { :success => "access_point_block" }
         %>
       </li>
       <li>
         <%= link_to_remote t(:Vlans), :method => :get,
                            :url => wisp_access_point_vlans_url(@wisp, @access_point),
-                           :update => { :success => "access_point_block" },
-                           :loading => "new Effect.BlindUp('access_point_block', { duration: 0.2, queue: 'front' })",
-                           :loaded => "new Effect.BlindDown('access_point_block', { duration: 0.2, queue: 'end' })"
+                           :update => { :success => "access_point_block" }
         %>
       </li>
       <li>
         <%= link_to_remote t(:Bridges), :method => :get,
                            :url => wisp_access_point_bridges_url(@wisp, @access_point),
-                           :update => { :success => "access_point_block" },
-                           :loading => "new Effect.BlindUp('access_point_block', { duration: 0.2, queue: 'front' })",
-                           :loaded => "new Effect.BlindDown('access_point_block', { duration: 0.2, queue: 'end' })"
+                           :update => { :success => "access_point_block" }
         %>
       </li>
       <li>
         <%= link_to_remote t(:L2tcs), :method => :get,
                            :url => wisp_access_point_l2tcs_url(@wisp, @access_point),
-                           :update => { :success => "access_point_block" },
-                           :loading => "new Effect.BlindUp('access_point_block', { duration: 0.2, queue: 'front' })",
-                           :loaded => "new Effect.BlindDown('access_point_block', { duration: 0.2, queue: 'end' })"
+                           :update => { :success => "access_point_block" }
         %>
       </li>
       <li>
-        <a><%=t :Custom_scripts %></a>
+        <%= link_to t(:Custom_scripts), '#', :class => 'nohand' %>
         <ul>
           <li>
             <%= link_to_remote t(:List), :method => :get,
                                :url => wisp_access_point_custom_scripts_url(@wisp, @access_point),
-                               :update => { :success => "access_point_block" },
-                               :loading => "new Effect.BlindUp('access_point_block', { duration: 0.2, queue: 'front' })",
-                               :loaded => "new Effect.BlindDown('access_point_block', { duration: 0.2, queue: 'end' })"
+                               :update => { :success => "access_point_block" }
             %>
           </li>
           <li>
             <%= link_to_remote t(:Add), :method => :get,
                                :url => new_wisp_access_point_custom_script_url(@wisp, @access_point),
-                               :update => { :success => "access_point_block" },
-                               :loading => "new Effect.BlindUp('access_point_block', { duration: 0.2, queue: 'front' })",
-                               :loaded => "new Effect.BlindDown('access_point_block', { duration: 0.2, queue: 'end' })"
+                               :update => { :success => "access_point_block" }
             %>
           </li>
         </ul>
       </li>
     </ul>
     <div class="block" id="access_point_block">
-      <%= t(:Select_operation_from_menu) %>
+      <p class="notice"><%= t(:Select_operation_from_menu) %></p>
     </div>
   </div>
 </div>

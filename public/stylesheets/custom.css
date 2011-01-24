@@ -81,3 +81,12 @@ h1#branding {
     color:green;
     text-align:center;
 }
+
+.notice {
+    font-size:1.4em;
+    text-align:center;
+}
+
+.nohand {
+    cursor:default;
+}

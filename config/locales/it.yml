@@ -56,7 +56,7 @@ it:
   Are_you_sure_template_group_destroy: Sei sicuro di voler eliminare il gruppo di template?
   Are_you_sure_vlan_destroy: Sei sicuro di voler eliminare la vlan?
   Are_you_sure_vlan_template_destroy:  Sei sicuro di voler eliminare il template di vlan?
-  Are_you_sure_wisp_destroy: "Sei sicuro di voler eliminare il wISP? (ATTENZIONE: saranno cancellate definitivamente tutte le informazioni del vWISP compresi gli access point definiti!!)"
+  Are_you_sure_wisp_destroy: "Sei sicuro di voler eliminare il WISP? (ATTENZIONE: saranno cancellate definitivamente tutte le informazioni del WISP compresi gli access point definiti!!)"
   Back: Indietro
   Bridgeables: Interfacce collegabili ad un bridge
   Bridged_interfaces: Interfacce in bridging
@@ -99,7 +99,7 @@ it:
   Destroy_server: Elimina server
   Destroy_vlan: Elimina vlan
   Destroy_vlan_template: Elimina template di vlan
-  Destroy_wisp: Elimina wISP
+  Destroy_wisp: Elimina WISP
   Detailed_info: Informazioni dettagliate
   Device_name: Nome del dispositivo
   Dn_prefix: Prefisso per il distinguish name
@@ -125,7 +125,7 @@ it:
   Editing_radio: Modifica interfaccia radio
   Editing_radio_template: Modifica template di interfaccia radio
   Editing_template_group: Modifica gruppo di template
-  Editing_wisp: Modifica wISP
+  Editing_wisp: Modifica WISP
   Encryption: Cifratura
   Essid: eSSID
   EthernetTemplates: Template di interfaccia ethernet 
@@ -190,7 +190,7 @@ it:
   Listing_template_groups: Gruppi di template presenti
   Listing_vlan_templates: Template di vlan presenti
   Listing_vlans: Vlan presenti
-  Listing_wisps: wISP presenti
+  Listing_wisps: WISP presenti
   Locality: Località
   Logged_in_as: Effettuato l'accesso come
   Login: Accedi
@@ -216,7 +216,7 @@ it:
   New_template_group: Nuovo gruppo di template
   New_vlan: Nuova vlan
   New_vlan_template: Nuovo template di vlan
-  New_wisp: Nuovo wISP
+  New_wisp: Nuovo WISP
   No_access_point: Nessun access point
   No_access_point_template: Nessun template di access point
   None: Nessuno
@@ -283,16 +283,16 @@ it:
   VlanTemplates: Template di vlan
   Vlans: Vlan
   Warning: Attenzione
-  Wisp: wISP
-  Wisp_name: Nome wISP 
-  Wisp_access_points: Access point del wISP
-  Wisp_services: Servizi wISP
-  Wisp_was_successfully_created: Il wISP è stato creato correttamente
-  Wisp_was_successfully_updated: Il wISP è stato aggiornato correttamente
-  Wisp_still_without_aps: Il wISP non possiede ancora APs
+  Wisp: WISP
+  Wisp_name: Nome WISP
+  Wisp_access_points: Access point del WISP
+  Wisp_services: Servizi WISP
+  Wisp_was_successfully_created: Il WISP è stato creato correttamente
+  Wisp_was_successfully_updated: Il WISP è stato aggiornato correttamente
+  Wisp_still_without_aps: Il WISP non possiede ancora APs
   Wisp_for_creation_of_ap_use_panel: Per crearli utilizza il pannello in alto
-  Wisps: wISP
-  Wisps_list: Lista dei wISP 
+  Wisps: Wireless ISP
+  Wisps_list: Lista dei WISP
   X509_certificate: Certificato X509
   You_must_be_logged_in_to_access_this_page: Devi effettuare l'accesso per accedere a questa pagina
   You_must_be_logged_out_to_access_this_page: Devi effettuare il logout per accedere a questa pagina
@@ -303,7 +303,7 @@ it:
   internal: interno
   none: nessuno
   static: statico
-  OWISPManager_servers: Server del vWISP manager
+  OWISPManager_servers: Server per Wireless ISP
   vWisps_manager: OWM
 
   number:
