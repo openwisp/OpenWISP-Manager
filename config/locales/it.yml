@@ -36,6 +36,7 @@ it:
   Address: Indrizzo
   Addressing_mode: Modalità indirizzamento
   Adjust_position: Correggi la posizione
+  All: "Tutti"
   Are_you_sure_access_point_destroy: Sei sicuro di voler eliminare l'access point?
   Are_you_sure_access_point_group_destroy: Sei sicuro di voler eliminare il gruppo di access point?
   Are_you_sure_access_point_template_destroy: "Sei sicuro di voler eliminare il template di access point? (ATTENZIONE: tutti gli access point collegati a questo template saranno cancellati automaticamente!)"
@@ -227,6 +228,7 @@ it:
   Operators: Operatori
   Operators_list: Lista operatori
   Organization: Organizzazione
+  Outdated: "Da aggiornare"
   Outdated_access_points_list: "Lista degli access point da aggiornare"
   Output_band: Banda di output
   Output_band_for: Banda di output per
