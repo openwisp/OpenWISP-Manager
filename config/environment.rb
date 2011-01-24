@@ -28,7 +28,6 @@ Rails::Initializer.run do |config|
   config.gem "system_timer", :version => ">= 1.0"
   config.gem "chronic", :version => ">= 0.2.3"
   config.gem "packet", :version => ">= 0.1.15"
-  config.gem "i18n", :version => ">= 0.5.0"
 
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
