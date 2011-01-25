@@ -119,6 +119,6 @@ function gmap_update_position() {
 
 <%=
     observe_fields ['_city', '_address', '_zip'],
-                   :frequency => 2,
+                   :frequency => 1,
                    :url => { :action => :ajax_update_gmap }
 %>
