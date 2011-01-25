@@ -146,9 +146,10 @@ ENI
       end
     end
   end
-  
+
   def get_crl_list
-     send_data @wisp.ca.crl_list
+    list = @wisp.ca.crl_list ? @wisp.ca.crl_list : ''
+    send_data list
   end
   
   # DELETE /wisps/1
