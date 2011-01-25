@@ -6,6 +6,7 @@ module ApplicationHelper
     fields.each do |field|
       ret += observe_field(field, options.merge({ :with => field }))
     end
+    ret
   end
 
 end
