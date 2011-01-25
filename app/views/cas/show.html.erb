@@ -12,9 +12,9 @@
       <li>
         <%= link_to t(:Back), :back %>
       </li>
-			<li>
-	      <%= link_to t(:Get_crl_list), :controller => "wisps", :id => @wisp, :action => "get_crl_list" %>
-			</li>
+      <li>
+        <%= link_to t(:Get_crl_list), :controller => "wisps", :id => @wisp, :action => "get_crl_list" %>
+      </li>
     </ul>
     <div class="block" id="ca_block">
       <table>
@@ -38,33 +38,33 @@
     <div class="block" id="certificates_block">
       <table id="cas-table">
         <thead>
-          <tr>
-            <th scope="col" class="head-left"><%=t :Operations %></th>
-            <th scope="col" class="head"><%=t :Cn %></th>
-            <th scope="col" class="head"><%=t :Owner %></th>
-            <th scope="col" class="head-right"><%=t :Status %></th>
-          </tr>
+        <tr>
+          <th scope="col" class="head-left"><%=t :Operations %></th>
+          <th scope="col" class="head"><%=t :Cn %></th>
+          <th scope="col" class="head"><%=t :Owner %></th>
+          <th scope="col" class="head-right"><%=t :Status %></th>
+        </tr>
         </thead>
         <tfoot>
-          <tr>
-            <td colspan="1" class="foot-left">&nbsp;</td>
-            <td colspan="2" class="foot">&nbsp;</td>
-            <td colspan="1" class="foot-right">&nbsp;</td>
-          </tr>
+        <tr>
+          <td colspan="1" class="foot-left">&nbsp;</td>
+          <td colspan="2" class="foot">&nbsp;</td>
+          <td colspan="1" class="foot-right">&nbsp;</td>
+        </tr>
         </tfoot>
         <tbody>
-          <% @ca.x509_certificates.each do |cert| %>
+        <% @ca.x509_certificates.each do |cert| %>
             <tr>
               <td style="width:32px;">
                 <%= link_to image_tag("renew.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_ca_x509_certificate_path(@wisp, cert),
                             :title => t(:Renew_certificate)
                 %>
                 <% unless cert == @ca.x509_certificate %>
-                  <%= link_to image_tag("revoke.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_ca_x509_certificate_path(@wisp, cert),
-                              :title => t(:Revoke_certificate),
-                              :confirm => t(:Are_you_sure_certificate_revoke),
-                              :method => :delete
-                  %>
+                    <%= link_to image_tag("revoke.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_ca_x509_certificate_path(@wisp, cert),
+                                :title => t(:Revoke_certificate),
+                                :confirm => t(:Are_you_sure_certificate_revoke),
+                                :method => :delete
+                    %>
                 <% end %>
               </td>
               <td>
@@ -72,35 +72,35 @@
               </td>
               <td>
                 <% if !cert.certificable.nil? %>
-                  <% if cert.certificable.class == L2vpnClient %>
-                    access point '<%= link_to h(cert.certificable.access_point.name),
-                          wisp_access_point_url(@wisp, cert.certificable.access_point),
-                          :title => h(cert.certificable.access_point.notes)
-                    %>' - 
-                    <%=h cert.certificable.tap.friendly_name %>
-                  <% elsif cert.certificable.class == L2vpnServer %>
-                    server '<%=h cert.certificable.server.name %>' - layer 2 vpn server '<%=h cert.certificable.name %>'                
-                  <% elsif cert.certificable.class == Ca %>
-                    <%=h cert.certificable.cn %> CA
-                  <% else %>
-                    &nbsp;
-                  <% end %>
+                    <% if cert.certificable.class == L2vpnClient %>
+                        access point '<%= link_to h(cert.certificable.access_point.name),
+                                                  wisp_access_point_url(@wisp, cert.certificable.access_point),
+                                                  :title => h(cert.certificable.access_point.notes)
+              %>' -
+                        <%=h cert.certificable.tap.friendly_name %>
+                    <% elsif cert.certificable.class == L2vpnServer %>
+                        server '<%=h cert.certificable.server.name %>' - layer 2 vpn server '<%=h cert.certificable.name %>'
+                    <% elsif cert.certificable.class == Ca %>
+                        <%=h cert.certificable.cn %> CA
+                    <% else %>
+                        &nbsp;
+                    <% end %>
                 <% else %>
-                  <b><i><%=h t(:Deleted) %></i></b>
+                    <strong><em><%=h t(:Deleted) %></em></strong>
                 <% end %>
               </td>
               <td>
                 <% if cert.revoked? %>
-                  <font color="#ee5500"><b><%=t :Revoked %></b></font>
+                    <strong style="color:#ee5500"><%=t :Revoked %></strong>
                 <% end %>
                 <% if cert.expired? %>
-                  <font color="#ee0000"><b><%=t :Expired %></b></font>
+                    <strong style="color:#ee0000"><%=t :Expired %></strong>
                 <% elsif !cert.revoked? %>
-                  <font color="#00ee00"><b><%=t :Valid %></b></font>
+                    <strong style="color:#00ee00"><%=t :Valid %></strong>
                 <% end %>
               </td>
             </tr>
-          <% end %>
+        <% end %>
         </tbody>
       </table>
     </div>

@@ -40,11 +40,11 @@
     <div class="block" id="access_point_info_block">
       <table>
         <tr>
-          <td><b><%=t :Name %></b></td>
+          <td><strong><%=t :Name %></strong></td>
           <td><%=h @access_point.name %></td>
         </tr>
         <tr>
-          <td><b><%=t :Template %></b></td>
+          <td><strong><%=t :Template %></strong></td>
           <% if @access_point.access_point_template.nil? %>
               <td><%=t :None %></td>
           <% else %>
@@ -52,23 +52,23 @@
           <% end %>
         </tr>
         <tr>
-          <td><b><%=t :Mac_address %></b></td>
+          <td><strong><%=t :Mac_address %></strong></td>
           <td><%=h @access_point.mac_address %></td>
         </tr>
         <tr>
-          <td><b><%=t :Internal %></b></td>
+          <td><strong><%=t :Internal %></strong></td>
           <td><%= @access_point.internal? ? t(:_yes) : t(:_no) %></td>
         </tr>
         <tr>
-          <td><b><%=t :Activation_date %></b></td>
+          <td><strong><%=t :Activation_date %></strong></td>
           <td><%=h @access_point.activation_date %></td>
         </tr>
         <tr>
-          <td><b><%=t :Address %></b></td>
+          <td><strong><%=t :Address %></strong></td>
           <td><%=h @access_point.address %></td>
         </tr>
         <tr>
-          <td><b><%=t :City %></b></td>
+          <td><strong><%=t :City %></strong></td>
           <td><%=h @access_point.city %></td>
         </tr>
         <% if @access_point.notes.length > 0 %>
@@ -76,7 +76,7 @@
               <td colspan="2">&nbsp;</td>
             </tr>
             <tr>
-              <td colspan="2"><b><%=t :Notes %></b></td>
+              <td colspan="2"><strong><%=t :Notes %></strong></td>
             </tr>
             <tr>
               <td colspan="2"><%= h(@access_point.notes).gsub(/\n/, "<br>") %></td>
@@ -87,7 +87,7 @@
               <td colspan="2">&nbsp;</td>
             </tr>
             <tr>
-              <td colspan="2"><b><%=t :Groups_for_access_point %></b></td>
+              <td colspan="2"><strong><%=t :Groups_for_access_point %></strong></td>
             </tr>
             <% @access_point.access_point_groups.each do |g|  %>
                 <tr>

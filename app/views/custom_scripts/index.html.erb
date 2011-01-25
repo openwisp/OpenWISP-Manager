@@ -29,7 +29,7 @@
 			<% @custom_script_templates.each do |custom_script_template| %>
 				<tr>
 	      	<td style="width:32px;">
-						<i><%= t :Inherited %></i>
+						<em><%= t :Inherited %></em>
 		      </td>
 		    	<td rowspan="1"><%=h custom_script_template.name %></td>
 			  	<td><%= link_to image_tag("script.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",

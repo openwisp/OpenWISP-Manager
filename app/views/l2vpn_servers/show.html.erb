@@ -4,41 +4,41 @@
 	    <div class="block" id="access_point_block">
 	      <table>
 		    <tr>
-	          <td><b><%=t :Wisp_name %></b></td>
+	          <td><strong><%=t :Wisp_name %></strong></td>
 	          <td><%=h @l2vpn_server.wisp.name %></td>
 	        </tr>
 			<tr>
 	          <td colspan="2">&nbsp;</td>
 	        </tr>
 	        <tr>
-	          <td><b><%=t :L2vpn_server_name %></b></td>
+	          <td><strong><%=t :L2vpn_server_name %></strong></td>
 	          <td><%=h @l2vpn_server.name %></td>
 	        </tr>
 	        <tr>
-	          <td><b><%=t :L2vpn_server_port %></b></td>
+	          <td><strong><%=t :L2vpn_server_port %></strong></td>
 	          <td><%=h @l2vpn_server.port %></td>
 	        </tr>
 	        <tr>
-	          <td><b><%=t :L2vpn_server_cipher %></b></td>
+	          <td><strong><%=t :L2vpn_server_cipher %></strong></td>
 	          <td><%=h @l2vpn_server.cipher %></td>
 	        </tr>
 	        <tr>
-	          <td><b><%=t :L2vpn_server_protocol %></b></td>
+	          <td><strong><%=t :L2vpn_server_protocol %></strong></td>
 	          <td><%=h @l2vpn_server.protocol %></td>
 	        </tr>
 	        <tr>
-	          <td><b><%=t :L2vpn_server_mtu %></b></td>
+	          <td><strong><%=t :L2vpn_server_mtu %></strong></td>
 	          <td><%=h @l2vpn_server.mtu %></td>
 	        </tr>
 	        <tr>
-	          <td><b><%=t :L2vpn_server_mtu_discovery %></b></td>
+	          <td><strong><%=t :L2vpn_server_mtu_discovery %></strong></td>
 	          <td><%=h @l2vpn_server.mtu_disc %></td>
 	        </tr>
 			<tr>
 	          <td colspan="2">&nbsp;</td>
 	        </tr> 
 	        <tr>
-	          <td colspan="2"><b><%=t :Notes %></b></td>
+	          <td colspan="2"><strong><%=t :Notes %></strong></td>
 	        </tr>
 	        <tr>
 	          <td colspan="2"><%= h(@l2vpn_server.notes).gsub(/\n/, "<br>") %></td>
