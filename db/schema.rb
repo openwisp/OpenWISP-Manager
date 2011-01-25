@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(:version => 20110124134236) do
     t.integer  "access_point_template_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ip_address"
   end
 
   add_index "access_points", ["mac_address"], :name => "index_access_points_on_mac_address"

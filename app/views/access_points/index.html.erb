@@ -24,13 +24,14 @@
               <th scope="col" class="head"><%=t :Address %></th>
               <th scope="col" class="head"><%=t :City %></th>
               <th scope="col" class="head"><%=t :Zip %></th>
+              <th scope="col" class="head"><%=t :Ip_address %></th>
               <th scope="col" class="head-right"><%=t :Notes %></th>
             </tr>
             </thead>
             <tfoot>
             <tr>
               <!--            <td colspan="1" class="foot-left"></td> -->
-              <td colspan="9" class="foot" style="text-align: center;">
+              <td colspan="10" class="foot" style="text-align: center;">
                 <%= link_to t(:Create_New), new_wisp_access_point_path(@wisp) %>
               </td>
               <!--            <td colspan="1" class="foot-right">&nbsp;</td> -->
@@ -61,6 +62,7 @@
                   <td><%=h access_point.address %></td>
                   <td><%=h access_point.city %></td>
                   <td><%=h access_point.zip %></td>
+                  <td><%=h access_point.ip_address %></td>
                   <td>
                     <% if (access_point.notes.nil? or access_point.notes.length == 0) %>
                         &nbsp;

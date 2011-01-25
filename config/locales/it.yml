@@ -140,6 +140,7 @@ it:
   Internal: Interno
   Internal_qm: Interno?
   Ip: IP
+  Ip_address: Indirizzo IP
   Ip_range_begin: Indirizzo iniziale del range
   Ip_range_end: Indirizzo finale del range
   Issued_certificates: Certificati emessi
@@ -285,7 +286,7 @@ it:
   Warning: Attenzione
   Wisp: WISP
   Wisp_name: Nome WISP
-  Wisp_access_points: Access point del WISP
+  Wisp_access_points: AP presenti nel WISP
   Wisp_services: Servizi WISP
   Wisp_was_successfully_created: Il WISP è stato creato correttamente
   Wisp_was_successfully_updated: Il WISP è stato aggiornato correttamente
