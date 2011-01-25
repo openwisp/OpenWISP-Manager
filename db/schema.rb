@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100413104408) do
+ActiveRecord::Schema.define(:version => 20110124134236) do
 
   create_table "access_point_groups", :force => true do |t|
     t.string   "name",       :null => false
@@ -183,12 +183,6 @@ ActiveRecord::Schema.define(:version => 20100413104408) do
     t.integer  "ethernet_template_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "hourly_monitoring_access_points", :force => true do |t|
-    t.integer "hour"
-    t.date    "date"
-    t.integer "access_point_id"
   end
 
   create_table "l2tc_templates", :force => true do |t|
@@ -396,12 +390,6 @@ ActiveRecord::Schema.define(:version => 20100413104408) do
     t.integer  "vlan_template_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "weekly_monitoring_access_points", :force => true do |t|
-    t.date    "date"
-    t.integer "percentage"
-    t.integer "access_point_id"
   end
 
   create_table "wisps", :force => true do |t|
