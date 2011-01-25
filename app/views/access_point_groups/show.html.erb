@@ -7,7 +7,7 @@
 
 <div class="grid_5">
   <div class="box">
-    <h2><a href="#" id="toggle-forms"><%=h t(:General_infos) %></a></h2>
+    <h2><a href="#"><%=h t(:General_infos) %></a></h2>
     <ul class="nav main">
       <li>
         <%= link_to t(:Edit), edit_wisp_access_point_group_path(@wisp, @access_point_group) %>
@@ -39,7 +39,7 @@
 
 <div class="grid_11">
   <div class="box">
-    <h2><a href="#" id="toggle-forms"><%=h t(:Access_points_in_group) %></a></h2>
+    <h2><a href="#"><%=h t(:Access_points_in_group) %></a></h2>
         <% unless @access_point_group.access_points.nil? or @access_point_group.access_points.length == 0  %>
           <%= render :partial => 'access_points_list', :locals => { :access_points => @access_point_group.access_points }  %>
         <% else %>

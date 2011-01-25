@@ -7,13 +7,13 @@
 
 <div class="grid_4">
   <div class="box">
-    <h2><a href="#" id="toggle-forms"><%= t(:Stats) %> - <%=h @server.name %></a></h2>
+    <h2><a href="#"><%= t(:Stats) %> - <%=h @server.name %></a></h2>
     <div class="block" id="server_stats-block">
         <%= render :partial => "stats", :object =>  @server %>
     </div>
   </div>
   <div class="box">
-    <h2><a href="#" id="toggle-forms"><%= t(:General_infos) %> - <%=h @server.name %></a></h2>
+    <h2><a href="#"><%= t(:General_infos) %> - <%=h @server.name %></a></h2>
     <ul class="nav main">
       <li>
         <%= link_to t(:Edit), edit_server_path(@server) %>
@@ -50,7 +50,7 @@
 
 <div class="grid_12">
   <div class="box">
-    <h2><a href="#" class="toggle-forms"><%= t(:Edit) %></a></h2>
+    <h2><a href="#"><%= t(:Edit) %></a></h2>
     <ul class="nav main">
       <li>
         <%= link_to t(:Ethernets), '#', :class => 'nohand' %>
