@@ -20,7 +20,7 @@
         <% form_for(@server) do |f| %>
           <p><%= f.error_messages %></p>
           <p>
-            <%= f.label t(:Server_name) %><br />
+            <%= f.label :name, t(:Server_name) %><br />
             <%= f.text_field :name %>
           </p>
           <p>

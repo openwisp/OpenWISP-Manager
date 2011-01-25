@@ -60,11 +60,6 @@
                               :update => 'access_point_templates_stats-block')
 %>
 
-<%= periodically_call_remote( :url => {:action => 'ajax_update', :id => @access_point_template.id},
-                              :frequency => '5',
-                              :update => 'update_access_points_block')
-%>
-
 <div class="grid_12">
   <div class="box">
     <h2><a href="#" class="toggle-forms"><%= t(:Edit) %></a></h2>

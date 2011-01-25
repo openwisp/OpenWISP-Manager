@@ -25,20 +25,18 @@ class AccessPointsController < ApplicationController
   def get_configuration
 
     mac_address = params[:mac_address]
-    remote_ip_address = request.remote_ip
-
+    remote_ip_address = request.env['REMOTE_HOST']
     if mac_address =~ /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
 
       mac_address.downcase!
 
       access_point = AccessPoint.find_by_mac_address(mac_address)
 
-      if access_point.ip_address != remote_ip_address
-        access_point.update_attributes(:ip_address => remote_ip_address)
-      end
-
       #Updating configuration files if old
       if !access_point.nil?
+        if access_point.last_configuration_retrieve_ip != remote_ip_address
+          access_point.update_attributes(:last_configuration_retrieve_ip => remote_ip_address)
+        end
         #Sending configuration files for the access point
         send_file "#{RAILS_ROOT}/private/access_points_configurations/ap-#{access_point.wisp.id}-#{access_point.id}.tar.gz"
       else
@@ -59,10 +57,6 @@ class AccessPointsController < ApplicationController
       access_point = AccessPoint.find_by_mac_address(mac_address)
 
       if !access_point.nil?
-        if ( HourlyMonitoringAccessPoint.find_by_access_point_id_and_hour_and_date(access_point.id, DateTime.now.hour, Date.today).nil? )
-          HourlyMonitoringAccessPoint.new( :access_point_id => access_point.id ).save!
-        end
-
         if !access_point.configuration_md5.nil?
           #Sending md5 digest of configuration files
           send_data access_point.configuration_md5
