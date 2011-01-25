@@ -160,6 +160,7 @@ it:
   L2vpn_server_configuration: Configurazione Server vpn layer 2
   L2vpn_servers: Server vpn layer 2
   L2vpns: VPN layer 2
+  Last_configuration_retrieve_ip: "Ultimo IP che ha scaricato la configurazione"
   Lat: Latitudine
   Linked_access_point: Access point associati
   List: Lista
