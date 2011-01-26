@@ -25,7 +25,7 @@ class AccessPointsController < ApplicationController
   def get_configuration
 
     mac_address = params[:mac_address]
-    remote_ip_address = request.env['REMOTE_HOST']
+    remote_ip_address = request.remote_ip
     if mac_address =~ /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
 
       mac_address.downcase!
