@@ -1,12 +1,5 @@
 mode  server
-proto <%=h l2vpn_server.protocol %>
-
-<%# check if boolean is all
-<% if !(l2vpn_server.ip == "all")
-local <%=h l2vpn_server.ip
-<% end
-%>
-
+proto <%= l2vpn_server.protocol == 'tcp' ? 'tcp-server' : 'udp' %>
 
 port  <%=h l2vpn_server.port %>
 <% if !l2vpn_server.bindall %>
