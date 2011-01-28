@@ -1,15 +1,28 @@
 class WispsController < ApplicationController
-  include MappablesAddons
+  include Addons::Mappable
 
   before_filter :load_wisp, :except => [:index, :new, :create]
   
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
 
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [:show, :edit, :update, :ajax_stats]
-    allow :wisp_operator, :of => :wisp, :to => [:show, :ajax_stats]
-    allow :wisp_viewer, :of => :wisp, :to => [:show, :ajax_stats]
+    actions :index, :show, :ajax_stats, :get_crl_list do
+      allow :wisps_viewer
+    end
+    allow :wisp_viewer, :of => :wisp, :to =>  [:show, :ajax_stats, :get_crl_list]
+
+    actions :new, :create do
+      allow :wisps_creator, :of => :wisp
+    end
+
+    actions :edit, :update do
+      allow :wisps_manager
+      allow :wisp_manager, :of => :wisp
+    end
+
+    actions :destroy do
+      allow :wisps_destroyer
+    end
   end
 
   def load_wisp
@@ -147,10 +160,6 @@ ENI
     end
   end
 
-  def get_crl_list
-    list = @wisp.ca.crl_list ? @wisp.ca.crl_list : ''
-    send_data list
-  end
   
   # DELETE /wisps/1
   def destroy

@@ -4,13 +4,29 @@ class BridgeTemplatesController < ApplicationController
   before_filter :load_wisp
   before_filter :load_access_point_template
     
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
 
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [ :index, :new, :edit, :create, :update, :destroy ]
-    allow :wisp_operator, :of => :wisp, :to => [ :index, :new, :edit, :create, :update, :destroy ]
-    allow :wisp_viewer, :of => :wisp, :to => [:index]
+    actions :index, :show do
+      allow :wisps_viewer
+      allow :access_point_templates_viewer, :of => :wisp
+    end
+
+    actions :new, :create do
+      allow :wisps_creator
+      allow :access_point_templates_creator, :of => :wisp
+    end
+
+    actions :edit, :update do
+      allow :wisps_manager
+      allow :access_point_templates_manager, :of => :wisp
+    end
+
+    actions :destroy do
+      allow :wisps_destroyer
+      allow :access_point_templates_destroyer, :of => :wisp
+    end
+
   end
 
   def load_wisp

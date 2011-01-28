@@ -11,9 +11,10 @@
         <h2><a href="#" id="toggle-warnings"><%= t(:Warning) %></a></h2>
         <div class="block warn" id="warnings_block">
           <p><%=t :Update_one_access_point_warning, :template => @access_point.template.name %></p>
-          <% form_tag outdated_access_points_update_path(@wisp, @access_point) do %>
-              <%= hidden_field_tag :update, 'true' %>
-              <%= submit_tag t(:Update) %>
+          <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
+              <% form_tag outdated_access_points_update_path(@wisp, @access_point) do %>
+                  <%= submit_tag t(:Update) %>
+              <% end %>
           <% end %>
         </div>
       </div>
@@ -25,12 +26,10 @@
   <div class="box">
     <h2><a href="#" class="toggle-forms"><%=h t(:General_infos) %></a></h2>
     <ul class="nav main">
-      <li>
-        <%= link_to t(:Edit), edit_wisp_access_point_path(@wisp, @access_point) %>
-      </li>
-      <li>
-        <%= link_to t(:List_all), wisp_access_points_path(@wisp) %>
-      </li>
+      <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
+          <li><%= link_to t(:Edit), edit_wisp_access_point_path(@wisp, @access_point) %></li>
+      <% end %>
+      <li><%= link_to t(:List_all), wisp_access_points_path(@wisp) %></li>
     </ul>
 
     <div class="block" id="access_point_map_block">
@@ -48,7 +47,11 @@
           <% if @access_point.access_point_template.nil? %>
               <td><%=t :None %></td>
           <% else %>
-              <td><%= link_to @access_point.access_point_template.name, wisp_access_point_template_path(@wisp, @access_point.access_point_template) %></td>
+              <% if auth?(:wisps_viewer) || auth?(:access_point_templates_viewer, @wisp) %>
+                  <td><%= link_to @access_point.access_point_template.name, wisp_access_point_template_path(@wisp, @access_point.access_point_template) %></td>
+              <% else %>
+                  <td><%= @access_point.access_point_template.name %></td>
+              <% end %>
           <% end %>
         </tr>
         <tr>
@@ -149,12 +152,14 @@
                                :update => { :success => "access_point_block" }
             %>
           </li>
-          <li>
-            <%= link_to_remote t(:Add), :method => :get,
-                               :url => new_wisp_access_point_custom_script_url(@wisp, @access_point),
-                               :update => { :success => "access_point_block" }
-            %>
-          </li>
+          <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
+              <li>
+                <%= link_to_remote t(:Add), :method => :get,
+                                   :url => new_wisp_access_point_custom_script_url(@wisp, @access_point),
+                                   :update => { :success => "access_point_block" }
+                %>
+              </li>
+          <% end %>
         </ul>
       </li>
     </ul>

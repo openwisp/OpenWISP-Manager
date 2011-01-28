@@ -23,14 +23,15 @@
         <tr>
           <% if bridge.bridgeables.length == 0 %>
               <td style="width:32px;">
-                <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
-                                   :method => :get,
-                                   :url => edit_wisp_access_point_bridge_path(@wisp, @access_point, bridge),
-                                   :title => t(:Edit_info),
-                                   :update => { :success => "list_bridges_div", :failure => "list_bridges_div" }
+                <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
+                    <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                                       :method => :get,
+                                       :url => edit_wisp_access_point_bridge_path(@wisp, @access_point, bridge),
+                                       :title => t(:Edit_info),
+                                       :update => { :success => "list_bridges_div", :failure => "list_bridges_div" }
 
-                %>
-
+                    %>
+                <% end %>
               </td>
               <td><%=h bridge.name %></td>
               <td>&nbsp;</td>

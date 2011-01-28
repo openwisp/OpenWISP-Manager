@@ -12,75 +12,77 @@
 
       <table id="operators-table">
         <thead>
-          <tr>
-            <th scope="col" class="head-left"><%=t :Operations %></th>
-            <th scope="col" class="head"><%=t :Operator_name %></th>
-            <th scope="col" class="head"><%=t :Roles %></th>
-            <th scope="col" class="head-right"><%=t :Notes %></th>
-          </tr>
+        <tr>
+          <th scope="col" class="head-left"><%=t :Operations %></th>
+          <th scope="col" class="head"><%=t :Operator_name %></th>
+          <th scope="col" class="head"><%=t :Roles %></th>
+          <th scope="col" class="head-right"><%=t :Notes %></th>
+        </tr>
         </thead>
-        <tfoot>
-          <tr>
-<!--            <td colspan="1" class="foot-left"></td> -->
-            <td colspan="4" class="foot" style="text-align: center;"><%= link_to t(:Create_New), new_wisp_operator_path(@wisp) %></td>
-<!--            <td colspan="1" class="foot-right">&nbsp;</td> -->
-          </tr>
-        </tfoot>
+        <% if auth?(:wisps_creator) || auth?(:operators_creator, @wisp) %>
+            <tfoot>
+            <tr><td colspan="4" class="foot" style="text-align: center;"><%= link_to t(:Create_New), new_wisp_operator_path(@wisp) %></td></tr>
+            </tfoot>
+        <% end %>
         <tbody>
-          <% @operators.each do |operator| %>
+        <% @operators.each do |operator| %>
             <tr>
               <% if operator.roles.length == 0 %>
-                <td style="width:32px;">
-                  <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_operator_path(@wisp, operator),
-                              :title => t(:Edit_access_point)
-                  %>
-                  <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_operator_path(@wisp, operator),
-                              :title => t(:Destroy_access_point),
-                              :confirm => t(:Are_you_sure_operator_destroy),
-                              :method => :delete
-                  %>
-                </td>
-                <td><%=h operator.login %></td>
-                <td>&nbsp;</td>
-                <td>
-                  <% if (operator.notes.nil? or operator.notes.length == 0) %>
-                    &nbsp;
-                  <% else %>
-                    <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
-                                :title => h(operator.notes)
-                    %>                    
-                  <% end %>
-                </td>
+                  <td style="width:32px;">
+                    <% if auth?(:wisps_manager) || auth?(:operators_manager, @wisp) %>
+                        <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_operator_path(@wisp, operator),
+                                    :title => t(:Edit_access_point)
+                        %>
+                    <% end %>
+                    <% if auth?(:wisps_destroyer) || auth?(:operators_destroyer, @wisp) %>
+                        <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_operator_path(@wisp, operator),
+                                    :title => t(:Destroy_access_point),
+                                    :confirm => t(:Are_you_sure_operator_destroy),
+                                    :method => :delete
+                        %>
+                    <% end %>
+                  </td>
+                  <td><%=h operator.login %></td>
+                  <td>&nbsp;</td>
+                  <td>
+                    <% if (operator.notes.nil? or operator.notes.length == 0) %>
+                        &nbsp;
+                    <% else %>
+                        <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                                    :title => h(operator.notes)
+                        %>
+                    <% end %>
+                  </td>
               <% else %>
-                <td rowspan="<%= operator.roles.length %>" style="width:32px;">
-                  <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_operator_path(@wisp, operator),
-                              :title => t(:Edit_access_point)
-                  %>
-                  <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_operator_path(@wisp, operator),
-                              :title => t(:Destroy_access_point),
-                              :confirm => t(:Are_you_sure_operator_destroy),
-                              :method => :delete
-                  %>
-                </td>
-                <td rowspan="<%= operator.roles.length %>"><%=h operator.login %></td>
-                <td><%=h operator.roles[0] %></td>
-                <td rowspan="<%= operator.roles.length %>">
-                  <% if (operator.notes.nil? or operator.notes.length == 0) %>
-                    &nbsp;
-                  <% else %>
-                    <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
-                                :title => h(operator.notes)
-                    %>                    
-                  <% end %>
-                </td>
+                  <td rowspan="<%= operator.roles.length %>" style="width:32px;">
+                    <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_operator_path(@wisp, operator),
+                                :title => t(:Edit_access_point)
+                    %>
+                    <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_operator_path(@wisp, operator),
+                                :title => t(:Destroy_access_point),
+                                :confirm => t(:Are_you_sure_operator_destroy),
+                                :method => :delete
+                    %>
+                  </td>
+                  <td rowspan="<%= operator.roles.length %>"><%=h operator.login %></td>
+                  <td><%=h operator.roles[0] %></td>
+                  <td rowspan="<%= operator.roles.length %>">
+                    <% if (operator.notes.nil? or operator.notes.length == 0) %>
+                        &nbsp;
+                    <% else %>
+                        <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                                    :title => h(operator.notes)
+                        %>
+                    <% end %>
+                  </td>
               <% end %>
             </tr>
             <% operator.roles.values_at(1..operator.roles.length-1).each do |r| %>
-              <tr>
-                <td><%=h r %></td>
-              </tr>
+                <tr>
+                  <td><%=h r %></td>
+                </tr>
             <% end %>
-          <% end %>
+        <% end %>
         </tbody>
       </table>
     </div>

@@ -2,12 +2,8 @@ class TemplateGroupsController < ApplicationController
   before_filter :load_wisp
   before_filter :load_template_group, :except => [ :index, :new, :create ]
   
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
-
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :update, :destroy]
-    allow :wisp_operator, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :update, :destroy]
   end
 
   def load_wisp

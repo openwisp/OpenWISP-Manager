@@ -24,35 +24,35 @@
               <th scope="col" class="head"><%=t :Address %></th>
               <th scope="col" class="head"><%=t :City %></th>
               <th scope="col" class="head"><%=t :Zip %></th>
-              <th scope="col" class="head"><%=t :Last_configuration_retrieve_ip %></th>
               <th scope="col" class="head-right"><%=t :Notes %></th>
             </tr>
             </thead>
-            <tfoot>
-            <tr>
-              <!--            <td colspan="1" class="foot-left"></td> -->
-              <td colspan="10" class="foot" style="text-align: center;">
-                <%= link_to t(:Create_New), new_wisp_access_point_path(@wisp) %>
-              </td>
-              <!--            <td colspan="1" class="foot-right">&nbsp;</td> -->
-            </tr>
-            </tfoot>
+            <% if auth?(:wisps_creator) || auth?(:access_points_creator, @wisp) %>
+                <tfoot>
+                <tr>
+                  <td colspan="9" class="foot" style="text-align: center;"><%= link_to t(:Create_New), new_wisp_access_point_path(@wisp) %></td>
+                </tr>
+                </tfoot>
+            <% end %>
             <tbody>
 
             <% access_point_template.access_points.each do |access_point| %>
                 <tr>
                   <td style="width:32px;">
-                    <% if current_operator and ( current_operator.has_role? 'admin' or current_operator.has_role? 'wisp_admin' or current_operator.has_role? 'wisp_operator' ) %>
+                    <%= link_to image_tag("configure.png", :border=>0, :size => "16x16", :alt => t(:Configure)), wisp_access_point_path(@wisp, access_point),
+                                :title => t(:Configure)
+                    %>
+                    <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
                         <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_access_point_path(@wisp, access_point),
                                     :title => t(:Edit_access_point)
                         %>
+                    <% end %>
+                    <% if auth?(:wisps_destroyer) || auth?(:access_points_destroyer, @wisp) %>
                         <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_access_point_path(@wisp, access_point),
                                     :title => t(:Destroy_access_point),
                                     :confirm => t(:Are_you_sure_access_point_destroy),
                                     :method => :delete
                         %>
-                    <% else %>
-                        <%= link_to image_tag("revoke.png", :border=>0, :size => "16x16") %>
                     <% end %>
                   </td>
                   <td><%= link_to access_point.name, wisp_access_point_path(@wisp, access_point) %></td>
@@ -62,7 +62,6 @@
                   <td><%=h access_point.address %></td>
                   <td><%=h access_point.city %></td>
                   <td><%=h access_point.zip %></td>
-                  <td><%=h access_point.last_configuration_retrieve_ip %></td>
                   <td>
                     <% if (access_point.notes.nil? or access_point.notes.length == 0) %>
                         &nbsp;

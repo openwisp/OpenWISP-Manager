@@ -1,23 +1,34 @@
 <table>
-  <tr>
-    <td><%= link_to t(:AccessPoints), wisp_access_points_path(@wisp) %></td>
-    <td><%= @wisp.access_points.length %></td>
-  </tr>
-  <tr>
-    <td> <%= link_to t(:Access_point_groups), wisp_access_point_groups_path(@wisp) %></td>
-    <td><%= @wisp.access_point_groups.length %></td>
-  </tr>
-  <tr>
-    <td><%= link_to t(:AccessPoint_templates), wisp_access_point_templates_path(@wisp) %></td>
-    <td><%= @wisp.access_point_templates.length %></td>
-  </tr>
-  <tr>
-    <td><%= link_to t(:Template_groups), wisp_template_groups_path(@wisp) %></td>
-    <td><%= @wisp.template_groups.length %></td>
-  </tr>
-  <tr>
-    <td> <%= link_to t(:Operators), wisp_operators_path(@wisp) %></td>
-    <td><%= @wisp.operators.length %></td>
-  </tr>
+  <% if auth?(:wisps_viewer) || auth?(:access_points_viewer, @wisp) %>
+      <tr>
+        <td><%= link_to t(:AccessPoints), wisp_access_points_path(@wisp) %></td>
+        <td><%= @wisp.access_points.length %></td>
+      </tr>
+  <% end %>
 
+  <% if auth?(:wisps_viewer) || auth?(:access_point_templates_viewer, @wisp) %>
+      <tr>
+        <td><%= link_to t(:AccessPoint_templates), wisp_access_point_templates_path(@wisp) %></td>
+        <td><%= @wisp.access_point_templates.length %></td>
+      </tr>
+  <% end %>
+
+  <% if auth?(:wisps_viewer) || auth?(:operators_viewer, @wisp) %>
+      <tr>
+        <td> <%= link_to t(:Operators), wisp_operators_path(@wisp) %></td>
+        <td><%= @wisp.operators.length %></td>
+      </tr>
+  <% end %>
+
+  <%#
+  TODO: find usage for ap groups
+  <tr>
+    <td> <%# link_to t(:Access_point_groups), wisp_access_point_groups_path(@wisp) % ></td>
+    <td><%# @wisp.access_point_groups.length % ></td>
+  </tr>
+  <tr>
+    <td><%# link_to t(:Template_groups), wisp_template_groups_path(@wisp) % ></td>
+    <td><%# @wisp.template_groups.length % ></td>
+  </tr>
+  %>
 </table>

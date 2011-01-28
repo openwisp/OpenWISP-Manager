@@ -2,13 +2,8 @@ class AccessPointGroupsController < ApplicationController
   before_filter :load_wisp
   before_filter :load_access_point_group, :except => [ :index, :new, :create ]
 
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
-
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :edit, :update, :destroy]
-    allow :wisp_operator, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :edit, :update, :destroy]
-    allow :wisp_viewer, :of => :wisp, :to => [:show, :index]
   end
   
   def load_wisp

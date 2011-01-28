@@ -4,13 +4,19 @@ class BridgesController < ApplicationController
   before_filter :load_wisp
   before_filter :load_access_point
     
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
 
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [ :index, :new, :edit, :create, :update, :destroy ]
-    allow :wisp_operator, :of => :wisp, :to => [ :index, :new, :edit, :create, :update, :destroy ]
-    allow :wisp_viewer, :of => :wisp, :to => [:index]
+    actions :index do
+      allow :wisps_viewer
+      allow :access_points_viewer, :of => :wisp
+    end
+
+    #TODO: Update actions
+    actions :edit, :update do
+      allow :wisps_manager
+      allow :access_points_manager, :of => :wisp
+    end
   end
 
   def load_wisp

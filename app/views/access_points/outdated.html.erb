@@ -16,19 +16,20 @@
     </div>
     <div class="clear">&nbsp;</div>
 <% else %>
-    <div class="grid_14 prefix_1 suffix_1">
-      <div class="box">
-        <h2><a href="#" id="toggle-warnings"><%= t(:Warning) %></a></h2>
-        <div class="block warn" id="warnings_block">
-          <p><%=t :Update_access_point_warning %></p>
-          <% form_tag outdated_access_points_update_path(@wisp) do %>
-              <%= hidden_field_tag :update, 'true' %>
-              <%= submit_tag t(:Update) %>
-          <% end %>
+    <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+        <div class="grid_14 prefix_1 suffix_1">
+          <div class="box">
+            <h2><a href="#" id="toggle-warnings"><%= t(:Warning) %></a></h2>
+            <div class="block warn" id="warnings_block">
+              <p><%=t :Update_access_point_warning %></p>
+              <% form_tag outdated_access_points_update_path(@wisp) do %>
+                  <%= submit_tag t(:Update) %>
+              <% end %>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="clear">&nbsp;</div>
+        <div class="clear">&nbsp;</div>
+    <% end %>
 
     <div class="grid_14 prefix_1 suffix_1">
       <div class="box">

@@ -54,10 +54,10 @@ class ApplicationController < ActionController::Base
       if current_operator
         store_location
         flash[:notice] = t(:You_must_be_logged_out_to_access_this_page)
-        if current_operator.has_role? "admin"
-          redirect_to wisps_url
-        else
+        if current_operator.wisp
           redirect_to wisp_url(current_operator.wisp)
+        else
+          redirect_to wisps_url
         end
         false
       end

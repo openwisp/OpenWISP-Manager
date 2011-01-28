@@ -4,10 +4,24 @@ class ServerEthernetsController < ApplicationController
   before_filter :load_server
   before_filter :load_ethernet, :except => [ :index, :new, :create ]
 
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
 
-    allow :admin
+    actions :index, :show do
+      allow :servers_viewer
+    end
+
+    actions :new, :create do
+      allow :servers_creator
+    end
+
+    actions :edit, :update do
+      allow :servers_manager
+    end
+
+    actions :destroy do
+      allow :servers_destroyer
+    end
   end
 
   def load_server

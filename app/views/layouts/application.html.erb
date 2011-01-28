@@ -54,23 +54,15 @@
 
   <div class="grid_16">
     <ul class="nav main">
-      <% if current_operator and current_operator.has_role? 'admin' %>
-          <!-- Super admin menus -->
-          <li>
-            <%= link_to t(:Super_admin), '#', :class => 'nohand' %>
-            <ul>
-              <li>
-                <%= link_to t(:Wisps), wisps_path %>
-              </li>
-              <li>
-                <%= link_to t(:OWISPManager_servers), servers_path %>
-              </li>
-            </ul>
-          </li>
+      <% if auth? :wisps_viewer %>
+          <li><%= link_to t(:Wisps), wisps_path %></li>
+      <% end %>
+      <% if auth? :servers_viewer %>
+          <li><%= link_to t(:OWISPManager_servers), servers_path %></li>
       <% end %>
       <!-- wisp administration menus -->
       <% if @wisp and @wisp.id %>
-          <% if current_operator and ( current_operator.has_role? 'admin' or current_operator.has_role? 'wisp_admin' or current_operator.has_role? 'wisp_operator' ) %>
+          <% if auth?(:wisps_viewer) || auth?(:access_point_templates_viewer, @wisp) %>
               <li>
                 <%= link_to t(:Templates), '#', :class => 'nohand' %>
                 <ul>
@@ -80,45 +72,33 @@
                     <%= link_to t(:Template_groups), wisp_template_groups_path(@wisp) % >
                   </li>
 %>
-                  <li>
-                    <%= link_to t(:All), wisp_access_point_templates_path(@wisp) %>
-                  </li>
-
+                  <li><%= link_to t(:All), wisp_access_point_templates_path(@wisp) %></li>
                 </ul>
               </li>
           <% end %>
-          <li>
-            <%= link_to t(:AccessPoints), '#', :class => 'nohand' %>
-            <ul>
+          <% if auth?(:wisps_viewer) || auth?(:access_points_viewer, @wisp) %>
               <li>
-                <%= link_to t(:All), wisp_access_points_path(@wisp) %>
-              </li>
-              <li>
-                <%= link_to t(:Outdated), outdated_access_points_update_path(@wisp) %>
-              </li>
-
+                <%= link_to t(:AccessPoints), '#', :class => 'nohand' %>
+                <ul>
+                  <li><%= link_to t(:All), wisp_access_points_path(@wisp) %></li>
+                  <li><%= link_to t(:Outdated), outdated_access_points_path(@wisp) %></li>
 <%# TODO: to be restored when a usage for access point groups will be found
               <li>
                 <%= link_to t(:Access_point_groups), wisp_access_point_groups_path(@wisp) % >
               </li>
 %>
-            </ul>
-          </li>
-
-          <% if current_operator and ( current_operator.has_role? 'admin' or current_operator.has_role? 'wisp_admin' ) %>
-              <li>
-                <%= link_to t(:Wisp_services), '#', :class => 'nohand' %>
-                <ul>
-                  <li>
-                    <%= link_to t(:Certification_authority), wisp_ca_path(@wisp) %>
-                  </li>
-                  <li>
-                    <%= link_to t(:Operators), wisp_operators_path(@wisp) %>
-                  </li>
                 </ul>
               </li>
           <% end %>
+
+          <% if auth?(:wisps_viewer) || auth?(:wisp_viewer, @wisp) %>
+              <li><%= link_to t(:Certification_authority), wisp_ca_path(@wisp) %></li>
+          <% end %>
+          <% if auth?(:wisps_viewer) || auth?(:operators_viewer, @wisp) %>
+              <li><%= link_to t(:Operators), wisp_operators_path(@wisp) %></li>
+          <% end %>
       <% end %>
+
       <!-- logout -->
       <% if current_operator %>
           <li>

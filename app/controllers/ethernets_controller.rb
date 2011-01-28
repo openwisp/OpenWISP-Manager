@@ -5,13 +5,13 @@ class EthernetsController < ApplicationController
   before_filter :load_access_point
   before_filter :load_ethernet, :except => [ :index, :new, :create ]
     
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
 
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :update, :destroy]
-    allow :wisp_operator, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :update, :destroy]
-    allow :wisp_viewer, :of => :wisp, :to => [:show, :index]
+    actions :index do
+      allow :wisps_viewer
+      allow :access_points_viewer, :of => :wisp
+    end
   end
 
   def load_wisp

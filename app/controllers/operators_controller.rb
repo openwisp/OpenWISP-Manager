@@ -1,13 +1,29 @@
 class OperatorsController < ApplicationController
-  before_filter :load_wisp
-  
-  access_control :subject_method => :current_operator do
+  before_filter :load_wisp, :except => [:show]
+
+  access_control do
     default :deny
 
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [:index, :show, :new, :edit, :create, :update, :destroy]
-    allow :wisp_operator, :of => :wisp, :to => [:show]
-    allow :wisp_viewer, :of => :wisp, :to => [:show]
+    actions :index do
+      allow :wisps_viewer
+      allow :operators_viewer, :of => :wisp
+    end
+    allow logged_in, :to => :show
+
+    actions :new, :create do
+      allow :wisps_creator
+      allow :operators_creator, :of => :wisp
+    end
+
+    actions :edit, :update do
+      allow :wisps_manager
+      allow :operators_manager, :of => :wisp
+    end
+
+    actions :destroy do
+      allow :wisps_destroyer
+      allow :operators_destroyer, :of => :wisp
+    end
   end
 
   def load_wisp
@@ -18,7 +34,17 @@ class OperatorsController < ApplicationController
   def index
     @operators = @wisp.operators
   end
-  
+
+  def show
+    @operator = Operator.find(params[:id])
+    load_wisp if params[:wisp_id]
+    
+    if current_operator != @operator
+      #TODO: implement stats for :operator_viewer
+      redirect_to :back
+    end
+  end
+
   def new
     @operator = @wisp.operators.build
     @selected_roles = []
@@ -29,23 +55,18 @@ class OperatorsController < ApplicationController
     # subject.roles won't work!
     @selected_roles = @operator.roles
   end
-  
+
   def create
     @operator = @wisp.operators.build(params[:operator])
-    
-		unless params[:roles].nil? or params[:roles].length == 0 
-    	@selected_roles = Operator::ROLES & params[:roles]
-		else
-			@selected_roles = []
-    end
+
+    @selected_roles = (params[:roles].nil? || params[:roles].length == 0) ? [] : params[:roles]
 
     if @operator.save
-      @selected_roles.each do |r|
-        @operator.has_role!(r, @wisp)
-      end
+      @operator.roles = @selected_roles
+
       respond_to do |format|
-          flash[:notice] = t(:Account_registered)
-          format.html { redirect_to(wisp_operators_url) }
+        flash[:notice] = t(:Account_registered)
+        format.html { redirect_to(wisp_operators_url) }
       end
     else
       respond_to do |format|
@@ -53,20 +74,15 @@ class OperatorsController < ApplicationController
       end
     end
   end
-  
+
   def update
     @operator = @wisp.operators.find(params[:id])
-    unless params[:roles].nil? or params[:roles].length == 0
-      @selected_roles = Operator::ROLES & params[:roles]
-    else
-      @selected_roles = []
-    end
+
+    @selected_roles = (params[:roles].nil? || params[:roles].length == 0) ? [] : params[:roles]
 
     if @operator.update_attributes(params[:operator])
-      @operator.has_no_roles!
-      @selected_roles.each do |r|
-        @operator.has_role!(r, @wisp)
-      end
+      @operator.roles = @selected_roles
+
       respond_to do |format|
         flash[:notice] = t(:Account_updated)
         format.html { redirect_to(wisp_operators_url(@wisp)) }
@@ -77,7 +93,7 @@ class OperatorsController < ApplicationController
       end
     end
   end
-  
+
   def destroy
     @operator = @wisp.operators.find(params[:id])
     @operator.has_no_roles!
@@ -87,5 +103,5 @@ class OperatorsController < ApplicationController
       format.html { redirect_to(wisp_operators_url(@wisp)) }
     end
   end
-  
+
 end

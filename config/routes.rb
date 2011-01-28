@@ -1,25 +1,31 @@
 ActionController::Routing::Routes.draw do |map|
+  # NAMED ROUTES
+  # Get certificate revocation list
+  map.wisp_ca_crl 'wisps/:wisp_id/ca/crl', :controller => 'cas', :action => 'crl'
+  # All outdated access points summary
+  map.outdated_access_points 'wisps/:wisp_id/access_points/outdated', :controller => 'access_points', :action => 'outdated'
+  # Outdated access point update (either single or all)
+  map.outdated_access_points_update 'wisps/:wisp_id/access_points/update_outdated/:id', :controller => 'access_points', :action => 'update_outdated'
+  map.welcome_operator 'operators/:id', :controller => 'operators', :action => 'show'
+
+  #Ajax Routes
+  map.connect 'access_point/ajax_update_gmap', :controller => 'access_points', :action => 'ajax_update_maps'
+  map.connect 'access_point_templates/ajax_stats', :controller => 'access_point_templates', :action => 'ajax_stats'
+  map.connect 'wisps/ajax_stats', :controller => 'wisps', :action => 'ajax_stats'
+  map.connect 'servers/ajax_stats', :controller => 'servers', :action => 'ajax_stats'
+
+  map.connect 'get_config/:mac_address', :controller => 'access_points', :action => 'get_configuration'
+  map.connect 'get_config/:mac_address.md5', :controller => 'access_points', :action => 'get_configuration_md5'
+
+
   map.resources :custom_scripts
-
   map.resources :custom_script_templates
-
 
   map.resource :login, :controller => "operator_sessions", :action => "new"
   map.resource :logout, :controller => "operator_sessions", :method => "delete"
   map.resource :operator_session
   map.root :controller => "operator_sessions", :action => "new"
   
-  #Ajax Routes
-  map.connect 'access_point/ajax_update_gmap', :controller => 'access_points', :action => 'ajax_update_maps'
-  map.connect 'access_point_templates/ajax_stats', :controller => 'access_point_templates', :action => 'ajax_stats'
-  map.connect 'wisps/ajax_stats', :controller => 'wisps', :action => 'ajax_stats'
-  map.connect 'servers/ajax_stats', :controller => 'servers', :action => 'ajax_stats'
-  
-  map.connect 'get_config/:mac_address', :controller => 'access_points', :action => 'get_configuration'
-  map.connect 'get_config/:mac_address.md5', :controller => 'access_points', :action => 'get_configuration_md5'
-  
-  map.connect 'wisps/:id/get_crl_list', :controller => 'wisps', :action => 'get_crl_list'
-
   map.resources :servers do |server|
     server.resources :l2vpn_servers
     server.resources :ethernets, :controller => :server_ethernets
@@ -57,11 +63,7 @@ ActionController::Routing::Routes.draw do |map|
       access_point_template.resources :l2tc_templates
       access_point_template.resources :custom_script_templates
     end
-
   end
-
-  # Outdated access point update and summary
-  map.outdated_access_points_update 'wisps/:wisp_id/outdated_access_points_update/:id', :controller => 'access_points', :action => 'outdated_access_points_update'
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

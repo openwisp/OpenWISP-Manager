@@ -63,6 +63,7 @@ it:
   Bridges: Bridge
   Certification_authority: Certification authority
   Certification_authority_infos: Informazioni della certification authority
+  Change_password: Nuova password
   Channel: Canale
   City: Città
   Clear: Azzera
@@ -276,7 +277,7 @@ it:
   Update: Aggiorna
   Update_configuration: Aggiornamento Configurazione
   Update_access_point_warning: "Attenzione, saranno modificati i seguenti access point"
-  Update_one_access_point_warning: "Attenzione, la configurazione del template {{template}} è stata modificata. Vuoi aggiornare questo hotspot?"
+  Update_one_access_point_warning: "Attenzione, la configurazione del template {{template}} è stata modificata! Questo access point è da aggiornare."
   Valid: Valido
   VapTemplates: Template di vap
   Vap_template: Template di vap
@@ -285,6 +286,7 @@ it:
   VlanTemplates: Template di vlan
   Vlans: Vlan
   Warning: Attenzione
+  Welcome: Benvenuto {{operator}}
   Wisp: WISP
   Wisp_name: Nome WISP
   Wisp_access_points: AP presenti nel WISP
@@ -293,7 +295,7 @@ it:
   Wisp_was_successfully_updated: Il WISP è stato aggiornato correttamente
   Wisp_still_without_aps: Il WISP non possiede ancora APs
   Wisp_for_creation_of_ap_use_panel: Per crearli utilizza il pannello in alto
-  Wisps: Wireless ISP
+  Wisps: Wireless ISPs
   Wisps_list: Lista dei WISP
   X509_certificate: Certificato X509
   You_must_be_logged_in_to_access_this_page: Devi effettuare l'accesso per accedere a questa pagina

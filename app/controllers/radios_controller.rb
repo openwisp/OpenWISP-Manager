@@ -4,13 +4,30 @@ class RadiosController < ApplicationController
   before_filter :load_wisp
   before_filter :load_access_point
 
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
 
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [ :index, :new, :edit, :create, :update, :destroy ]
-    allow :wisp_operator, :of => :wisp, :to => [ :index, :new, :edit, :create, :update, :destroy ]
-    allow :wisp_viewer, :of => :wisp, :to => [:index, :edit, :update ]
+    actions :index, :show do
+      allow :wisps_viewer
+      allow :access_points_viewer, :of => :wisp
+    end
+
+    #TODO: In order to have per-ap radio configuration
+    actions :new, :create do
+      allow :wisps_creator
+      allow :access_points_creator, :of => :wisp
+    end
+
+    actions :edit, :update, :outdated_access_points_update do
+      allow :wisps_manager
+      allow :access_points_manager, :of => :wisp
+    end
+
+    actions :destroy do
+      allow :wisps_destroyer
+      allow :access_points_destroyer, :of => :wisp
+    end
+
   end
   
   def load_wisp

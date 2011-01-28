@@ -1,12 +1,18 @@
 class X509CertificatesController < ApplicationController
   before_filter :load_wisp
 
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
 
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [:show, :index, :new, :create, :update, :destroy]
-    allow :wisp_operator, :of => :wisp, :to => [:show, :index]
+    actions :show do
+      allow :wisps_viewer
+      allow :wisp_viewer, :of => :wisp
+    end
+
+    actions :destroy do
+      allow :wisps_destroyer
+      allow :wisp_viewer, :of => :wisp
+    end
   end
 
   def load_wisp

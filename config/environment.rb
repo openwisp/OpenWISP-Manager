@@ -12,7 +12,7 @@ Rails::Initializer.run do |config|
   # -- all .rb files in that directory are automatically loaded.
 
   # Add additional load paths for your own custom dirs
-  # config.load_paths += %W( #{RAILS_ROOT}/extras )
+  config.load_paths += [Rails.root.join('lib', 'modules')]
 
   # Specify gems that this application depends on and have them installed with rake gems:install
   # config.gem "bj"
@@ -21,7 +21,7 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem "geokit", :version => ">= 1.5.0"
   config.gem "authlogic", :version => ">= 2.1.3"
-  config.gem "be9-acl9", :source => "http://gems.github.com", :lib => "acl9", :version => ">= 0.11.0"
+  config.gem "acl9", :version => ">= 0.12.0"
   config.gem "libarchive", :lib => "libarchive_ruby", :version => ">= 0.1.2"
   config.gem "memcache-client", :lib => "memcache", :version => ">= 1.7.7"
   config.gem "system_timer", :version => ">= 1.0"
@@ -45,9 +45,6 @@ Rails::Initializer.run do |config|
   config.time_zone = 'Rome'
 
   # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-  config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
+  #config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   config.i18n.default_locale = :it
-  
 end
-
-Mime::Type.register "application/x-tar-gz", :tgz

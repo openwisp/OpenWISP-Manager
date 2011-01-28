@@ -1,17 +1,34 @@
 class AccessPointsController < ApplicationController
-  include MappablesAddons
+  include Addons::Mappable
 
   before_filter :load_wisp, :except => [:ajax_update_gmap, :get_configuration, :get_configuration_md5]
-  before_filter :load_access_point, :except => [:index, :new, :create, :ajax_update_gmap, :get_configuration, :get_configuration_md5, :outdated_access_points_update]
+  before_filter :load_access_point, :except => [:index, :new, :create, :ajax_update_gmap, :get_configuration, :get_configuration_md5, :outdated, :update_outdated]
 
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
 
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [:index, :show, :new, :edit, :create, :update, :destroy, :ajax_update_gmap]
-    allow :wisp_operator, :of => :wisp, :to => [:show, :index, :new, :edit, :update, :ajax_update_gmap]
-    allow :wisp_viewer, :of => :wisp, :to => [:show, :index]
-    allow anonymous, :to => [:get_configuration, :get_configuration_md5]
+    actions :index, :show, :outdated do
+      allow :wisps_viewer
+      allow :access_points_viewer, :of => :wisp
+    end
+
+    actions :new, :create do
+      allow :wisps_creator
+      allow :access_points_creator, :of => :wisp
+    end
+
+    actions :edit, :update, :update_outdated do
+      allow :wisps_manager
+      allow :access_points_manager, :of => :wisp
+    end
+
+    actions :destroy do
+      allow :wisps_destroyer
+      allow :access_points_destroyer, :of => :wisp
+    end
+
+    # TODO: :ajax_update_gmap should be moved somewhere else
+    allow all, :to => [:ajax_update_gmap, :get_configuration, :get_configuration_md5]
   end
 
   def load_wisp
@@ -25,7 +42,7 @@ class AccessPointsController < ApplicationController
   def get_configuration
 
     mac_address = params[:mac_address]
-    remote_ip_address = request.remote_ip
+    remote_ip_address = request.env['REMOTE_HOST']
     if mac_address =~ /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
 
       mac_address.downcase!
@@ -317,22 +334,23 @@ ENI
     end
   end
 
-  # Outdated access point update and summary
-  # Actions redirects to a single ap when invoked on an ap show view (a single ap gets updated)
-  def outdated_access_points_update
-    @access_points = params[:id] ? [load_access_point] : @wisp.access_points.select {|ap| ap.is_outdated? }
+  def outdated
+    @access_points = @wisp.access_points.select {|ap| ap.is_outdated? }
+  end
 
-    if params[:update]
-      worker = MiddleMan.worker(:configuration_update_worker)
-      worker.outdated_access_points_update(:arg => { :access_point_ids => @access_points.map{ |ap| ap.id } })
-      @access_points = []
-    end
+  def update_outdated
+    access_points = params[:id] ? [load_access_point] : @wisp.access_points.select {|ap| ap.is_outdated? }
+
+    worker = MiddleMan.worker(:configuration_update_worker)
+    worker.outdated_access_points_update(:arg => { :access_point_ids => access_points.map{ |ap| ap.id } })
 
     # Redirect if called on a single AP
-    # Otherwise render the outdated_access_points_update view
+    # Otherwise redirect to access points index
     if params[:id]
       flash[:notice] = I18n.t(:AccessPoint_was_successfully_updated)
-      redirect_to(wisp_access_point_url(@wisp, @access_point))
+      redirect_to wisp_access_point_url(@wisp, access_points.first)
+    else
+      redirect_to wisp_access_points_url(@wisp)
     end
   end
 

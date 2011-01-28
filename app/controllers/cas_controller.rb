@@ -1,13 +1,15 @@
 class CasController < ApplicationController
   before_filter :load_wisp
 
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
 
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :update, :destroy]
+    actions :show do
+      allow :wisps_viewer
+      allow :wisp_viewer, :of => :wisp
+    end
   end
-  
+
   def load_wisp
     @wisp = Wisp.find(params[:wisp_id])
   end
@@ -21,5 +23,9 @@ class CasController < ApplicationController
       format.html # show.html.erb
     end
   end
-    
+
+  def crl
+    list = @wisp.ca.crl_list ? @wisp.ca.crl_list : ''
+    send_data list
+  end
 end

@@ -17,12 +17,10 @@
   <div class="box">
     <h2><a href="#" class="toggle-forms"><%= t(:General_infos) %></a></h2>
     <ul class="nav main">
-      <li>
-        <%= link_to t(:Edit), edit_wisp_access_point_template_path(@wisp, @access_point_template) %>
-      </li>
-      <li>
-        <%= link_to t(:List_all_access_point_templates), wisp_access_point_templates_path(@wisp) %>
-      </li>
+      <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+          <li><%= link_to t(:Edit), edit_wisp_access_point_template_path(@wisp, @access_point_template) %></li>
+      <% end %>
+      <li><%= link_to t(:List_all_access_point_templates), wisp_access_point_templates_path(@wisp) %></li>
     </ul>
     <div class="block" id="access_point_templates_info-block">
       <table>
@@ -73,12 +71,14 @@
                                :update => { :success => "access_point_template_block" }
             %>
           </li>
-          <li>
-            <%= link_to_remote t(:Add), :method => :get,
-                               :url => new_wisp_access_point_template_radio_template_url(@wisp, @access_point_template),
-                               :update => { :success => "access_point_template_block" }
-            %>
-          </li>
+          <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+              <li>
+                <%= link_to_remote t(:Add), :method => :get,
+                                   :url => new_wisp_access_point_template_radio_template_url(@wisp, @access_point_template),
+                                   :update => { :success => "access_point_template_block" }
+                %>
+              </li>
+          <% end %>
         </ul>
       </li>
       <li>
@@ -90,12 +90,14 @@
                                :update => { :success => "access_point_template_block" }
             %>
           </li>
-          <li>
-            <%= link_to_remote t(:Add), :method => :get,
-                               :url => new_wisp_access_point_template_ethernet_template_url(@wisp, @access_point_template),
-                               :update => { :success => "access_point_template_block" }
-            %>
-          </li>
+          <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+              <li>
+                <%= link_to_remote t(:Add), :method => :get,
+                                   :url => new_wisp_access_point_template_ethernet_template_url(@wisp, @access_point_template),
+                                   :update => { :success => "access_point_template_block" }
+                %>
+              </li>
+          <% end %>
         </ul>
       </li>
       <li>
@@ -107,12 +109,14 @@
                                :update => { :success => "access_point_template_block" }
             %>
           </li>
-          <li>
-            <%= link_to_remote t(:Add), :method => :get,
-                               :url => new_wisp_access_point_template_l2vpn_template_url(@wisp, @access_point_template),
-                               :update => { :success => "access_point_template_block" }
-            %>
-          </li>
+          <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+              <li>
+                <%= link_to_remote t(:Add), :method => :get,
+                                   :url => new_wisp_access_point_template_l2vpn_template_url(@wisp, @access_point_template),
+                                   :update => { :success => "access_point_template_block" }
+                %>
+              </li>
+          <% end %>
         </ul>
       </li>
       <li>
@@ -124,12 +128,14 @@
                                :update => { :success => "access_point_template_block" }
             %>
           </li>
-          <li>
-            <%= link_to_remote t(:Add), :method => :get,
-                               :url => new_wisp_access_point_template_vlan_template_url(@wisp, @access_point_template),
-                               :update => { :success => "access_point_template_block" }
-            %>
-          </li>
+          <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+              <li>
+                <%= link_to_remote t(:Add), :method => :get,
+                                   :url => new_wisp_access_point_template_vlan_template_url(@wisp, @access_point_template),
+                                   :update => { :success => "access_point_template_block" }
+                %>
+              </li>
+          <% end %>
         </ul>
       </li>
       <li>
@@ -141,12 +147,14 @@
                                :update => { :success => "access_point_template_block" }
             %>
           </li>
-          <li>
-            <%= link_to_remote t(:Add), :method => :get,
-                               :url => new_wisp_access_point_template_bridge_template_url(@wisp, @access_point_template),
-                               :update => { :success => "access_point_template_block" }
-            %>
-          </li>
+          <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+              <li>
+                <%= link_to_remote t(:Add), :method => :get,
+                                   :url => new_wisp_access_point_template_bridge_template_url(@wisp, @access_point_template),
+                                   :update => { :success => "access_point_template_block" }
+                %>
+              </li>
+          <% end %>
         </ul>
       </li>
       <li>
@@ -169,17 +177,19 @@
                                :update => { :success => "access_point_template_block" }
             %>
           </li>
-          <li>
-            <%= link_to_remote t(:Add), :method => :get,
-                               :url => new_wisp_access_point_template_custom_script_template_url(@wisp, @access_point_template),
-                               :update => { :success => "access_point_template_block" }
-            %>
-          </li>
+          <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+              <li>
+                <%= link_to_remote t(:Add), :method => :get,
+                                   :url => new_wisp_access_point_template_custom_script_template_url(@wisp, @access_point_template),
+                                   :update => { :success => "access_point_template_block" }
+                %>
+              </li>
+          <% end %>
         </ul>
       </li>
     </ul>
     <div class="block" id="access_point_template_block">
-        <p class="notice"><%= t(:Select_operation_from_menu) %></p>
+      <p class="notice"><%= t(:Select_operation_from_menu) %></p>
     </div>
   </div>
 </div>

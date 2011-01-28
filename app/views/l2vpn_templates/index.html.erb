@@ -4,51 +4,53 @@
 
   <table id="l2vpn_templates-table">
     <thead>
-      <tr>
-        <th scope="col" class="head-left"><%=t :Operations %></th>
-        <th scope="col" class="head"><%=t :L2vpn_server %></th>
-        <th scope="col" class="head-right"><%=t :Notes %></th>
-      </tr>
+    <tr>
+      <th scope="col" class="head-left"><%=t :Operations %></th>
+      <th scope="col" class="head"><%=t :L2vpn_server %></th>
+      <th scope="col" class="head-right"><%=t :Notes %></th>
+    </tr>
     </thead>
     <tfoot>
-      <tr>
-        <td colspan="1" class="foot-left">&nbsp;</td>
-        <td colspan="1" class="foot">&nbsp;</td>
-        <td colspan="1" class="foot-right">&nbsp;</td>
-      </tr>
+    <tr>
+      <td colspan="1" class="foot-left">&nbsp;</td>
+      <td colspan="1" class="foot">&nbsp;</td>
+      <td colspan="1" class="foot-right">&nbsp;</td>
+    </tr>
     </tfoot>
     <tbody>
     <% @l2vpn_templates.each do |l2vpn_template| %>
-      <tr>
-        <td style="width:32px;">
-          <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
-                :method => :get,
-                :url => edit_wisp_access_point_template_l2vpn_template_path(@wisp, @access_point_template, l2vpn_template),
-                :title => t(:Edit_info),
-                :update => { :success => "list_l2vpn_templates_div", :failure => "list_l2vpn_templates_div" }
-            
-          %>
-          <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), 
-                :method => :delete,
-                :url => wisp_access_point_template_l2vpn_template_path(@wisp, @access_point_template, l2vpn_template),
-                :title => t(:Destroy_l2vpn_template),
-                :confirm => t(:Are_you_sure_l2vpn_template_destroy),
-                :update => { :success => "list_l2vpn_templates_div", :failure => "list_l2vpn_templates_div" }
-            
-          %>
-        </td>
-        <td><%=h l2vpn_template.l2vpn_server.name %></td>
+        <tr>
+          <td style="width:32px;">
+            <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+                <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                                   :method => :get,
+                                   :url => edit_wisp_access_point_template_l2vpn_template_path(@wisp, @access_point_template, l2vpn_template),
+                                   :title => t(:Edit_info),
+                                   :update => { :success => "list_l2vpn_templates_div", :failure => "list_l2vpn_templates_div" }
 
-        <td>
-          <% if (l2vpn_template.notes.nil? or l2vpn_template.notes.length == 0) %>
-            &nbsp;
-          <% else %>
-            <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
-                        :title => h(l2vpn_template.notes)
-            %>                    
-          <% end %>
-        </td>
-      </tr>
+                %>
+                <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)),
+                                   :method => :delete,
+                                   :url => wisp_access_point_template_l2vpn_template_path(@wisp, @access_point_template, l2vpn_template),
+                                   :title => t(:Destroy_l2vpn_template),
+                                   :confirm => t(:Are_you_sure_l2vpn_template_destroy),
+                                   :update => { :success => "list_l2vpn_templates_div", :failure => "list_l2vpn_templates_div" }
+
+                %>
+            <% end %>
+          </td>
+          <td><%=h l2vpn_template.l2vpn_server.name %></td>
+
+          <td>
+            <% if (l2vpn_template.notes.nil? or l2vpn_template.notes.length == 0) %>
+                &nbsp;
+            <% else %>
+                <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                            :title => h(l2vpn_template.notes)
+                %>
+            <% end %>
+          </td>
+        </tr>
     <% end %>
     </tbody>
   </table>

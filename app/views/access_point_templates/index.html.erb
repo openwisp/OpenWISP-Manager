@@ -11,52 +11,54 @@
     <div class="block" id="access_point_templates_block">
       <table id="access_point_templates-table">
         <thead>
-          <tr>
-            <th scope="col" class="head-left"><%=t :Operations %></th>
-            <th scope="col" class="head"><%=t :Name %></th>
-            <th scope="col" class="head"><%=t :Linked_access_point %></th>
-            <th scope="col" class="head-right"><%=t :Notes %></th>
-          </tr>
+        <tr>
+          <th scope="col" class="head-left"><%=t :Operations %></th>
+          <th scope="col" class="head"><%=t :Name %></th>
+          <th scope="col" class="head"><%=t :Linked_access_point %></th>
+          <th scope="col" class="head-right"><%=t :Notes %></th>
+        </tr>
         </thead>
-        <tfoot>
-          <tr>
-<!--            <td colspan="1" class="foot-left"></td> -->
-            <td colspan="4" class="foot" style="text-align: center;"><%= link_to t(:Create_New), new_wisp_access_point_template_path(@wisp) %></td>
-<!--            <td colspan="1" class="foot-right">&nbsp;</td> -->
-          </tr>
-        </tfoot>
+        <% if auth?(:wisps_creator) || auth?(:access_point_templates_creator, @wisp) %>
+            <tfoot>
+            <tr><td colspan="4" class="foot" style="text-align: center;"><%= link_to t(:Create_New), new_wisp_access_point_template_path(@wisp) %></td></tr>
+            </tfoot>
+        <% end %>
 
         <tbody>
 
-          <% @access_point_templates.each do |access_point_template| %>
+        <% @access_point_templates.each do |access_point_template| %>
             <tr>
               <td style="width:48px;">
-                <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_access_point_template_path(@wisp, access_point_template),
-                            :title => t(:Edit_info)
-                %>
                 <%= link_to image_tag("configure.png", :border=>0, :size => "16x16", :alt => t(:Edit)), wisp_access_point_template_path(@wisp, access_point_template),
                             :title => t(:Configure)
                 %>
-                <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_access_point_template_path(@wisp, access_point_template),
-                            :title => t(:Destroy_access_point),
-                            :confirm => t(:Are_you_sure_access_point_template_destroy),
-                            :method => :delete
-                %>
+                <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+                    <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_access_point_template_path(@wisp, access_point_template),
+                                :title => t(:Edit_info)
+                    %>
+                <% end %>
+                <% if auth?(:wisps_destroyer) || auth?(:access_point_templates_destroyer, @wisp) %>
+                    <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_access_point_template_path(@wisp, access_point_template),
+                                :title => t(:Destroy_access_point),
+                                :confirm => t(:Are_you_sure_access_point_template_destroy),
+                                :method => :delete
+                    %>
+                <% end %>
               </td>
               <td><%= link_to access_point_template.name, wisp_access_point_template_path(@wisp, access_point_template) %></td>
               <td><%=h access_point_template.access_points.length %></td>
               <td>
                 <% if (access_point_template.notes.nil? or access_point_template.notes.length == 0) %>
-                  &nbsp;
+                    &nbsp;
                 <% else %>
-                  <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
-                              :title => h(access_point_template.notes)
-                  %>                    
+                    <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                                :title => h(access_point_template.notes)
+                    %>
                 <% end %>
               </td>
 
             </tr>
-          <% end %>
+        <% end %>
         </tbody>
       </table>
     </div>

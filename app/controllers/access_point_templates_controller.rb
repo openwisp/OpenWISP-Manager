@@ -3,15 +3,35 @@ class AccessPointTemplatesController < ApplicationController
   before_filter :load_wisp, :except => [:ajax_stats, :list_access_points]
   before_filter :load_access_point_template, :except => [:index, :new, :create, :ajax_stats, :list_access_points]
 
-  access_control :subject_method => :current_operator do
+  access_control do
     default :deny
 
-    allow :admin
-    allow :wisp_admin, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :update, :destroy, :list_access_points, :ajax_stats, :ajax_update]
-    allow :wisp_operator, :of => :wisp, :to => [:show, :index, :new, :edit, :create, :update, :destroy, :list_access_points, :ajax_stats, :ajax_update]
+    actions :index, :show do
+      allow :wisps_viewer
+      allow :access_point_templates_viewer, :of => :wisp
+    end
+
+    actions :new, :create do
+      allow :wisps_creator
+      allow :access_point_templates_creator, :of => :wisp
+    end
+
+    actions :edit, :update do
+      allow :wisps_manager
+      allow :access_point_templates_manager, :of => :wisp
+    end
+
+    actions :destroy do
+      allow :wisps_destroyer
+      allow :access_point_templates_destroyer, :of => :wisp
+    end
+
+    # TODO: :ajax_stats and :list_access_points should be moved somewhere else
+    allow all, :to => [:ajax_stats, :list_access_points]
   end
   
   def load_wisp
+    #@wisp = current_operator.wisp or Wisp.find(params[:wisp_id])
     @wisp = Wisp.find(params[:wisp_id])
   end
   
