@@ -23,7 +23,7 @@ echo "Stopping wifi and removing its configuration"
 wifi down
 uci revert wireless
 
-echo "Reverting network configuration and removing its configuration"
+echo "Reverting network and removing its configuration"
 uci changes network | grep interface | cut -d'=' -f1 | cut -d'.' -f2 | awk '{"ifdown "$1|getline;print}'
 uci revert network
 <% if access_point.bridges.length > 0 %>
