@@ -2,9 +2,11 @@
 module ApplicationHelper
 
   def observe_fields(fields, options)
-    ret = ""
+    ret =""
+    params = "$('#{fields.join(',')}').serialize()"
+    
     fields.each do |field|
-      ret += observe_field(field, options.merge({ :with => field }))
+      ret += observe_field(field, options.merge({ :with => params }))
     end
     ret
   end

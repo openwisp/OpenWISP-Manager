@@ -361,7 +361,11 @@ ENI
     @marker_variable = "marker_new"
     @div_variable = "div_new"
 
-    location = (params['_address'].nil? ? '' : params['_address']) + ' ' + (params['_zip'].nil? ? '' : params['_zip']) + ' ' + (params['_city'].nil? ? '' : params['_city'])
+    city    = params[:access_point][:city]     or ''
+    address = params[:access_point][:address]  or ''
+    zip     = params[:access_point][:zip]      or ''
+
+    location = [address, zip, city].join(' ')
 
     req_location = Geokit::Geocoders::GoogleGeocoder.geocode(location)
     if req_location.success
