@@ -4,12 +4,12 @@ class CasController < ApplicationController
   access_control do
     default :deny
 
-    actions :show do
+    action :show do
       allow :wisps_viewer
       allow :wisp_viewer, :of => :wisp
     end
 
-    actions :crl do
+    action :crl do
       allow :wisps_manager
       allow :wisp_manager, :of => :wisp
     end
