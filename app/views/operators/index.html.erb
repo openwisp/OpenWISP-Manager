@@ -55,14 +55,18 @@
                   </td>
               <% else %>
                   <td rowspan="<%= operator.roles.length %>" style="width:32px;">
-                    <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_operator_path(@wisp, operator),
-                                :title => t(:Edit_access_point)
-                    %>
-                    <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_operator_path(@wisp, operator),
-                                :title => t(:Destroy_access_point),
-                                :confirm => t(:Are_you_sure_operator_destroy),
-                                :method => :delete
-                    %>
+                    <% if auth?(:wisps_manager) || auth?(:operators_manager, @wisp) %>
+                        <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_operator_path(@wisp, operator),
+                                    :title => t(:Editing_operator)
+                        %>
+                    <% end %>
+                    <% if auth?(:wisps_destroyer) || auth?(:operators_destroyer, @wisp) %>
+                        <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_operator_path(@wisp, operator),
+                                    :title => t(:Destroy_operator),
+                                    :confirm => t(:Are_you_sure_operator_destroy),
+                                    :method => :delete
+                        %>
+                    <% end %>
                   </td>
                   <td rowspan="<%= operator.roles.length %>"><%=h operator.login %></td>
                   <td><%=h operator.roles[0] %></td>
