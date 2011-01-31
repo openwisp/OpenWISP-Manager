@@ -8,6 +8,11 @@ class CasController < ApplicationController
       allow :wisps_viewer
       allow :wisp_viewer, :of => :wisp
     end
+
+    actions :crl do
+      allow :wisps_manager
+      allow :wisp_manager, :of => :wisp
+    end
   end
 
   def load_wisp
