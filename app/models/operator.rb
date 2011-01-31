@@ -13,8 +13,8 @@ class Operator < ActiveRecord::Base
   ROLES = [
       :wisp_viewer, :wisp_manager, :operators_viewer, :operators_creator,
       :operators_manager, :operators_destroyer, :access_point_templates_creator,
-      :access_points_templates_viewer, :access_points_templates_manager,
-      :access_points_templates_destroyer, :access_points_creator, :access_points_viewer,
+      :access_point_templates_viewer, :access_point_templates_manager,
+      :access_point_templates_destroyer, :access_points_creator, :access_points_viewer,
       :access_points_manager, :access_points_destroyer, :servers_viewer, :servers_creator,
       :servers_manager, :servers_destroyer
   ]
