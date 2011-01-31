@@ -57,21 +57,23 @@
               </td>
           <% else %>
               <td rowspan="<%= l2tc_template.shapeable_template.subinterfaces.length %>" style="width:32px;">
-                <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
-                                   :method => :get,
-                                   :url => edit_wisp_access_point_template_l2tc_template_path(@wisp, @access_point_template, l2tc_template),
-                                   :title => t(:Edit),
-                                   :update => { :success => "list_l2tc_templates_div", :failure => "list_l2tc_templates_div" }
+                <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+                    <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                                       :method => :get,
+                                       :url => edit_wisp_access_point_template_l2tc_template_path(@wisp, @access_point_template, l2tc_template),
+                                       :title => t(:Edit),
+                                       :update => { :success => "list_l2tc_templates_div", :failure => "list_l2tc_templates_div" }
 
-                %>
-                <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Clear)),
-                                   :method => :delete,
-                                   :url => wisp_access_point_template_l2tc_template_path(@wisp, @access_point_template, l2tc_template),
-                                   :title => t(:Clear_l2tc_template),
-                                   :confirm => t(:Are_you_sure_l2tc_template_clear),
-                                   :update => { :success => "list_l2tc_templates_div", :failure => "list_l2tc_templates_div" }
+                    %>
+                    <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Clear)),
+                                       :method => :delete,
+                                       :url => wisp_access_point_template_l2tc_template_path(@wisp, @access_point_template, l2tc_template),
+                                       :title => t(:Clear_l2tc_template),
+                                       :confirm => t(:Are_you_sure_l2tc_template_clear),
+                                       :update => { :success => "list_l2tc_templates_div", :failure => "list_l2tc_templates_div" }
 
-                %>
+                    %>
+                <% end %>
               </td>
               <td rowspan="<%= l2tc_template.shapeable_template.subinterfaces.length %>">
                 <%=h l2tc_template.shapeable_template.friendly_name %>

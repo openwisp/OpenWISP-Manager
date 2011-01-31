@@ -65,21 +65,23 @@
               </td>
           <% else %>
               <td rowspan="<%= bridge_template.bridgeable_templates.length %>" style="width:32px;">
-                <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
-                                   :method => :get,
-                                   :url => edit_wisp_access_point_template_bridge_template_path(@wisp, @access_point_template, bridge_template),
-                                   :title => t(:Edit_info),
-                                   :update => { :success => "list_bridge_templates_div", :failure => "list_bridge_templates_div" }
+                <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
+                    <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
+                                       :method => :get,
+                                       :url => edit_wisp_access_point_template_bridge_template_path(@wisp, @access_point_template, bridge_template),
+                                       :title => t(:Edit_info),
+                                       :update => { :success => "list_bridge_templates_div", :failure => "list_bridge_templates_div" }
 
-                %>
-                <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)),
-                                   :method => :delete,
-                                   :url => wisp_access_point_template_bridge_template_path(@wisp, @access_point_template, bridge_template),
-                                   :title => t(:Destroy_bridge_template),
-                                   :confirm => t(:Are_you_sure_bridge_template_destroy),
-                                   :update => { :success => "list_bridge_templates_div", :failure => "list_bridge_templates_div" }
+                    %>
+                    <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)),
+                                       :method => :delete,
+                                       :url => wisp_access_point_template_bridge_template_path(@wisp, @access_point_template, bridge_template),
+                                       :title => t(:Destroy_bridge_template),
+                                       :confirm => t(:Are_you_sure_bridge_template_destroy),
+                                       :update => { :success => "list_bridge_templates_div", :failure => "list_bridge_templates_div" }
 
-                %>
+                    %>
+                <% end %>
               </td>
               <td rowspan="<%= bridge_template.bridgeable_templates.length %>"><%=h bridge_template.name %></td>
               <td>
