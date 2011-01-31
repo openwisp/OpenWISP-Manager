@@ -89,6 +89,7 @@ it:
   Destroy: Elimina
   Destroy_access_point: Elimina access point
   Destroy_access_point_group: Elimina gruppo di access point
+  Destroy_access_point_template: Elimina template access point
   Destroy_bridge: Elimina bridge
   Destroy_bridge_template: Elimina template di bridge
   Destroy_custom_script: Elimina script personalizzato
@@ -97,6 +98,7 @@ it:
   Destroy_ethernet_template: Elimina template di interfaccia ethernet
   Destroy_l2vpn_server: Elimina server vpn layer 2
   Destroy_l2vpn_template: Elimina template di server vpn layer 2
+  Destroy_operator: Elimina operatore
   Destroy_server: Elimina server
   Destroy_vlan: Elimina vlan
   Destroy_vlan_template: Elimina template di vlan
