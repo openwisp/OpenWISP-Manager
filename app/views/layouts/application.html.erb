@@ -101,9 +101,14 @@
 
       <!-- logout -->
       <% if current_operator %>
+          <span class="right">
+          <li>
+            <%= link_to t(:Home), home_path_for(current_operator) %>
+          </li>
           <li>
             <%= link_to t(:Logout), operator_session_path, :method => :delete %>
           </li>
+          </span>
       <% end %>
     </ul>
   </div>

@@ -90,3 +90,7 @@ h1#branding {
 .nohand {
     cursor:default;
 }
+
+.right {
+    float:right;
+}
