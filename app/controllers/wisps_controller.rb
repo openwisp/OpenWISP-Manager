@@ -6,10 +6,10 @@ class WispsController < ApplicationController
   access_control do
     default :deny
 
-    actions :index, :show, :ajax_stats, :get_crl_list do
+    actions :index, :show, :ajax_stats do
       allow :wisps_viewer
+      allow :wisp_viewer, :of => :wisp
     end
-    allow :wisp_viewer, :of => :wisp, :to =>  [:show, :ajax_stats, :get_crl_list]
 
     actions :new, :create do
       allow :wisps_creator, :of => :wisp

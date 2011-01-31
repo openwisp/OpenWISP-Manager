@@ -24,35 +24,37 @@
         <% end %>
         <tbody>
         <% @wisps.each do |wisp| %>
-            <tr>
-              <td style="width:48px;">
-                <%= link_to image_tag("configure.png", :border=>0, :size => "16x16", :alt => t(:Configure)), wisp,
-                            :title => t(:Configure)
-                %>
-                <% if auth? :wisps_manager %>
-                    <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_path(wisp),
-                                :title => t(:Edit_info)
+            <% if auth?(:wisps_viewer) || auth?(:wisp_viewer, wisp) %>
+                <tr>
+                  <td style="width:48px;">
+                    <%= link_to image_tag("configure.png", :border=>0, :size => "16x16", :alt => t(:Configure)), wisp,
+                                :title => t(:Configure)
                     %>
-                <% end %>
-                <% if auth? :wisps_destroyer %>
-                    <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp,
-                                :title => t(:Destroy_wisp),
-                                :confirm => t(:Are_you_sure_wisp_destroy),
-                                :method => :delete
-                    %>
-                <% end %>
-              </td>
-              <td><%= link_to wisp.name, wisp_path(wisp) %></td>
-              <td>
-                <% if (wisp.notes.nil? or wisp.notes.length == 0) %>
-                    &nbsp;
-                <% else %>
-                    <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
-                                :title => h(wisp.notes)
-                    %>
-                <% end %>
-              </td>
-            </tr>
+                    <% if auth?(:wisps_manager) || auth?(:wisp_manager, wisp) %>
+                        <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_path(wisp),
+                                    :title => t(:Edit_info)
+                        %>
+                    <% end %>
+                    <% if auth? :wisps_destroyer %>
+                        <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp,
+                                    :title => t(:Destroy_wisp),
+                                    :confirm => t(:Are_you_sure_wisp_destroy),
+                                    :method => :delete
+                        %>
+                    <% end %>
+                  </td>
+                  <td><%= link_to wisp.name, wisp_path(wisp) %></td>
+                  <td>
+                    <% if (wisp.notes.nil? or wisp.notes.length == 0) %>
+                        &nbsp;
+                    <% else %>
+                        <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                                    :title => h(wisp.notes)
+                        %>
+                    <% end %>
+                  </td>
+                </tr>
+            <% end %>
         <% end %>
         </tbody>
       </table>
