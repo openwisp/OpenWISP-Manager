@@ -1,6 +1,62 @@
- <div class="grid_16">
+<div class="grid_16">
   <div class="box">
-    <h4><%=t :Welcome, :operator => @operator.login %></h4>
+    <h4><%=t :Welcome, :operator => h(@operator.login) %></h4>
+    <% if @operator.wisp %>
+        <h5 class="center pad_top_5"><%=t :Operator_of, :wisp => h(@operator.wisp.name) %></h5>
+    <% end %>
   </div>
 </div>
 <div class="clear">&nbsp;</div>
+
+<div class="grid_8">
+  <div class="box">
+    <h2><%=t :Stats %></h2>
+    <div class="block">
+      <table>
+        <tbody>
+        <tr>
+          <td><strong><%=t :Last_login_at %></strong></td>
+          <td class="center"><%= @operator.last_login_at.to_s(:short) %></td>
+        </tr>
+        <tr>
+          <td><strong><%=t :Last_login_ip %></strong></td>
+          <td class="center"><%= @operator.last_login_ip %></td>
+        </tr>
+        <tr>
+          <td><strong><%=t :Login_count %></strong></td>
+          <td class="center"><%= @operator.login_count %></td>
+        </tr>
+        <% unless @operator.notes.blank? %>
+            <tr><td colspan="2">&nbsp;</td></tr>
+            <tr>
+              <td class="center" colspan="2"><strong><%=t :Notes %></strong></td>
+            </tr>
+            <tr>
+              <td class="center" colspan="2"><%=h @operator.notes %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="grid_8">
+  <div class="box">
+    <h2><%=t :Roles %></h2>
+    <div class="block">
+      <table>
+        <tbody class="center">
+        <% @operator.roles.in_groups_of(2) do |role_left, role_right| %>
+            <tr>
+              <td><%= role_left %></td>
+              <td><%= role_right %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="clear">&nbsp;</div>
+

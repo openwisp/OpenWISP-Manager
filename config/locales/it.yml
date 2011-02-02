@@ -165,6 +165,8 @@ it:
   L2vpn_servers: Server vpn layer 2
   L2vpns: VPN layer 2
   Last_configuration_retrieve_ip: "Ultimo IP che ha scaricato la configurazione"
+  Last_login_ip: "Indirizzo dell'ultimo accesso"
+  Last_login_at: "Data dell'ultimo accesso"
   Lat: Latitudine
   Linked_access_point: Access point associati
   List: Lista
@@ -198,9 +200,10 @@ it:
   Listing_vlans: Vlan presenti
   Listing_wisps: WISP presenti
   Locality: Località
-  Logged_in_as: Effettuato l'accesso come
-  Login: Accedi
-  Login_successful: Accesso riuscito
+  Logged_in_as: "Effettuato l'accesso come"
+  Login: "Accedi"
+  Login_count: "Numero di acessi"
+  Login_successful: "Accesso riuscito"
   Logout: Logout
   Logout_successful: Logout riuscito
   Lon: Longitudine
@@ -230,6 +233,7 @@ it:
   Notes: Note
   Openwrt_configuration: Configurazione openWRT
   Operations: Operazioni
+  Operator_of: "Operatore di {{wisp}}"
   Operator_name: Nome dell'operatore
   Operators: Operatori
   Operators_list: Lista operatori
@@ -253,7 +257,7 @@ it:
   Renew_certificate: Rinnova certificato
   Revoke_certificate: Revoca certificato
   Revoked: Revocato
-  Roles: Ruoli
+  Roles: "Ruoli"
   Select: Seleziona
   Select_location: Seleziona la posizione
   Select_operation_from_menu: Seleziona l'operazione dal menù

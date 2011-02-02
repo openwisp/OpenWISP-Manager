@@ -103,7 +103,7 @@
       <% if current_operator %>
           <span class="right">
           <li>
-            <%= link_to t(:Home), home_path_for(current_operator) %>
+            <%= link_to t(:Home), welcome_operator_path(current_operator) %>
           </li>
           <li>
             <%= link_to t(:Logout), operator_session_path, :method => :delete %>

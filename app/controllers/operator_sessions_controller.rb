@@ -11,7 +11,7 @@ class OperatorSessionsController < ApplicationController
     if @operator_session.save
       flash[:notice] = t(:Login_successful)
 
-      redirect_to home_path_for(@operator_session.operator)
+      redirect_to welcome_operator_path(@operator_session.operator)
     else
       render :action => :new
     end

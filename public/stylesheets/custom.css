@@ -94,3 +94,11 @@ h1#branding {
 .right {
     float:right;
 }
+
+.center, .center * {
+    text-align:center;
+}
+
+.pad_top_5 {
+    padding-top:5px;
+}

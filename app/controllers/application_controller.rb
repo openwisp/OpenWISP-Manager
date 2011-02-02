@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
   end
 
   def home_path_for(operator)
-    operator.wisp ? wisp_operator_path(operator.wisp, operator) : welcome_operator_path(operator)
+    welcome_operator_path(operator)
   end
 
   def require_operator
