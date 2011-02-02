@@ -15,12 +15,20 @@
       <table>
         <tbody>
         <tr>
+          <td><strong><%=t :Current_login_at %></strong></td>
+          <td class="center"><%= @operator.current_login_at.to_s(:short) %></td>
+        </tr>
+        <tr>
           <td><strong><%=t :Last_login_at %></strong></td>
-          <td class="center"><%= @operator.last_login_at.to_s(:short) %></td>
+          <td class="center"><%= @operator.last_login_at.blank? ? "" : @operator.last_login_at.to_s(:short) %></td>
+        </tr>
+        <tr>
+          <td><strong><%=t :Current_login_ip %></strong></td>
+          <td class="center"><%= @operator.current_login_ip %></td>
         </tr>
         <tr>
           <td><strong><%=t :Last_login_ip %></strong></td>
-          <td class="center"><%= @operator.last_login_ip %></td>
+          <td class="center"><%= @operator.last_login_ip.blank? ? "" : @operator.last_login_ip %></td>
         </tr>
         <tr>
           <td><strong><%=t :Login_count %></strong></td>

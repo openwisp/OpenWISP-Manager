@@ -80,6 +80,8 @@ it:
   Cron_month: Mesi
   Cron_dayweek: Giorni Settimana  
   Cron_body: Body Script
+  Current_login_at: "Data dell'accesso corrente"
+  Current_login_ip: "Indirizzo dell'accesso corrente"
   Custom_script: Script Personalizzato
   Custom_scripts: Script Personalizzabili
   Custom_script_template: Template di Script Personalizzabili
@@ -165,8 +167,8 @@ it:
   L2vpn_servers: Server vpn layer 2
   L2vpns: VPN layer 2
   Last_configuration_retrieve_ip: "Ultimo IP che ha scaricato la configurazione"
-  Last_login_ip: "Indirizzo dell'ultimo accesso"
-  Last_login_at: "Data dell'ultimo accesso"
+  Last_login_ip: "Indirizzo dell'accesso precedente"
+  Last_login_at: "Data dell'accesso precedente"
   Lat: Latitudine
   Linked_access_point: Access point associati
   List: Lista
@@ -202,7 +204,7 @@ it:
   Locality: Località
   Logged_in_as: "Effettuato l'accesso come"
   Login: "Accedi"
-  Login_count: "Numero di acessi"
+  Login_count: "Numero totale di acessi"
   Login_successful: "Accesso riuscito"
   Logout: Logout
   Logout_successful: Logout riuscito
