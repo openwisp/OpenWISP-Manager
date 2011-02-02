@@ -56,7 +56,7 @@
     <ul class="nav main">
       <% if auth?(:wisps_viewer) %>
           <li><%= link_to t(:Wisps), wisps_path %></li>
-      <% elsif auth?(:wisp_viewer, current_operator.wisp) %>
+      <% elsif current_operator and auth?(:wisp_viewer, current_operator.wisp) %>
           <li><%= link_to h(current_operator.wisp.name), current_operator.wisp %></li>
       <% end %>
       <% if auth? :servers_viewer %>
