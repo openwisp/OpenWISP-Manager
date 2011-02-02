@@ -54,8 +54,10 @@
 
   <div class="grid_16">
     <ul class="nav main">
-      <% if auth?(:wisps_viewer) || auth?(:wisp_viewer, @wisp) %>
+      <% if auth?(:wisps_viewer) %>
           <li><%= link_to t(:Wisps), wisps_path %></li>
+      <% elsif auth?(:wisp_viewer, current_operator.wisp) %>
+          <li><%= link_to h(current_operator.wisp.name), current_operator.wisp %></li>
       <% end %>
       <% if auth? :servers_viewer %>
           <li><%= link_to t(:OWISPManager_servers), servers_path %></li>
