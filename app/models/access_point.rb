@@ -217,12 +217,6 @@ class AccessPoint < ActiveRecord::Base
     )
   end
 
-  # Re-generation of configuration and re-computation of md5
-  def update_configuration
-    self.generate_configuration
-    self.generate_configuration_md5
-  end
-
   def link_to_template(t)
     return_value = false
 

@@ -69,7 +69,6 @@ class CustomScriptsController < ApplicationController
 
      respond_to do |format|
        if @custom_script.save
-         @access_point.update_configuration
          format.html { redirect_to(wisp_access_point_custom_scripts_url(@wisp, @access_point)) }
        else
          format.html { render :action => "new" }
@@ -86,8 +85,6 @@ class CustomScriptsController < ApplicationController
     @custom_script = @access_point.custom_scripts.find(params[:id])
     respond_to do |format|
       if @custom_script.update_attributes(params[:custom_script])
-        # Update Configuration
-        @access_point.update_configuration
         format.html { redirect_to(wisp_access_point_custom_scripts_url(@wisp, @access_point)) }
       else
         format.html { render :action => "edit" }
@@ -99,7 +96,6 @@ class CustomScriptsController < ApplicationController
     @custom_script = CustomScript.find(params[:id])
     @custom_script.destroy
     
-    @access_point.update_configuration
     respond_to do |format|
       format.html { redirect_to(wisp_access_point_custom_scripts_url(@wisp, @access_point)) }
     end

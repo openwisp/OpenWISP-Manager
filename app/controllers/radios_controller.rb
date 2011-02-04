@@ -47,8 +47,6 @@ class RadiosController < ApplicationController
     @radio = @access_point.radios.find(params[:id])
     respond_to do |format|
       if @radio.update_attributes(params[:radio])
-        # Update access_point Configuration
-        @access_point.update_configuration
         format.html { redirect_to(wisp_access_point_radios_url(@wisp, @access_point)) }
       else
         format.html { render :action => "edit" }
@@ -57,7 +55,7 @@ class RadiosController < ApplicationController
   end
   
   def index
-    @radios = @access_point.radios.find(:all)
+    @radios = @access_point.radios.all
 
     respond_to do |format|
       format.html # index.html.erb

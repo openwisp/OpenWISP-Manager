@@ -59,8 +59,6 @@ class L2tcsController < ApplicationController
   def update
     @l2tc = @access_point.l2tcs.find(params[:id])
 
-    result = true
-    
     L2tcTemplate.transaction do
       @l2tc.shapeable.output_band = params[:shapeables][:output_band]
       if @l2tc.shapeable.save    
@@ -68,24 +66,20 @@ class L2tcsController < ApplicationController
         @l2tc.shapeable.subinterfaces.each do |s|
           s.output_band_percent = params[:subinterfaces]["#{i}"][:output_band_percent]
           unless s.save
-            result = false
             raise ActiveRecord::Rollback
           end
           i += 1
         end
       else
-        result = false
         raise ActiveRecord::Rollback
       end
       unless @l2tc.validate
-        result = false
         raise ActiveRecord::Rollback
       end
     end
     
     respond_to do |format|
-      if result and @l2tc.update_attributes(params[:l2tc])
-        @access_point.update_configuration
+      if @l2tc.update_attributes(params[:l2tc])
         format.html { 
           redirect_to(wisp_access_point_l2tcs_url(@wisp, @access_point)) 
         }
@@ -104,7 +98,6 @@ class L2tcsController < ApplicationController
     end
     @l2tc.shapeable.save!
 
-    @access_point.update_configuration
     respond_to do |format|
       format.html { redirect_to(wisp_access_point_l2tcs_url(@wisp, @access_point)) }
     end

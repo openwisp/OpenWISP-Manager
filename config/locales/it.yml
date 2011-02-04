@@ -286,7 +286,7 @@ it:
   Update: Aggiorna
   Update_configuration: Aggiornamento Configurazione
   Update_access_point_warning: "Attenzione, saranno modificati i seguenti access point"
-  Update_one_access_point_warning: "Attenzione, la configurazione del template {{template}} è stata modificata! Questo access point è da aggiornare."
+  Update_one_access_point_warning: "Attenzione, la configurazione del access point è stata modificata ma non è ancora stata applicata."
   Valid: Valido
   VapTemplates: Template di vap
   Vap_template: Template di vap
