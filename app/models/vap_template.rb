@@ -46,13 +46,18 @@ class VapTemplate < ActiveRecord::Base
   validates_length_of :key, :maximum=>128, :if => :key_needed?
 
   validates_presence_of :radius_auth_server, :if => :radius_needed?
-  validates_format_of :radius_auth_server, :with => /\A[\w\d\.]+\Z/i
-  validates_length_of :radius_auth_server, :maximum=>128
+  validates_format_of :radius_auth_server,
+                      :with => /\A[\w\d\.]+\Z/i,
+                      :if => :radius_needed?
+  validates_length_of :radius_auth_server,
+                      :maximum=>128,
+                      :if => :radius_needed?
   validates_presence_of :radius_auth_server_port, :if => :radius_needed?
   validates_numericality_of :radius_auth_server_port,
                             :only_integer => true,
                             :greater_than => 0,
-                            :less_than_or_equal_to => 65535
+                            :less_than_or_equal_to => 65535,
+                            :if => :radius_needed?
 
   validates_format_of :radius_acct_server, :with => /\A[\w\d\.]+\Z/i, :allow_nil => true
   validates_length_of :radius_acct_server, :maximum=>128, :allow_nil => true

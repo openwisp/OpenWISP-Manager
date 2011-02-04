@@ -10,7 +10,7 @@ class BridgeTemplate < ActiveRecord::Base
   validates_presence_of :ip_range_begin, :ip_range_end, :netmask, :if => :static_addressing?
 
   validates_uniqueness_of :name, :scope => :access_point_template_id
-  validates_format_of :name, :with => /\A[a-z][a-z0-9]\Z/i
+  validates_format_of :name, :with => /\A[a-z][a-z0-9]*\Z/i
   validates_length_of :name, :maximum => 8
 
   has_many :ethernet_templates, :dependent => :nullify
