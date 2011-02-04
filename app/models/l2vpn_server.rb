@@ -32,7 +32,7 @@ class L2vpnServer < ActiveRecord::Base
   # Avoids 2 servers on the same port
   validates_uniqueness_of :port, :scope => [ :protocol, :server_id ]
   validates_uniqueness_of :name, :scope => :wisp_id
-  validates_format_of :name, :with => /\A[a-z][\s\w\d_\.]*\Z/i
+  validates_format_of :name, :with => /\A[a-z][\s\w\d_\.\-]*\Z/i
   validates_length_of :name, :maximum => 32
   validates_inclusion_of :protocol, :in => L2vpnServer::PROTOCOLS
   validates_inclusion_of :cipher, :in => L2vpnServer::CIPHERSUITES
