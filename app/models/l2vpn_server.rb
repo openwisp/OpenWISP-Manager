@@ -67,11 +67,16 @@ class L2vpnServer < ActiveRecord::Base
 
   def generate_configuration
     @ca_name = Ca.find(self.x509_certificate.ca_id).cn.gsub(" ", "_")
-    @openvpn_conf = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "l2vpn_servers/openvpn_conf", :locals => { :l2vpn_server => self, :ca_name => @ca_name} )
+    @openvpn_conf = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "l2vpn_servers/openvpn_conf", :locals => { :l2vpn_server => self, :ca_name => @ca_name }
+    )
     @tarname = "server-openvpn-#{self.server.id}-#{self.id}.tar.gz"
     entries_date = Time.now
 
-    Archive.write_open_filename("#{RAILS_ROOT}/private/l2vpn_servers_configurations/#{@tarname}", Archive::COMPRESSION_GZIP, Archive::FORMAT_TAR) do |tar|
+    Archive.write_open_filename(
+        SERVERS_CONFIGURATION_PATH.join("#{@tarname}").to_s,
+        Archive::COMPRESSION_GZIP, Archive::FORMAT_TAR
+    ) do |tar|
       tar.new_entry do |entry|
         entry.pathname = "openvpn/openvpn.conf"
         entry.mode = 33056

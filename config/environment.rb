@@ -48,3 +48,13 @@ Rails::Initializer.run do |config|
   #config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   config.i18n.default_locale = :it
 end
+
+ACCESS_POINTS_CONFIGURATION_PATH = Rails.root.join(
+    'private',
+    'access_points_configurations'
+) unless defined? ACCESS_POINTS_CONFIGURATION_PATH
+
+SERVERS_CONFIGURATION_PATH = Rails.root.join(
+    'private',
+    'l2vpn_servers_configurations'
+) unless defined? SERVERS_CONFIGURATION_PATH

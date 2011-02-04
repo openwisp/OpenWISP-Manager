@@ -47,19 +47,36 @@ class AccessPoint < ActiveRecord::Base
 
   def generate_configuration
 
-    @uci_system     = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "access_points/uci_system", :locals => { :access_point => self} )
-    @uci_network    = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "access_points/uci_network", :locals => { :access_point => self} )
-    @uci_wireless   = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "access_points/uci_wireless", :locals => { :access_point => self} )
-    @uci_openvpn    = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "access_points/uci_openvpn", :locals => { :access_point => self} )
-    @l2tc_script    = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "access_points/l2tc_script", :locals => { :access_point => self} )
-    @install_script = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "access_points/install_script", :locals => { :access_point => self} )
-    @uninstall_script = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "access_points/uninstall_script", :locals => { :access_point => self} )
+    @uci_system       = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/uci_system", :locals => { :access_point => self}
+    )
+    @uci_network      = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/uci_network", :locals => { :access_point => self }
+    )
+    @uci_wireless     = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/uci_wireless", :locals => { :access_point => self }
+    )
+    @uci_openvpn      = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/uci_openvpn", :locals => { :access_point => self }
+    )
+    @l2tc_script      = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/l2tc_script", :locals => { :access_point => self }
+    )
+    @install_script   = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/install_script", :locals => { :access_point => self }
+    )
+    @uninstall_script = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/uninstall_script", :locals => { :access_point => self }
+    )
     @vpn_scripts = {}
 
     @tarname = "ap-#{self.wisp.id}-#{self.id}.tar.gz"
     entries_date = Time.now
 
-    Archive.write_open_filename("#{RAILS_ROOT}/private/access_points_configurations/#{@tarname}", Archive::COMPRESSION_GZIP, Archive::FORMAT_TAR) do |tar|
+    Archive.write_open_filename(
+        ACCESS_POINTS_CONFIGURATION_PATH.join("#{@tarname}").to_s,
+        Archive::COMPRESSION_GZIP, Archive::FORMAT_TAR
+    ) do |tar|
       tar.new_entry do |entry|
         entry.pathname = "uci/system.conf"
         entry.mode = 33056
@@ -192,8 +209,11 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def generate_configuration_md5
-    configuration_file_name_and_path = "#{RAILS_ROOT}/private/access_points_configurations/ap-#{self.wisp.id}-#{self.id}.tar.gz"
-    self.update_attributes(:configuration_md5 => OpenSSL::Digest::MD5.new(File.read(configuration_file_name_and_path)).to_s)
+    configuration_file_name_and_path =
+        ACCESS_POINTS_CONFIGURATION_PATH.join("ap-#{self.wisp.id}-#{self.id}.tar.gz")
+    self.update_attributes(
+        :configuration_md5 => OpenSSL::Digest::MD5.new(File.read(configuration_file_name_and_path)).to_s
+    )
   end
 
   # Re-generation of configuration and re-computation of md5

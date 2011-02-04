@@ -16,11 +16,12 @@ class ApplicationController < ActionController::Base
   private
   def configure_gmap_key
     #Read the API key config for the current ENV
-    unless File.exist?(RAILS_ROOT + '/config/gmaps_api_key.yml')
-      raise GMapsAPIKeyConfigFileNotFoundException.new("File RAILS_ROOT/config/gmaps_api_key.yml not found")
+    api_key_file = Rails.root.join('config','gmaps_api_key.yml')
+    unless File.exist?(api_key_file)
+      raise GMapsAPIKeyConfigFileNotFoundException.new("File #{api_key_file.to_s} not found")
     else
       env = ENV['RAILS_ENV'] || RAILS_ENV
-      gak = YAML::load_file(RAILS_ROOT + '/config/gmaps_api_key.yml')[env]
+      gak = YAML::load_file(api_key_file)[env]
     end
 
     if gak.is_a?(Hash)

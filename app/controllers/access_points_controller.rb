@@ -2,7 +2,14 @@ class AccessPointsController < ApplicationController
   include Addons::Mappable
 
   before_filter :load_wisp, :except => [:ajax_update_gmap, :get_configuration, :get_configuration_md5]
-  before_filter :load_access_point, :except => [:index, :new, :create, :ajax_update_gmap, :get_configuration, :get_configuration_md5, :outdated, :update_outdated]
+  before_filter :load_access_point,
+                :except => [
+                    :index,
+                    :new, :create,
+                    :ajax_update_gmap,
+                    :get_configuration, :get_configuration_md5,
+                    :outdated, :update_outdated
+                ]
 
   access_control do
     default :deny
@@ -44,9 +51,7 @@ class AccessPointsController < ApplicationController
     mac_address = params[:mac_address]
     remote_ip_address = request.env['REMOTE_HOST']
     if mac_address =~ /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
-
       mac_address.downcase!
-
       access_point = AccessPoint.find_by_mac_address(mac_address)
 
       #Updating configuration files if old
@@ -55,7 +60,9 @@ class AccessPointsController < ApplicationController
           access_point.update_attributes(:last_configuration_retrieve_ip => remote_ip_address)
         end
         #Sending configuration files for the access point
-        send_file "#{RAILS_ROOT}/private/access_points_configurations/ap-#{access_point.wisp.id}-#{access_point.id}.tar.gz"
+        send_file ACCESS_POINTS_CONFIGURATION_PATH.join(
+                      "ap-#{access_point.wisp.id}-#{access_point.id}.tar.gz"
+                  )
       else
         send_file "public/404.html", :status => 404
       end
@@ -143,8 +150,6 @@ ENI
     @map_variable = "map_new"
     @marker_variable = "marker_new"
     @div_variable = "div_new"
-    #@latlon = [41.9, 12.4833]
-    #@zoom = 10
     llz = get_center_zoom(@wisp.access_points)
     @latlon = llz[0,2]
     @zoom = llz[2]
@@ -167,7 +172,8 @@ ENI
     @access_point_groups = @wisp.access_point_groups
     @selected_access_point_groups = @access_point.access_point_groups.map { |g| g.id.to_s }
     @access_point_templates = @wisp.access_point_templates
-    @selected_access_point_template = !@access_point.access_point_template.nil? ? @access_point.access_point_template.id.to_s : nil
+    @selected_access_point_template =
+        !@access_point.access_point_template.nil? ? @access_point.access_point_template.id.to_s : nil
 
     @map_variable = "map_new"
     @marker_variable = "marker_new"
@@ -189,7 +195,7 @@ ENI
   def create
     @access_point = @wisp.access_points.build(params[:access_point])
 
-    # MAC Address in lowercase 
+    # MAC Address in lowercase
     @access_point.mac_address.downcase!
 
     @access_point_groups = @wisp.access_point_groups
@@ -213,7 +219,6 @@ ENI
     end
 
     save_success = true
-    link_success = true
     AccessPoint.transaction do
       # We have to generate access_point.id to permit templates instantiations (access_point.id)
 
@@ -221,21 +226,19 @@ ENI
 
         unless @access_point_template.nil?
           unless @access_point.link_to_template(@access_point_template)
-            link_success = false
             raise ActiveRecord::Rollback
           end
         end
-        #Generation of the configuration files for the Access Point just saved
-        @access_point.generate_configuration
-        #Generation of md5 digest for new configuration
-        @access_point.generate_configuration_md5
-        @access_point.touch(:committed_at)
+        worker = MiddleMan.worker(:configuration_worker)
+        worker.async_create_access_points_configuration(
+            :arg => { :access_point_ids => [ @access_point.id ] }
+        )
       else
         save_success = false
       end
     end
 
-    if save_success and link_success
+    if save_success
       respond_to do |format|
         flash[:notice] = t(:AccessPoint_was_successfully_created)
         format.html { redirect_to(wisp_access_point_url(@wisp, @access_point)) }
@@ -283,16 +286,10 @@ ENI
 
     if @access_point.update_attributes(params[:access_point])
 
-      # Delete old Configuration
-      @conf_fileName = "#{RAILS_ROOT}/private/access_points_configurations/ap-#{@access_point.wisp.id}-#{@access_point.id}.tar.gz"
-      File.delete(@conf_fileName)
-
-      # Updating of the configuration files for the Access Point just edited
-      @access_point.generate_configuration
-
-      # Generation of md5 digest for new configuration
-      @access_point.generate_configuration_md5
-      @access_point.touch(:committed_at)
+      worker = MiddleMan.worker(:configuration_worker)
+      worker.async_create_access_points_configuration(
+          :arg => { :access_point_ids => [ @access_point.id ] }
+      )
 
       respond_to do |format|
         flash[:notice] = t(:AccessPoint_was_successfully_updated)
@@ -324,8 +321,10 @@ ENI
   # DELETE /wisps/:wisp_id/access_points/1
   def destroy
 
-    @conf_fileName = "#{RAILS_ROOT}/private/access_points_configurations/ap-#{@access_point.wisp.id}-#{@access_point.id}.tar.gz"
-    File.delete(@conf_fileName)
+    worker = MiddleMan.worker(:configuration_worker)
+    worker.async_delete_access_points_configuration(
+        :arg => { :access_point_ids => [ @access_point.id ] }
+    )
 
     @access_point.destroy
 
@@ -339,10 +338,11 @@ ENI
   end
 
   def update_outdated
+    # TODO: some ajax-magic is needed here...
     access_points = params[:id] ? [load_access_point] : @wisp.access_points.select {|ap| ap.is_outdated? }
 
-    worker = MiddleMan.worker(:configuration_update_worker)
-    worker.outdated_access_points_update(:arg => { :access_point_ids => access_points.map{ |ap| ap.id } })
+    worker = MiddleMan.worker(:configuration_worker)
+    worker.async_create_access_points_configuration(:arg => { :access_point_ids => access_points.map{ |ap| ap.id } })
 
     # Redirect if called on a single AP
     # Otherwise redirect to access points index

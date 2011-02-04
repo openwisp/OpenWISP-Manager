@@ -24,7 +24,7 @@ class L2vpnServerWorker < BackgrounDRb::MetaWorker
     while (cache['dh'].nil?) do
       break if Time.now() - start > 1.minute
     end
-    return cache['dh']       
+    cache['dh']
   end
   
   def getTls
@@ -32,7 +32,7 @@ class L2vpnServerWorker < BackgrounDRb::MetaWorker
     while  (cache['tls'].nil?)  do
       break if Time.now() - start > 1.minute
     end
-    return cache['tls']
+    cache['tls']
   end
   
 end
