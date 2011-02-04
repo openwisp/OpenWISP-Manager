@@ -337,14 +337,7 @@ ENI
     worker = MiddleMan.worker(:configuration_worker)
     worker.async_create_access_points_configuration(:arg => { :access_point_ids => access_points.map{ |ap| ap.id } })
 
-    # Redirect if called on a single AP
-    # Otherwise redirect to access points index
-    if params[:id]
-      flash[:notice] = I18n.t(:AccessPoint_was_successfully_updated)
-      redirect_to wisp_access_point_url(@wisp, access_points.first)
-    else
-      redirect_to wisp_access_points_url(@wisp)
-    end
+    redirect_to wisp_access_points_url(@wisp)
   end
 
   # Ajax Methods
