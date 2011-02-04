@@ -1,32 +1,22 @@
 #!/bin/sh
 
 up() {
-<% l2vpn_bridges.each do |bridge| %>
-  ifup <%= bridge.name %>
-  #OpenWRT Bug!
-  ifup <%= bridge.name %>
-<% end %>
-
-  wifi up
+  # TO DO: openvpn scripts
 }
 
 
 down() {
-<% l2vpn_bridges.each do |bridge| %>
-  ifdown <%= bridge.name %>
-<% end %>
-
-  wifi down
+  # TO DO: openvpn scripts
 }
 
-# <script> tap_dev tap_mtu link_mtu ifconfig_local_ip ifconfig_netmask [ init | restart | ??? ]
+# Syntax:  <script> tap_dev tap_mtu link_mtu ifconfig_local_ip ifconfig_netmask [ init | restart | ??? ]
 eval "last=\${$#}"
 case "$last" in
   init)
     up
     ;;
   restart)
-    up
+    down ; up
     ;;
   *)
     down
