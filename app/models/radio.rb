@@ -7,10 +7,9 @@ class Radio < ActiveRecord::Base
 
   MAX_VAPS = 4
 
-  # LOL ==> validates_presence_of :name, :allow_nil => :true
-  validates_uniqueness_of :name, :scope => :access_point_id, :allow_nil => :true
-  validates_format_of :name, :with => /\A[a-z][\s\w\d\.]*\Z/i, :allow_nil => :true
-  validates_length_of :name, :maximum => 8, :allow_nil => :true
+  validates_uniqueness_of :name, :scope => :access_point_id, :allow_nil => :true, :allow_blank => true
+  validates_format_of :name, :with => /\A[a-z][\s\w\d\.]*\Z/i, :allow_nil => :true, :allow_blank => true
+  validates_length_of :name, :maximum => 8, :allow_nil => :true, :allow_blank => true
 
   has_many :vaps, :dependent => :destroy
   has_many :subinterfaces, :class_name => 'Vap', :foreign_key => :radio_id
