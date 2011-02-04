@@ -5,23 +5,23 @@ package 'openvpn'
   option 'client' '1'
   option 'dev' '<%=h l2vpn_client.tap.name %>'
   option 'dev_type' 'tap'
-  <% if l2vpn_client.l2vpn_template.l2vpn_server.protocol == 'tcp' -%>
+<% if l2vpn_client.l2vpn_template.l2vpn_server.protocol == 'tcp' -%>
   option 'proto' 'tcp-client'
-  <% else -%>
+<% else -%>
   option 'proto' 'udp'
   <% end -%>
   <% if l2vpn_client.l2vpn_template.l2vpn_server.ip %>
   option 'remote' '<%=h l2vpn_client.l2vpn_template.l2vpn_server.ip %> <%=h l2vpn_client.l2vpn_template.l2vpn_server.port %>'
-  <% end -%>
-  <% if l2vpn_client.l2vpn_template.l2vpn_server.protocol == 'udp' and !l2vpn_client.l2vpn_template.l2vpn_server.mtu.nil? -%>
+<% end -%>
+<% if l2vpn_client.l2vpn_template.l2vpn_server.protocol == 'udp' and !l2vpn_client.l2vpn_template.l2vpn_server.mtu.nil? -%>
   option 'fragment' <%=h l2vpn_client.l2vpn_template.l2vpn_server.mtu - 8 %>
-  <% end -%>
-  <% unless l2vpn_client.l2vpn_template.l2vpn_server.mtu_disc.nil? or l2vpn_client.l2vpn_template.l2vpn_server.mtu_disc.blank? -%>
+<% end -%>
+<% unless l2vpn_client.l2vpn_template.l2vpn_server.mtu_disc.nil? or l2vpn_client.l2vpn_template.l2vpn_server.mtu_disc.blank? -%>
   option 'mtu_disc' <%=h l2vpn_client.l2vpn_template.l2vpn_server.mtu_disc %>
-  <% end -%>
-  <% if l2vpn_client.mtu_test -%>
+<% end -%>
+<% if l2vpn_client.mtu_test -%>
   option 'mtu_test'
-  <% end -%>
+<% end -%>
   option 'nobind' '1'
   option 'keepalive' '5 40'
   option 'ns_cert_type' 'server'
