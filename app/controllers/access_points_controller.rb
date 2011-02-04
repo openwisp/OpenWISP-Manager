@@ -49,15 +49,14 @@ class AccessPointsController < ApplicationController
   def get_configuration
 
     mac_address = params[:mac_address]
-    remote_ip_address = request.env['REMOTE_HOST']
     if mac_address =~ /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
       mac_address.downcase!
       access_point = AccessPoint.find_by_mac_address(mac_address)
 
       #Updating configuration files if old
       if !access_point.nil?
-        if access_point.last_configuration_retrieve_ip != remote_ip_address
-          access_point.update_attributes(:last_configuration_retrieve_ip => remote_ip_address)
+        if access_point.last_configuration_retrieve_ip != request.remote_ip
+          access_point.update_attributes(:last_configuration_retrieve_ip => request.remote_ip)
         end
         #Sending configuration files for the access point
         send_file ACCESS_POINTS_CONFIGURATION_PATH.join(

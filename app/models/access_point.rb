@@ -18,6 +18,7 @@ class AccessPoint < ActiveRecord::Base
   validates_format_of :name, :with => /\A[\w\d_]+\Z/
   validates_length_of :name, :maximum => 8
 
+  validates_format_of :last_configuration_retrieve_ip, :with => /\A[0-9a-f:\.]+\Z/i, :allow_nil => true
   validates_format_of :mac_address, :with => /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
   validates_format_of :address, :with => /\A[\s\w\d\.',]+\Z/
   validates_length_of :address, :maximum => 128
