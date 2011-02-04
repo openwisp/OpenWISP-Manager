@@ -3,7 +3,7 @@ class L2vpnTemplate < ActiveRecord::Base
 
   validates_uniqueness_of :l2vpn_server_id, :scope => :access_point_template_id
   validates_presence_of :l2vpn_server_id
-  
+
   has_one :tap_template, :dependent => :destroy
   belongs_to :access_point_template, :touch => true
   belongs_to :l2vpn_server

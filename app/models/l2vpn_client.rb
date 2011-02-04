@@ -39,7 +39,7 @@ class L2vpnClient < ActiveRecord::Base
       return template.l2vpn_server
     end
 
-    return L2vpnServer.find(read_attribute(:l2vpn_server_id))
+    L2vpnServer.find(read_attribute(:l2vpn_server_id))
   end
   
   def name

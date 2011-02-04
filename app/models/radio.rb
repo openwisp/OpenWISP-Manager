@@ -3,12 +3,14 @@ class Radio < ActiveRecord::Base
 
   DEFAULT_CHANNEL = 6
   DEFAULT_MODE = "11bg"
-  MODES = %w( 11bg 11g 11b 11a )
+  MODES = %w( 11bg 11g 11b 11a 11n )
 
   MAX_VAPS = 4
 
-  validates_presence_of :name, :allow_nil => :true
+  # LOL ==> validates_presence_of :name, :allow_nil => :true
   validates_uniqueness_of :name, :scope => :access_point_id, :allow_nil => :true
+  validates_format_of :name, :with => /\A[a-z][\s\w\d\.]*\Z/i, :allow_nil => :true
+  validates_length_of :name, :maximum => 8, :allow_nil => :true
 
   has_many :vaps, :dependent => :destroy
   has_many :subinterfaces, :class_name => 'Vap', :foreign_key => :radio_id
@@ -21,10 +23,7 @@ class Radio < ActiveRecord::Base
   belongs_to :radio_template
   belongs_to :template, :class_name => 'RadioTemplate', :foreign_key => :radio_template_id
 
-  # accepts_nested_attributes_for :vaps, 
-  #     :allow_destroy => true,
-  #     :reject_if => lambda { |a| a.values.all?(&:blank?) }
-
+  
   def initialize(params = nil)
     super(params)
 
@@ -60,7 +59,7 @@ class Radio < ActiveRecord::Base
       return template.name
     end
 
-    return read_attribute(:name)
+    read_attribute(:name)
   end
 
   def friendly_name
@@ -72,7 +71,7 @@ class Radio < ActiveRecord::Base
       return template.mode
     end
 
-    return read_attribute(:mode)
+    read_attribute(:mode)
   end
   
   def channel
@@ -80,7 +79,7 @@ class Radio < ActiveRecord::Base
       return template.channel
     end
 
-    return read_attribute(:channel)
+    read_attribute(:channel)
   end
 
   def output_band
@@ -88,7 +87,7 @@ class Radio < ActiveRecord::Base
       return template.output_band
     end
 
-    return read_attribute(:output_band)
+    read_attribute(:output_band)
   end
 
 end

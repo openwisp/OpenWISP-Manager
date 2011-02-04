@@ -15,7 +15,7 @@ class Tap < ActiveRecord::Base
   belongs_to :template, :class_name => 'TapTemplate', :foreign_key => :tap_template_id
 
   def belongs_to_access_point?
-    return self.machine.class == AccessPoint
+    self.machine.class == AccessPoint
   end
 
   def link_to_template(t)
@@ -66,7 +66,7 @@ class Tap < ActiveRecord::Base
       return template.output_band
     end
 
-    return read_attribute(:output_band)
+    read_attribute(:output_band)
   end
 
   def machine

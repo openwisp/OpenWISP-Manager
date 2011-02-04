@@ -12,7 +12,9 @@ class Bridge < ActiveRecord::Base
     :if => Proc.new { |b| b.addressing_mode == 'static' }
   validates_uniqueness_of :name, :scope => [ :machine_id, :machine_type ],
     :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
-  validates_format_of :name, :with => /^[a-zA-z][a-zA-z0-9]*$/,
+  validates_format_of :name, :with => /\A[a-z][a-z0-9]*\Z/i,
+    :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
+  validates_length_of :name, :maximum => 8,
     :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
 
   has_many :ethernets, :dependent => :nullify

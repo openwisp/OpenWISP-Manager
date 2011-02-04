@@ -6,9 +6,12 @@ class BridgeTemplate < ActiveRecord::Base
   ADDRESSING_MODES = %w( static dynamic none )
   
   validates_inclusion_of :addressing_mode, :in => BridgeTemplate::ADDRESSING_MODES
-  validates_uniqueness_of :name, :scope => :access_point_template_id
-  validates_format_of :name, :with => /^[a-zA-z][a-zA-z0-9]*$/
+
   validates_presence_of :ip_range_begin, :ip_range_end, :netmask, :if => :static_addressing?
+
+  validates_uniqueness_of :name, :scope => :access_point_template_id
+  validates_format_of :name, :with => /\A[a-z][a-z0-9]\Z/i
+  validates_length_of :name, :maximum => 8
 
   has_many :ethernet_templates, :dependent => :nullify
   has_many :tap_templates, :dependent => :nullify

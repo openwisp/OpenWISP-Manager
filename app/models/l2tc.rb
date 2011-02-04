@@ -21,7 +21,7 @@ class L2tc < ActiveRecord::Base
       return false
     end
 
-    return true
+    true
   end
 
   def link_to_template(template)
@@ -60,6 +60,7 @@ class L2tc < ActiveRecord::Base
       r2q_max = (min*1024/8) / 1500.0
       r2q_min = (max*1024/8) / 60000.0
       r2q = ((r2q_max + r2q_min) / 2).ceil
+      r2q
     else
       nil
     end

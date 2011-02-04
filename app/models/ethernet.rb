@@ -4,7 +4,11 @@ class Ethernet < ActiveRecord::Base
   validates_presence_of :name,
     :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
   validates_uniqueness_of :name, :scope => [ :machine_id, :machine_type ],
-      :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
+    :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
+  validates_format_of :name, :with => /\A[a-z][\w\d_\.]*\Z/i,
+    :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
+  validates_length_of :name, :maximum => 8,
+    :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
 
   belongs_to :bridge
   belongs_to :machine, :polymorphic => true, :touch => true

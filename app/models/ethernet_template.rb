@@ -5,6 +5,8 @@ class EthernetTemplate < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :access_point_template_id
+  validates_format_of :name, :with => /\A[a-z][\s\w\d_\.]*\Z/i
+  validates_length_of :name, :maximum => 8
 
   belongs_to :bridge_template
 

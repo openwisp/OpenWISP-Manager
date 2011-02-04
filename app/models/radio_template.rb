@@ -11,7 +11,9 @@ class RadioTemplate < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :access_point_template_id
-
+  validates_format_of :name, :with => /\A[a-z][\s\w\d\.]*\Z/i
+  validates_length_of :name, :maximum => 8
+  
   has_many :vap_templates, :dependent => :destroy
   has_many :subinterfaces, :class_name => 'VapTemplate', :foreign_key => :radio_template_id
 

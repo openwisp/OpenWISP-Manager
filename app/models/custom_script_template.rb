@@ -3,7 +3,9 @@ class CustomScriptTemplate < ActiveRecord::Base
   
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :access_point_template_id
-  
+  validates_format_of :name, :with => /\A[\s\w\d_\.]+\Z/i
+  validates_length_of :name, :maximum => 16
+
   validates_presence_of :body
   
   belongs_to :access_point_template, :touch => true

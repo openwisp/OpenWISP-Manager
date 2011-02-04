@@ -22,7 +22,7 @@ class L2tcTemplate < ActiveRecord::Base
       return false
     end
     
-    return true
+    true
   end
 
 end

@@ -9,10 +9,24 @@ class AccessPoint < ActiveRecord::Base
 
   validates_presence_of :name, :mac_address, :address, :city, :zip
   validates_presence_of :lat, :lon, :message => :not_valid_f
+
+  validates_uniqueness_of :name, :mac_address
+
   validates_numericality_of :lat, :allow_nil => true
   validates_numericality_of :lon, :allow_nil => true
-  validates_uniqueness_of :name, :mac_address
+
+  validates_format_of :name, :with => /\A[\w\d_]+\Z/
+  validates_length_of :name, :maximum => 8
+
   validates_format_of :mac_address, :with => /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
+  validates_format_of :address, :with => /\A[\s\w\d\.']+\Z/
+  validates_length_of :address, :maximum => 128
+  validates_format_of :city, :with => /\A[\s\w\d\.']+\Z/
+  validates_length_of :city, :maximum => 32
+  validates_format_of :zip, :with => /\A[\s\w\d]+\Z/
+  validates_length_of :zip, :maximum => 32
+
+
   belongs_to :wisp
   has_and_belongs_to_many :access_point_groups
 

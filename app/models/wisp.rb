@@ -2,7 +2,9 @@ class Wisp < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   validates_uniqueness_of :name
-
+  validates_format_of :name, :with => /\A[a-z][\s\w\d\._']*\Z/i
+  validates_length_of :name, :maximum => 32
+  
   has_one :ca, :dependent => :destroy
 
   has_many :operators, :dependent => :destroy

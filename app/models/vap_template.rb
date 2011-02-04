@@ -4,37 +4,63 @@ class VapTemplate < ActiveRecord::Base
   NAME_PREFIX = "vap"
 
   ENC_TYPES = %w(none wep psk psk2 wpa wpa2)
-  ENC_TYPES_SELECT = { 'none'        => 'none', 
-                       'WEP'         => 'wep', 
-                       'WPA psk'     => 'psk', 
-                       'WPA2 psk'    => 'psk2', 
-                       'WPA 802.1x'  => 'wpa', 
-                       'WPA2 802.1x' => 'wpa2' 
-                     }
-   ENC_TYPES_FSELECT = {  'none' => 'none', 
-                          'wep'   => 'WEP', 
-                          'psk'   => 'WPA psk', 
-                          'psk2'   => 'WPA2 psk', 
-                          'wpa'   => 'WPA 802.1x', 
-                          'wpa2'  => 'WPA2 802.1x' 
-                      }
+  ENC_TYPES_SELECT = {
+      'none'        => 'none',
+      'WEP'         => 'wep',
+      'WPA psk'     => 'psk',
+      'WPA2 psk'    => 'psk2',
+      'WPA 802.1x'  => 'wpa',
+      'WPA2 802.1x' => 'wpa2'
+  }
+  ENC_TYPES_FSELECT = {
+      'none' => 'none',
+      'wep'  => 'WEP',
+      'psk'  => 'WPA psk',
+      'psk2' => 'WPA2 psk',
+      'wpa'  => 'WPA 802.1x',
+      'wpa2' => 'WPA2 802.1x'
+  }
   ENC_TYPES_WKEY = %w(wep psk psk2 wpa wpa2)
   ENC_TYPES_WRADIUS = %w(wpa wpa2)
-  
+
   VISIBILITIES = %w(hidden broadcasted)
-  VISIBILITIES_SELECT = { 'Hidden'      => 'hidden',
-                          'Broadcasted' => 'broadcasted'
-                        }
-  VISIBILITIES_FSELECT = { 'hidden'      => 'Hidden',
-                           'broadcasted' => 'Broadcasted'
-                        }
+  VISIBILITIES_SELECT = {
+      'Hidden'      => 'hidden',
+      'Broadcasted' => 'broadcasted'
+  }
+  VISIBILITIES_FSELECT = {
+      'hidden'      => 'Hidden',
+      'broadcasted' => 'Broadcasted'
+  }
 
   validates_presence_of :essid
+  validates_format_of :essid, :with => /\A[\s\w\d\._]+\Z/i
+  validates_length_of :essid, :maximum=>32
+
   validates_inclusion_of :visibility, :in => VapTemplate::VISIBILITIES
+
   validates_inclusion_of :encryption, :in => VapTemplate::ENC_TYPES
+
   validates_presence_of :key, :if => :key_needed?
+  validates_format_of :key, :with => /\A[\s\w\d\._]+\Z/i, :if => :key_needed?
+  validates_length_of :key, :maximum=>128, :if => :key_needed?
+
   validates_presence_of :radius_auth_server, :if => :radius_needed?
+  validates_format_of :radius_auth_server, :with => /\A[\w\d\.]+\Z/i
+  validates_length_of :radius_auth_server, :maximum=>128
   validates_presence_of :radius_auth_server_port, :if => :radius_needed?
+  validates_numericality_of :radius_auth_server_port,
+                            :only_integer => true,
+                            :greater_than => 0,
+                            :less_than_or_equal_to => 65535
+
+  validates_format_of :radius_acct_server, :with => /\A[\w\d\.]+\Z/i, :allow_nil => true
+  validates_length_of :radius_acct_server, :maximum=>128, :allow_nil => true
+  validates_numericality_of :radius_acct_server_port,
+                            :only_integer => true,
+                            :greater_than => 0,
+                            :less_than_or_equal_to => 65535,
+                            :allow_nil => true
 
   belongs_to :bridge_template
   belongs_to :radio_template, :touch => true
@@ -53,7 +79,7 @@ class VapTemplate < ActiveRecord::Base
 
   # Update linked template instances
   after_create { |record|
-    # We have a new vap_template
+  # We have a new vap_template
     record.radio_template.radios.each do |r|
       # For each linked template instance, create a new vap and associate it with
       # the corresponding access_point
@@ -64,7 +90,7 @@ class VapTemplate < ActiveRecord::Base
   }
 
   after_save { |record|
-    # Are we saving after a change of bridging status?
+  # Are we saving after a change of bridging status?
     if record.bridge_template_id_changed?
       # Vap changed bridging status/bridge
       record.instances.each do |v|
@@ -72,7 +98,9 @@ class VapTemplate < ActiveRecord::Base
         if record.bridge_template.nil?
           v.do_unbridge!
         else
-          v.do_bridge!(v.radio.access_point.bridges.find(:first, :conditions => "bridge_template_id = #{record.bridge_template.id}"))
+          v.do_bridge!(v.radio.access_point.bridges.find(
+                           :first,
+                           :conditions => "bridge_template_id = #{record.bridge_template.id}"))
         end
       end
     end
@@ -90,11 +118,11 @@ class VapTemplate < ActiveRecord::Base
 
   # Accessor methods (read)
   def name
-     "r#{self.radio_template.id}v#{self.id}"
+    "r#{self.radio_template.id}v#{self.id}"
   end
-  
+
   def friendly_name
-     "essid '#{self.essid}' - radio '#{self.radio_template.name}'"
+    "essid '#{self.essid}' - radio '#{self.radio_template.name}'"
   end
 
 end
