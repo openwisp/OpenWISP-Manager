@@ -59,13 +59,15 @@ class VapTemplate < ActiveRecord::Base
                             :less_than_or_equal_to => 65535,
                             :if => :radius_needed?
 
-  validates_format_of :radius_acct_server, :with => /\A[\w\d\.]+\Z/i, :allow_nil => true
-  validates_length_of :radius_acct_server, :maximum=>128, :allow_nil => true
+  validates_format_of :radius_acct_server, :with => /\A[\w\d\.]+\Z/i,
+                      :allow_nil => true, :allow_blank => true
+  validates_length_of :radius_acct_server, :maximum=>128,
+                      :allow_nil => true, :allow_blank => true
   validates_numericality_of :radius_acct_server_port,
                             :only_integer => true,
                             :greater_than => 0,
                             :less_than_or_equal_to => 65535,
-                            :allow_nil => true
+                            :allow_nil => true, :allow_blank => true
 
   belongs_to :bridge_template
   belongs_to :radio_template, :touch => true
