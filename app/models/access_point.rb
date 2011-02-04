@@ -293,7 +293,7 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def is_outdated?
-    self.access_point_template.updated_at > self.updated_at
+    (self.access_point_template.updated_at > self.updated_at) or (self.updated_at > self.committed_at)
   end
 
 end

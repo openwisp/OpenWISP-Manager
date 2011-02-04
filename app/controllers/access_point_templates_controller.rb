@@ -79,7 +79,6 @@ class AccessPointTemplatesController < ApplicationController
     @access_point_template.wisp = @wisp
         
     if @access_point_template.save
-	  @access_point_template.touch(:committed_at) 
       respond_to do |format|
         format.html { redirect_to(wisp_access_point_template_url(@wisp, @access_point_template)) }
       end

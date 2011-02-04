@@ -3,7 +3,6 @@ class CreateAccessPointTemplates < ActiveRecord::Migration
     create_table :access_point_templates do |t|
       t.string :name, :null => false
       t.text :notes
-      t.timestamp :committed_at
       
       t.belongs_to :wisp
 

@@ -284,12 +284,6 @@ ENI
     end
 
     if @access_point.update_attributes(params[:access_point])
-
-      worker = MiddleMan.worker(:configuration_worker)
-      worker.async_create_access_points_configuration(
-          :arg => { :access_point_ids => [ @access_point.id ] }
-      )
-
       respond_to do |format|
         flash[:notice] = t(:AccessPoint_was_successfully_updated)
         format.html { redirect_to(wisp_access_point_url(@wisp, @access_point)) }
