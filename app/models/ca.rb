@@ -185,23 +185,6 @@ class Ca < ActiveRecord::Base
     )
   end
 
-  def self.create_DH
-    OpenSSL::PKey::DH.new(1024)
-  end
-
-#2048 bit OpenVPN static Key
-  def self.create_tls_auth
-    byte = 2048/8
-    size = 32
-    s = ""
-    t = ""
-    OpenSSL::Random::random_bytes(byte).each_byte{ |b| s+= "%02x" % b  }
-    (0..(s.length-1)/size).each do |i|
-      t += s[i*size,size]+"\n"
-    end
-    return ("-----BEGIN OpenVPN Static key V1-----\n" + t + "-----END OpenVPN Static key V1-----")
-  end
-
   def dn
     "/C=#{self.c}/ST=#{self.st}/L=#{self.l}/O=#{self.o}/CN=#{self.cn}"
   end
@@ -210,8 +193,23 @@ class Ca < ActiveRecord::Base
     "/C=#{self.c}/ST=#{self.st}/L=#{self.l}/O=#{self.o}"
   end
 
-  def key
-    return read_attribute(:key)
+  # Class methods
+  def self.generate_dh
+    OpenSSL::PKey::DH.new(1024).to_s
+  end
+
+  # 2048 bit OpenVPN static Key
+  def self.generate_tls_auth
+    byte = 2048/8
+    size = 32
+    s = ""
+    t = ""
+    OpenSSL::Random::random_bytes(byte).each_byte{ |b| s+= "%02x" % b  }
+    (0..(s.length-1)/size).each do |i|
+      t += s[i*size,size]+"\n"
+    end
+    
+    "-----BEGIN OpenVPN Static key V1-----\n" + t + "-----END OpenVPN Static key V1-----"
   end
 
 end

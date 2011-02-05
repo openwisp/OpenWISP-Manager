@@ -48,7 +48,6 @@ class L2vpnServersController < ApplicationController
     @wisps = Wisp.all
   end
 
-
   def index
     @l2vpn_servers = @server.l2vpn_servers
   end
@@ -58,9 +57,7 @@ class L2vpnServersController < ApplicationController
   end
 
   def new
-    MiddleMan.worker(:l2vpn_server_worker).async_genDh
-    MiddleMan.worker(:l2vpn_server_worker).async_genTls
-    @l2vpn_server = L2vpnServer.new( :wisp => Wisp.first )
+    @l2vpn_server = L2vpnServer.new( :wisp => Wisp.last )
   end
 
   def edit
@@ -70,12 +67,10 @@ class L2vpnServersController < ApplicationController
     @l2vpn_server = @server.l2vpn_servers.build(params[:l2vpn_server])
     @l2vpn_server.tap = Tap.new()
 
-    @l2vpn_server.dh = MiddleMan.worker(:l2vpn_server_worker).getDh
-    @l2vpn_server.tls_auth = MiddleMan.worker(:l2vpn_server_worker).getTls
-    if !@l2vpn_server.dh.nil? and !@l2vpn_server.tls_auth.nil? and @l2vpn_server.save
+    if @l2vpn_server.save
       @l2vpn_server.tap.save!
 
-
+      # Create DH and TLS auth key and generate tar.gz configuration
       worker = MiddleMan.worker(:configuration_worker)
       worker.async_create_l2vpn_server_configuration(
           :arg => { :l2vpn_server_id => @l2vpn_server.id }
@@ -84,7 +79,6 @@ class L2vpnServersController < ApplicationController
       respond_to do |format|
         flash[:notice] = t(:L2vpn_server_created)
         format.html { redirect_to(server_l2vpn_servers_url(@server)) }
-        MiddleMan.worker(:l2vpn_server_worker).clean
       end
     else
       respond_to do |format|

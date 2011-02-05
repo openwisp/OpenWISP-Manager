@@ -58,6 +58,12 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
       rescue
           puts "Info: " + $!.inspect
       end
+
+      # Dh and tls_auth generation could be a long process...
+      l2vpn_server.dh = Ca.generate_dh
+      l2vpn_server.tls_auth = Ca.generate_tls_auth
+      l2vpn_server.save!
+
       l2vpn_server.generate_configuration
     end
     true
