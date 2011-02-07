@@ -85,7 +85,7 @@ class VapTemplate < ActiveRecord::Base
   end
 
   # Update linked template instances
-  after_create { |record|
+  after_create do |record|
   # We have a new vap_template
     record.radio_template.radios.each do |r|
       # For each linked template instance, create a new vap and associate it with
@@ -94,9 +94,9 @@ class VapTemplate < ActiveRecord::Base
       nv.link_to_template( record )
       nv.save!
     end
-  }
+  end
 
-  after_save { |record|
+  after_save do |record|
   # Are we saving after a change of bridging status?
     if record.bridge_template_id_changed?
       # Vap changed bridging status/bridge
@@ -111,7 +111,7 @@ class VapTemplate < ActiveRecord::Base
         end
       end
     end
-  }
+  end
 
   def do_bridge!(b)
     self.bridge_template = b

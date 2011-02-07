@@ -61,9 +61,9 @@ class L2vpnServer < ActiveRecord::Base
   belongs_to :wisp
   belongs_to :server
 
-  after_create { |record|
+  after_create do |record|
     record.wisp.ca.create_openvpn_server_certificate(record)
-  }
+  end
 
   def generate_configuration
     @ca_name = Ca.find(self.x509_certificate.ca_id).cn.gsub(" ", "_")

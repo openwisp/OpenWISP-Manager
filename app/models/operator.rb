@@ -19,10 +19,6 @@ class Operator < ActiveRecord::Base
       :servers_manager, :servers_destroyer
   ]
 
-  def initialize(params = nil)
-    super(params)
-  end
-
   def roles
     @rs = []
     Operator::ROLES.each do |r|

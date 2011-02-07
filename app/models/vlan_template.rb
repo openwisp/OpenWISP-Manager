@@ -15,7 +15,7 @@ class VlanTemplate < ActiveRecord::Base
   has_many :instances, :class_name => 'Vlan', :foreign_key => :vlan_template_id
 
   # Update linked template instances
-  after_create { |record|
+  after_create do |record|
   # We have a new vlan_template
     record.interface_template.instances.each do |i|
       # For each linked template instance, create a new vlan and associate it with
@@ -24,9 +24,9 @@ class VlanTemplate < ActiveRecord::Base
       nv.link_to_template( record )
       nv.save!
     end
-  }
+  end
 
-  after_save { |record|
+  after_save do |record|
   # Are we saving after a change of bridging status?
     if record.bridge_template_id_changed?
       # Vlan changed bridging status/bridge
@@ -41,7 +41,7 @@ class VlanTemplate < ActiveRecord::Base
         end
       end
     end
-  }
+  end
 
   def do_bridge!(b)
     self.bridge_template = b

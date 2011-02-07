@@ -23,7 +23,7 @@ class Ethernet < ActiveRecord::Base
   belongs_to :template, :class_name => 'EthernetTemplate', :foreign_key => :ethernet_template_id
 
   def belongs_to_access_point?
-    return self.machine.class == AccessPoint
+    self.machine.class == AccessPoint
   end
   
   def link_to_template(t)
@@ -62,7 +62,7 @@ class Ethernet < ActiveRecord::Base
       return template.name
     end
 
-    return read_attribute(:name)
+    read_attribute(:name)
   end
 
   def friendly_name
@@ -74,7 +74,7 @@ class Ethernet < ActiveRecord::Base
       return template.output_band
     end
 
-    return read_attribute(:output_band)
+    read_attribute(:output_band)
   end
   
 end

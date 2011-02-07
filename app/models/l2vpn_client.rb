@@ -1,18 +1,18 @@
 class L2vpnClient < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  has_one :tap, :as => :l2vpn, :dependent => :destroy  
+  has_one :tap, :as => :l2vpn, :dependent => :destroy
   has_one :x509_certificate, :as => :certificable, :dependent => :destroy
   belongs_to :access_point, :touch => true
 
   belongs_to :l2vpn_template
   belongs_to :template, :class_name => 'L2vpnTemplate', :foreign_key => :l2vpn_template_id
-  
+
   belongs_to :l2vpn_server
 
-  after_create { |record|
+  after_create do |record|
     record.access_point.wisp.ca.create_openvpn_client_certificate(record)
-  }
+  end
 
   def link_to_template(template)
     self.l2vpn_template = template
@@ -33,7 +33,7 @@ class L2vpnClient < ActiveRecord::Base
   def machine
     self.access_point
   end
-  
+
   def l2vpn_server
     if (read_attribute(:l2vpn_server_id).blank? or read_attribute(:l2vpn_server_id).nil?) and !template.nil?
       return template.l2vpn_server
@@ -41,9 +41,9 @@ class L2vpnClient < ActiveRecord::Base
 
     L2vpnServer.find(read_attribute(:l2vpn_server_id))
   end
-  
+
   def name
     l2vpn_server.name
   end
-  
+
 end

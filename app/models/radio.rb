@@ -23,11 +23,6 @@ class Radio < ActiveRecord::Base
   belongs_to :template, :class_name => 'RadioTemplate', :foreign_key => :radio_template_id
 
   
-  def initialize(params = nil)
-    super(params)
-
-  end
-
   def link_to_template(template)
     self.template = template
     

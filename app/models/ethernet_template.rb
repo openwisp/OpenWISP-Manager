@@ -15,20 +15,20 @@ class EthernetTemplate < ActiveRecord::Base
   has_one :l2tc_template, :as => :shapeable_template, :dependent => :destroy
 
   has_many :vlan_templates, :as => :interface_template, :dependent => :destroy
-  has_many :subinterfaces, :as => :interface_template, :class_name => 'VlanTemplate', 
-    :foreign_key => :interface_template_id, :conditions => { :interface_template_type => 'EthernetTemplate' }
+  has_many :subinterfaces, :as => :interface_template, :class_name => 'VlanTemplate',
+           :foreign_key => :interface_template_id, :conditions => { :interface_template_type => 'EthernetTemplate' }
 
   # Template instances
   has_many :ethernets, :dependent => :destroy
   has_many :instances, :class_name => 'Ethernet', :foreign_key => :ethernet_template_id
 
-  before_create { |record|
-    record.l2tc_template = L2tcTemplate.new( :shapeable_template => record, 
+  before_create do |record|
+    record.l2tc_template = L2tcTemplate.new( :shapeable_template => record,
                                              :access_point_template => record.access_point_template)
-  }
+  end
 
   # Update linked template instances 
-  after_create { |record|
+  after_create do |record|
     # We have a new ethernet_template
     record.access_point_template.access_points.each do |h|
       # For each linked template instance, create a new ethernet and associate it with
@@ -39,9 +39,9 @@ class EthernetTemplate < ActiveRecord::Base
         errors.add_to_base(:cannot_update_linked_instances)
       end
     end
-  }
+  end
 
-  after_save { |record|
+  after_save do |record|
     # Are we saving after a change of bridging status?
     if record.bridge_template_id_changed?
       # Ethernet changed bridging status/bridge
@@ -54,8 +54,8 @@ class EthernetTemplate < ActiveRecord::Base
         end
       end
     end
-  }
-  
+  end
+
   def do_bridge!(b)
     self.bridge_template = b
     self.save!
@@ -65,7 +65,7 @@ class EthernetTemplate < ActiveRecord::Base
     self.bridge_template = nil
     self.save!
   end
-  
+
   # Accessor methods (read)
   def friendly_name
     self.name

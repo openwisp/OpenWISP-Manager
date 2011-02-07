@@ -13,7 +13,7 @@ class RadioTemplate < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :access_point_template_id
   validates_format_of :name, :with => /\A[a-z][\s\w\d\.]*\Z/i
   validates_length_of :name, :maximum => 8
-  
+
   has_many :vap_templates, :dependent => :destroy
   has_many :subinterfaces, :class_name => 'VapTemplate', :foreign_key => :radio_template_id
 
@@ -25,18 +25,18 @@ class RadioTemplate < ActiveRecord::Base
   has_many :radios, :dependent => :destroy
   has_many :instances, :class_name => 'Radio', :foreign_key => :radio_template_id
 
-  accepts_nested_attributes_for :vap_templates, 
-      :allow_destroy => true,
-      :reject_if => lambda { |a| a.values.all?(&:blank?) }
+  accepts_nested_attributes_for :vap_templates,
+                                :allow_destroy => true,
+                                :reject_if => lambda { |a| a.values.all?(&:blank?) }
 
-  before_create { |record|
-    record.l2tc_template = L2tcTemplate.new( :shapeable_template => record, 
+  before_create do |record|
+    record.l2tc_template = L2tcTemplate.new( :shapeable_template => record,
                                              :access_point_template => record.access_point_template)
-  }
-  
+  end
+
   # Update linked template instances
-  after_create { |record|
-    # We have a new radio_template
+  after_create do |record|
+  # We have a new radio_template
     record.access_point_template.access_points.each do |h|
       # For each linked template instance, create a new radio and associate it with
       # the corresponding access_point
@@ -44,11 +44,11 @@ class RadioTemplate < ActiveRecord::Base
       nr.link_to_template( record )
       nr.save!
     end
-   }
+  end
 
-  def initialize(params = nil)  
+  def initialize(params = nil)
     super(params)
-    self.channel = DEFAULT_CHANNEL if self.channel.nil?  
+    self.channel = DEFAULT_CHANNEL if self.channel.nil?
     self.mode = DEFAULT_MODE if self.mode.nil?
   end
 

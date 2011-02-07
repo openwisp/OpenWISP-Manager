@@ -41,7 +41,7 @@ class Vlan < ActiveRecord::Base
       return template.tag
     end
 
-    return read_attribute(:tag)
+    read_attribute(:tag)
   end
 
   def name

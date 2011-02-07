@@ -12,7 +12,7 @@ class L2vpnTemplate < ActiveRecord::Base
   has_many :l2vpn_clients, :dependent => :destroy
 
   # Update l2vpn instances
-  after_create { |record|
+  after_create do |record|
     if record.l2vpn_clients.length == 0
       record.access_point_template.access_points.each do |h|
         nv = h.l2vpn_clients.build( :access_point => h )
@@ -20,6 +20,6 @@ class L2vpnTemplate < ActiveRecord::Base
         nv.save
       end
     end
-  }
+  end
 
 end
