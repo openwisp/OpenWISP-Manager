@@ -26,17 +26,8 @@ class L2vpnTemplatesController < ApplicationController
       allow :wisps_destroyer
       allow :access_point_templates_destroyer, :of => :wisp
     end
-
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-  
-  def load_access_point_template
-    @access_point_template = @wisp.access_point_templates.find(params[:access_point_template_id])
-  end
-    
   # GET /wisps/:wisp_id/access_point_templates/:access_point_template_id/l2vpn_templates
   def index
     @l2vpn_templates = @access_point_template.l2vpn_templates.find(:all)
@@ -121,5 +112,4 @@ class L2vpnTemplatesController < ApplicationController
       format.html { redirect_to(wisp_access_point_template_l2vpn_templates_url(@wisp, @access_point_template)) }
     end
   end
-  
 end

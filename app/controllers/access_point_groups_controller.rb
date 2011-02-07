@@ -6,15 +6,6 @@ class AccessPointGroupsController < ApplicationController
     default :deny
   end
   
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-
-  def load_access_point_group
-    @access_point_group = @wisp.access_point_groups.find(params[:id])
-  end
-  
-  
   # GET /wisps/:wisp_id/access_point_groups
   def index
     @access_point_groups = @wisp.access_point_groups
@@ -102,5 +93,10 @@ class AccessPointGroupsController < ApplicationController
       format.html { redirect_to(wisp_access_point_groups_url) }
     end
   end
+
+  private
   
+  def load_access_point_group
+    @access_point_group = @wisp.access_point_groups.find(params[:id])
+  end
 end

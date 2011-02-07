@@ -24,14 +24,6 @@ class ServerEthernetsController < ApplicationController
     end
   end
 
-  def load_server
-    @server = Server.find(params[:server_id])
-  end
-  
-  def load_ethernet
-    @ethernet = @server.ethernets.find(params[:id]) 
-  end
-
   def index
     @ethernets = @server.ethernets
 
@@ -41,7 +33,6 @@ class ServerEthernetsController < ApplicationController
   end
 
   def show
-
     respond_to do |format|
       format.html # show.html.erb
     end
@@ -56,7 +47,6 @@ class ServerEthernetsController < ApplicationController
   end
 
   def edit
-    
   end
 
   def create
@@ -90,5 +80,10 @@ class ServerEthernetsController < ApplicationController
       format.html { redirect_to(server_ethernets_url(@server)) }
     end
   end
-    
+
+  private
+
+  def load_ethernet
+    @ethernet = @server.ethernets.find(params[:id])
+  end
 end

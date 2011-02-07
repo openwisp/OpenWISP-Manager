@@ -1,19 +1,11 @@
 class TemplateGroupsController < ApplicationController
   before_filter :load_wisp
   before_filter :load_template_group, :except => [ :index, :new, :create ]
-  
+
   access_control do
     default :deny
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-  
-  def load_template_group
-    @template_group = @wisp.template_groups.find(params[:id])
-  end
-  
   # GET /wisps/:wisp_id/template_groups
   def index
     @template_groups = @wisp.template_groups
@@ -25,7 +17,6 @@ class TemplateGroupsController < ApplicationController
 
   # GET /wisps/:wisp_id/template_groups/1
   def show
-
     respond_to do |format|
       format.html # show.html.erb
     end
@@ -35,7 +26,7 @@ class TemplateGroupsController < ApplicationController
   def new
     @template_group = @wisp.template_groups.new
     @selected_access_point_templates = []
-        
+
     respond_to do |format|
       format.html # new.html.erb
     end
@@ -55,7 +46,7 @@ class TemplateGroupsController < ApplicationController
     @template_group.access_point_templates = []
     unless params[:access_point_templates].nil?
       params[:access_point_templates].each { |hid|
-         @template_group.access_point_templates << @wisp.access_point_templates.find(hid)
+        @template_group.access_point_templates << @wisp.access_point_templates.find(hid)
       }
     end
 
@@ -76,10 +67,10 @@ class TemplateGroupsController < ApplicationController
     @template_group.access_point_templates = []
     unless params[:access_point_templates].nil?
       params[:access_point_templates].each { |hid|
-         @template_group.access_point_templates << @wisp.access_point_templates.find(hid)
+        @template_group.access_point_templates << @wisp.access_point_templates.find(hid)
       }
     end
-    
+
     respond_to do |format|
       if @template_group.update_attributes(params[:template_group])
         flash[:notice] = t(:TemplateGroup_was_successfully_updated)
@@ -97,5 +88,11 @@ class TemplateGroupsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(wisp_template_groups_url(@wisp)) }
     end
+  end
+
+  private
+
+  def load_template_group
+    @template_group = @wisp.template_groups.find(params[:id])
   end
 end

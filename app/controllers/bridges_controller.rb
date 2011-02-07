@@ -19,14 +19,6 @@ class BridgesController < ApplicationController
     end
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-
-  def load_access_point
-    @access_point = @wisp.access_points.find(params[:access_point_id])
-  end
-
   # GET /wisps/:wisp_id/access_points/:access_point_id/bridges
   def index
     @bridges = @access_point.bridges.find(:all)
@@ -41,5 +33,4 @@ class BridgesController < ApplicationController
   def edit
     render :nothing => true
   end
-
 end

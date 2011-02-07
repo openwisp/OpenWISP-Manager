@@ -21,10 +21,6 @@ class ServersController < ApplicationController
     end
   end
 
-  def load_server
-    @server = Server.find(params[:id])
-  end
-
   # GET /servers
   def index
     @servers = Server.all
@@ -38,10 +34,7 @@ class ServersController < ApplicationController
     @server = Server.new
   end
   
-  
-  
   def edit
-    
   end
 
   def create
@@ -89,4 +82,9 @@ class ServersController < ApplicationController
     end
   end
 
+  private
+  
+  def load_server
+    @server = Server.find(params[:id])
+  end
 end

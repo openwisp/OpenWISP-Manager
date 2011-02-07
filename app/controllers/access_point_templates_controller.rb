@@ -30,15 +30,6 @@ class AccessPointTemplatesController < ApplicationController
     allow all, :to => [:ajax_stats, :list_access_points]
   end
   
-  def load_wisp
-    #@wisp = current_operator.wisp or Wisp.find(params[:wisp_id])
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-  
-  def load_access_point_template
-    @access_point_template = @wisp.access_point_templates.find(params[:id])
-  end
-  
   # GET /wisps/:wisp_id/access_point_templates
   def index
     @access_point_templates = @wisp.access_point_templates.find(:all)
@@ -126,4 +117,9 @@ class AccessPointTemplatesController < ApplicationController
     end
   end
 
+  private
+
+  def load_access_point_template
+    @access_point_template = @wisp.access_point_templates.find(params[:id])
+  end
 end

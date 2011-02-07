@@ -13,14 +13,6 @@ class L2vpnClientsController < ApplicationController
     end
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-  
-  def load_access_point
-    @access_point = @wisp.access_points.find(params[:access_point_id])
-  end
-    
   # GET /wisps/:wisp_id/access_points/:access_point_id/l2vpn_clients
   def index
     @l2vpn_clients = @access_point.l2vpn_clients.find(:all)
@@ -38,5 +30,4 @@ class L2vpnClientsController < ApplicationController
       format.html # show.html.erb
     end
   end
-
 end

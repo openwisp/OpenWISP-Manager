@@ -3,7 +3,7 @@ class VlanTemplatesController < ApplicationController
 
   before_filter :load_wisp
   before_filter :load_access_point_template
-  
+
   access_control do
     default :deny
 
@@ -26,20 +26,11 @@ class VlanTemplatesController < ApplicationController
       allow :wisps_destroyer
       allow :access_point_templates_destroyer, :of => :wisp
     end
-
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-  
-  def load_access_point_template
-    @access_point_template = @wisp.access_point_templates.find(params[:access_point_template_id])
-  end
-  
   def index
     @device_templates = @access_point_template.interface_templates
-    
+
     respond_to do |format|
       format.html # index.html.erb
     end
@@ -53,7 +44,7 @@ class VlanTemplatesController < ApplicationController
     @interface_template_select = @tap_templates.map { |t| [ t.friendly_name, "#{t.id}_tap" ] }
     @interface_template_select.concat(@ethernet_templates.map { |e| [ e.friendly_name, "#{e.id}_ethernet" ] })
     @interface_template_select_selected = []
- 
+
     @vlan_template = VlanTemplate.new()
 
     respond_to do |format|
@@ -80,20 +71,20 @@ class VlanTemplatesController < ApplicationController
 
     respond_to do |format|
       if @vlan_template.save
-        format.html { 
-          redirect_to(wisp_access_point_template_vlan_templates_url(@wisp, @access_point_template)) 
+        format.html {
+          redirect_to(wisp_access_point_template_vlan_templates_url(@wisp, @access_point_template))
         }
       else
         format.html { render :action => "new" }
       end
     end
-    
+
   end
 
   def destroy
     @vlan_template = VlanTemplate.find(params[:id])
     @vlan_template.destroy
-    
+
     respond_to do |format|
       format.html { redirect_to(wisp_access_point_template_vlan_templates_url(@wisp, @access_point_template)) }
     end

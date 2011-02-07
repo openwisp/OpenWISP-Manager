@@ -24,14 +24,6 @@ class ServerBridgesController < ApplicationController
     end
   end
 
-  def load_server
-    @server = Server.find(params[:server_id])
-  end
-  
-  def load_bridge
-    @bridge = @server.bridges.find(params[:id]) 
-  end
-
   def index
     @bridges = @server.bridges.find(:all)
     
@@ -209,5 +201,11 @@ class ServerBridgesController < ApplicationController
         redirect_to(server_bridges_url(@server))
       }
     end
+  end
+
+  private
+
+  def load_bridge
+    @bridge = @server.bridges.find(params[:id])
   end
 end

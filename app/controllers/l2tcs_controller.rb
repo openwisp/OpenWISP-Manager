@@ -21,17 +21,8 @@ class L2tcsController < ApplicationController
       allow :wisps_destroyer
       allow :access_points_destroyer, :of => :wisp
     end
-
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-  
-  def load_access_point
-    @access_point = @wisp.access_points.find(params[:access_point_id])
-  end
-  
   # GET /wisps/:wisp_id/access_points/:access_point_id/l2tcs
   def index
     @l2tcs = @access_point.l2tcs
@@ -102,5 +93,4 @@ class L2tcsController < ApplicationController
       format.html { redirect_to(wisp_access_point_l2tcs_url(@wisp, @access_point)) }
     end
   end
-  
 end

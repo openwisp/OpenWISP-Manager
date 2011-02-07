@@ -14,18 +14,6 @@ class EthernetsController < ApplicationController
     end
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-
-  def load_access_point
-    @access_point = @wisp.access_points.find(params[:access_point_id])
-  end
-  
-  def load_ethernet
-    @ethernet = @access_point.ethernets.find(params[:id]) 
-  end
-
   def index
     @ethernets = @access_point.ethernets.all
 
@@ -34,4 +22,9 @@ class EthernetsController < ApplicationController
     end
   end
 
+  private
+  
+  def load_ethernet
+    @ethernet = @access_point.ethernets.find(params[:id])
+  end
 end

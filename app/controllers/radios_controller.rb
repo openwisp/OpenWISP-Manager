@@ -27,17 +27,8 @@ class RadiosController < ApplicationController
       allow :wisps_destroyer
       allow :access_points_destroyer, :of => :wisp
     end
-
-  end
-  
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
   end
 
-  def load_access_point
-    @access_point = @wisp.access_points.find(params[:access_point_id])
-  end  
-  
   # GET /wisps/:wisp_id/access_points/:access_point_id/radios/1/edit
   def edit
     @radio = @access_point.radios.find(params[:id])
@@ -61,5 +52,4 @@ class RadiosController < ApplicationController
       format.html # index.html.erb
     end
   end
-
 end

@@ -26,11 +26,6 @@ class OperatorsController < ApplicationController
     end
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-
-
   def index
     @operators = @wisp.operators
   end
@@ -103,5 +98,4 @@ class OperatorsController < ApplicationController
       format.html { redirect_to(wisp_operators_url(@wisp)) }
     end
   end
-
 end

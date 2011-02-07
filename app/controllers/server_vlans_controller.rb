@@ -24,16 +24,7 @@ class ServerVlansController < ApplicationController
     end
   end
 
-  def load_server
-    @server = Server.find(params[:server_id])
-  end
-  
-  def load_vlan
-    @vlan = @server.vlans
-  end
-  
   def index
-
     respond_to do |format|
       format.html # index.html.erb
     end
@@ -91,5 +82,11 @@ class ServerVlansController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(server_vlans_url(@server)) }
     end
+  end
+
+  private
+
+  def load_vlan
+    @vlan = @server.vlans
   end
 end

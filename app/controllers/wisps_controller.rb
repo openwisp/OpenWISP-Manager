@@ -25,11 +25,6 @@ class WispsController < ApplicationController
     end
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:id])
-  end
-
-
   # GET /wisps
   def index
     @wisps = Wisp.find(:all)
@@ -126,7 +121,6 @@ ENI
 
   # GET /wisps/1/edit
   def edit
-
     respond_to do |format|
       format.html # edit.html.erb
     end
@@ -149,7 +143,6 @@ ENI
 
   # POST /wisps/1
   def update
-
     respond_to do |format|
       if @wisp.update_attributes(params[:wisp])
         flash[:notice] = t(:Wisp_was_successfully_updated)
@@ -172,10 +165,14 @@ ENI
   
   # Ajax Methods
   def ajax_stats
-    
     respond_to do |format|
       format.html { render :partial => "stats", :object => @wisp }
     end
   end
-  
+
+  private
+
+  def load_wisp
+    @wisp = Wisp.find(params[:id])
+  end
 end

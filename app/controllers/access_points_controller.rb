@@ -38,16 +38,7 @@ class AccessPointsController < ApplicationController
     allow all, :to => [:ajax_update_gmap, :get_configuration, :get_configuration_md5]
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-
-  def load_access_point
-    @access_point = @wisp.access_points.find(params[:id])
-  end
-
   def get_configuration
-
     mac_address = params[:mac_address]
     if mac_address =~ /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
       mac_address.downcase!
@@ -72,7 +63,6 @@ class AccessPointsController < ApplicationController
   end
 
   def get_configuration_md5
-
     mac_address = params[:mac_address]
 
     if mac_address =~ /\A([0-9a-fA-F][0-9a-fA-F]:){5}[0-9a-fA-F][0-9a-fA-F]\Z/
@@ -104,7 +94,6 @@ class AccessPointsController < ApplicationController
 
   # GET /wisps/:wisp_id/access_points/1
   def show
-
     @map_variable = "map_new"
     @marker_variable = "marker_new"
     @div_variable = "div_new"
@@ -313,7 +302,6 @@ ENI
 
   # DELETE /wisps/:wisp_id/access_points/1
   def destroy
-
     worker = MiddleMan.worker(:configuration_worker)
     worker.async_delete_access_points_configuration(
         :arg => { :access_point_ids => [ @access_point.id ] }
@@ -364,7 +352,11 @@ ENI
     else
       @zoom = 12
     end
-
   end
 
+  private
+
+  def load_access_point
+    @access_point = @wisp.access_points.find(params[:id])
+  end
 end

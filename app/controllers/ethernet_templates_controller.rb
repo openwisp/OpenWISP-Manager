@@ -27,19 +27,6 @@ class EthernetTemplatesController < ApplicationController
       allow :wisps_destroyer
       allow :access_point_templates_destroyer, :of => :wisp
     end
-
-  end
-
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-
-  def load_access_point_template
-    @access_point_template = @wisp.access_point_templates.find(params[:access_point_template_id])
-  end
-  
-  def load_ethernet_template
-    @ethernet_template = @access_point_template.ethernet_templates.find(params[:id]) 
   end
 
   def index
@@ -100,5 +87,10 @@ class EthernetTemplatesController < ApplicationController
       format.html { redirect_to(wisp_access_point_template_ethernet_templates_url(@wisp, @access_point_template)) }
     end
   end
-    
+
+  private
+
+  def load_ethernet_template
+    @ethernet_template = @access_point_template.ethernet_templates.find(params[:id])
+  end
 end

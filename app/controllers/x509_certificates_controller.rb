@@ -15,11 +15,6 @@ class X509CertificatesController < ApplicationController
     end
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-  
-  
   # GET /wisps/:wisp_id/ca/x509_certificates/1
   def show
     @ca = @wisp.ca
@@ -40,5 +35,4 @@ class X509CertificatesController < ApplicationController
       format.html { redirect_to(wisp_ca_url(@wisp)) }
     end
   end
-
 end

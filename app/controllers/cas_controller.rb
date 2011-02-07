@@ -15,11 +15,6 @@ class CasController < ApplicationController
     end
   end
 
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-  
-  
   # GET /wisps/:wisp_id/ca
   def show
     @ca = @wisp.ca

@@ -26,34 +26,11 @@ class L2vpnServersController < ApplicationController
     end
   end
 
-  def load_server_ip
-    @server_ip = []
-    @server.bridges.each do |b|
-      if b.addressing_mode == "static"
-        @server_ip << b.ip
-      end
-    end
-    @server_ip << "all"
-  end
-
-  def load_server
-    @server = Server.find(params[:server_id])
-  end
-
-  def load_l2vpn_server
-    @l2vpn_server = @server.l2vpn_servers.find(params[:id])
-  end
-
-  def load_wisps
-    @wisps = Wisp.all
-  end
-
   def index
     @l2vpn_servers = @server.l2vpn_servers
   end
 
   def show
-
   end
 
   def new
@@ -105,11 +82,27 @@ class L2vpnServersController < ApplicationController
     worker.async_delete_l2vpn_server_configuration(
         :arg => { :l2vpn_server_id => @l2vpn_server.id }
     )
-    
+
     @l2vpn_server.destroy
 
     respond_to do |format|
       format.html { redirect_to(server_l2vpn_servers_url(@server)) }
     end
+  end
+
+  private
+
+  def load_server_ip
+    @server_ip = []
+    @server.bridges.each do |b|
+      if b.addressing_mode == "static"
+        @server_ip << b.ip
+      end
+    end
+    @server_ip << "all"
+  end
+
+  def load_l2vpn_server
+    @l2vpn_server = @server.l2vpn_servers.find(params[:id])
   end
 end

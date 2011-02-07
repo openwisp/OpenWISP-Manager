@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password, :password_confirmation
 
   private
+
   def configure_gmap_key
     #Read the API key config for the current ENV
     api_key_file = Rails.root.join('config','gmaps_api_key.yml')
@@ -77,4 +78,24 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
+  ## Default (most commonly used in controllers) instance variables loaders ##
+  def load_wisps
+    @wisps = Wisp.all
+  end
+  
+  def load_wisp
+    @wisp = Wisp.find(params[:wisp_id])
+  end
+  
+  def load_access_point
+    @access_point = @wisp.access_points.find(params[:access_point_id])
+  end
+
+  def load_access_point_template
+    @access_point_template = @wisp.access_point_templates.find(params[:access_point_template_id])
+  end
+
+  def load_server
+    @server = Server.find(params[:server_id])
+  end
 end

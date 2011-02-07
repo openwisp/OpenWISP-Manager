@@ -26,17 +26,8 @@ class CustomScriptsController < ApplicationController
       allow :wisps_destroyer
       allow :access_points_destroyer, :of => :wisp
     end
-
   end
   
-  def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
-  end
-
-  def load_access_point
-    @access_point = @wisp.access_points.find(params[:access_point_id])
-  end
-
   # GET /wisps/:wisp_id/access_points/:access_point_id/custom_script
   def index
     @custom_scripts = @access_point.custom_scripts.find(:all)
