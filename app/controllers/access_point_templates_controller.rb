@@ -1,12 +1,12 @@
 class AccessPointTemplatesController < ApplicationController
 
-  before_filter :load_wisp, :except => [:ajax_stats, :list_access_points]
-  before_filter :load_access_point_template, :except => [:index, :new, :create, :ajax_stats, :list_access_points]
+  before_filter :load_wisp
+  before_filter :load_access_point_template, :except => [:index, :new, :create, :ajax_stats]
 
   access_control do
     default :deny
 
-    actions :index, :show do
+    actions :index, :show, :ajax_stats do
       allow :wisps_viewer
       allow :access_point_templates_viewer, :of => :wisp
     end
@@ -25,9 +25,6 @@ class AccessPointTemplatesController < ApplicationController
       allow :wisps_destroyer
       allow :access_point_templates_destroyer, :of => :wisp
     end
-
-    # TODO: :ajax_stats and :list_access_points should be moved somewhere else
-    allow all, :to => [:ajax_stats, :list_access_points]
   end
   
   # GET /wisps/:wisp_id/access_point_templates
@@ -100,12 +97,6 @@ class AccessPointTemplatesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(wisp_access_point_templates_url(@wisp)) }
     end
-  end
-
-  # Method for calling access points list partial
-  def list_access_points
-    template_id = params[:template_id]
-    render :partial => "access_points_list", :locals => { :access_point_template_id => template_id }
   end
 
   # Ajax Methods

@@ -10,7 +10,7 @@ ActionController::Routing::Routes.draw do |map|
 
   #Ajax Routes
   map.connect 'access_point/ajax_update_gmap', :controller => 'access_points', :action => 'ajax_update_maps'
-  map.connect 'access_point_templates/ajax_stats', :controller => 'access_point_templates', :action => 'ajax_stats'
+  map.connect 'wisps/:wisp_id/access_point_templates/ajax_stats', :controller => 'access_point_templates', :action => 'ajax_stats'
   map.connect 'wisps/ajax_stats', :controller => 'wisps', :action => 'ajax_stats'
   map.connect 'servers/ajax_stats', :controller => 'servers', :action => 'ajax_stats'
 
