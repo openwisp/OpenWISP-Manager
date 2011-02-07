@@ -120,5 +120,5 @@
 <%=
     observe_fields ['#access_point_city', '#access_point_address', '#access_point_zip'],
                    :frequency => 1,
-                   :url => { :action => :ajax_update_gmap }
+                   :url => { :action => :ajax_update_gmap, :wisp_id => @wisp }
 %>

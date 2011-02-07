@@ -1,7 +1,7 @@
 class AccessPointsController < ApplicationController
   include Addons::Mappable
 
-  before_filter :load_wisp, :except => [:ajax_update_gmap, :get_configuration, :get_configuration_md5]
+  before_filter :load_wisp, :except => [:get_configuration, :get_configuration_md5]
   before_filter :load_access_point,
                 :except => [
                     :index,
@@ -19,12 +19,12 @@ class AccessPointsController < ApplicationController
       allow :access_points_viewer, :of => :wisp
     end
 
-    actions :new, :create do
+    actions :new, :create, :ajax_update_gmap do
       allow :wisps_creator
       allow :access_points_creator, :of => :wisp
     end
 
-    actions :edit, :update, :update_outdated do
+    actions :edit, :update, :update_outdated, :ajax_update_gmap do
       allow :wisps_manager
       allow :access_points_manager, :of => :wisp
     end
@@ -34,8 +34,7 @@ class AccessPointsController < ApplicationController
       allow :access_points_destroyer, :of => :wisp
     end
 
-    # TODO: :ajax_update_gmap should be moved somewhere else
-    allow all, :to => [:ajax_update_gmap, :get_configuration, :get_configuration_md5]
+    allow all, :to => [:get_configuration, :get_configuration_md5]
   end
 
   def get_configuration
