@@ -1,0 +1,15 @@
+<% @access_point ||= access_point %>
+<table>
+  <tr>
+    <td><strong><%=t :Name %></strong></td>
+    <td><%= @access_point.name %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :Address %></strong></td>
+    <td><%= @access_point.address %></td>
+  </tr>
+  <tr>
+    <td><strong><%=t :City %></strong></td>
+    <td><%= @access_point.city %></td>
+  </tr>
+</table>

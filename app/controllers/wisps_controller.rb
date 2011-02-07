@@ -2,7 +2,7 @@ class WispsController < ApplicationController
   include Addons::Mappable
 
   before_filter :load_wisp, :except => [:index, :new, :create]
-  
+
   access_control do
     default :deny
 
@@ -37,11 +37,11 @@ class WispsController < ApplicationController
   # GET /wisps/1
   def show
     @access_points = @wisp.access_points.find(:all)
-    
+
     @map_variable = "map_new"
     @marker_suffix_variable = "marker_suffix_"
     @div_variable = "div_new"
-          
+
     if @access_points.length > 0
       llz = get_center(@wisp.access_points)
       @latlon = llz[0,2]
@@ -51,59 +51,32 @@ class WispsController < ApplicationController
 
       @zoom = 10
     end
-    
+
     @map = GMap.new(@div_variable, @map_variable)
     @map.control_init(:large_map => true, :map_type => true)
     @map.set_map_type_init(GMapType::G_HYBRID_MAP)
     @map.center_zoom_init(@latlon, @zoom)
 
     if @access_points.length > 0
-      
+
       sorted_latitudes = @access_points.collect(&:lat).compact.sort
       sorted_longitudes = @access_points.collect(&:lon).compact.sort
 
       @map.center_zoom_on_bounds_init([
-          [sorted_latitudes.first, sorted_longitudes.first], 
-          [sorted_latitudes.last, sorted_longitudes.last]])
+                                          [sorted_latitudes.first, sorted_longitudes.first],
+                                          [sorted_latitudes.last, sorted_longitudes.last]])
 
       @access_points.each do |ap|
-        info = <<ENI
-<table>
-<tr>
-  <td><b>#{t(:Name)}</b></td>
-  <td>#{ap.name}</td>
-</tr>
-  <td><b>#{t(:Address)}</b></td>
-  <td>#{ap.address}</td>
-</tr>
-  <td><b>#{t(:City)}</b></td>
-  <td>#{ap.city}</td>
-</tr>
-</table>
-ENI
+        info = render_to_string(:partial => "access_points/info_window", :layout => false, :locals => {:access_point => ap})
         marker = GMarker.new([ap.lat, ap.lon], :title => ap.name, :draggable => false, :info_window => info)
         @map.overlay_global_init(marker, @marker_suffix_variable + "#{ap.name.gsub(/\-/,'_')}")
       end
     else
-      info = <<ENI
-<table>
-<tr>
-<td><b>#{@wisp.name}</b> - #{@wisp_address_locality} </td>
-</tr>
-<tr>
-<td></td>
-</tr>
-<td><i><b>#{t(:Wisp_still_without_aps)}</b></i></td>
-</tr>
-</tr>
-<td><i>#{t(:Wisp_for_creation_of_ap_use_panel)}</i></td>
-</tr>
-</table>
-ENI
+      info = render_to_string(:partial => "info_window", :layout => false)
       marker = GMarker.new(@latlon, :title => @wisp.name, :draggable => false, :info_window => info)
       @map.overlay_global_init(marker, "wispAddressInfo")
-    end  
-    
+    end
+
     respond_to do |format|
       format.html # show.html.erb
     end
@@ -111,8 +84,8 @@ ENI
 
   # GET /wisps/new
   def new
-     @wisp = Wisp.new
-     @wisp.ca = Ca.new
+    @wisp = Wisp.new
+    @wisp.ca = Ca.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -125,7 +98,7 @@ ENI
       format.html # edit.html.erb
     end
   end
-  
+
   # POST /wisps
   def create
     @wisp = Wisp.new(params[:wisp])
@@ -153,7 +126,7 @@ ENI
     end
   end
 
-  
+
   # DELETE /wisps/1
   def destroy
     @wisp.destroy
@@ -162,7 +135,7 @@ ENI
       format.html { redirect_to(wisps_url) }
     end
   end
-  
+
   # Ajax Methods
   def ajax_stats
     respond_to do |format|

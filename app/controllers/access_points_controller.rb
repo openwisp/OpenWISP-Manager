@@ -104,20 +104,7 @@ class AccessPointsController < ApplicationController
     @map.control_init(:large_map => true, :map_type => true)
     @map.set_map_type_init(GMapType::G_NORMAL_MAP)
     @map.center_zoom_init(@latlon, @zoom)
-    info = <<ENI
-<table>
-<tr>
-  <td><b>#{t(:Name)}</b></td>
-  <td>#{@access_point.name}</td>
-</tr>
-  <td><b>#{t(:Address)}</b></td>
-  <td>#{@access_point.address}</td>
-</tr>
-  <td><b>#{t(:City)}</b></td>
-  <td>#{@access_point.city}</td>
-</tr>
-</table>
-ENI
+    info = render_to_string(:partial => "info_window", :layout => false)
     @marker = GMarker.new(@latlon, :title => @access_point.name, :draggable => false, :info_window => info )
     @map.overlay_global_init(@marker, @marker_variable)
 
