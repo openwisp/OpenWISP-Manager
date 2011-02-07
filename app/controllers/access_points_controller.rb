@@ -101,11 +101,10 @@ class AccessPointsController < ApplicationController
     @zoom = 16
 
     @map = GMap.new(@div_variable, @map_variable)
-    @map.control_init(:large_map => true, :map_type => true)
+    @map.control_init(:small_map => true, :map_type => true)
     @map.set_map_type_init(GMapType::G_NORMAL_MAP)
     @map.center_zoom_init(@latlon, @zoom)
-    info = render_to_string(:partial => "info_window", :layout => false)
-    @marker = GMarker.new(@latlon, :title => @access_point.name, :draggable => false, :info_window => info )
+    @marker = GMarker.new(@latlon, :title => @access_point.name)
     @map.overlay_global_init(@marker, @marker_variable)
 
     respond_to do |format|

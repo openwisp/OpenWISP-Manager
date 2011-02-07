@@ -12,4 +12,7 @@
     <td><strong><%=t :City %></strong></td>
     <td><%= @access_point.city %></td>
   </tr>
+  <tr>
+    <td colspan="2" class="center"><strong><%= link_to t(:Detailed_info), wisp_access_point_path(@wisp, @access_point) %></strong></td>
+  </tr>
 </table>

@@ -53,7 +53,7 @@ class WispsController < ApplicationController
     end
 
     @map = GMap.new(@div_variable, @map_variable)
-    @map.control_init(:large_map => true, :map_type => true)
+    @map.control_init(:small_map => true, :map_type => true)
     @map.set_map_type_init(GMapType::G_HYBRID_MAP)
     @map.center_zoom_init(@latlon, @zoom)
 
@@ -67,7 +67,7 @@ class WispsController < ApplicationController
                                           [sorted_latitudes.last, sorted_longitudes.last]])
 
       @access_points.each do |ap|
-        info = render_to_string(:partial => "access_points/info_window", :layout => false, :locals => {:access_point => ap})
+        info = render_to_string(:partial => "access_points/info_window", :layout => false, :locals => { :access_point => ap })
         marker = GMarker.new([ap.lat, ap.lon], :title => ap.name, :draggable => false, :info_window => info)
         @map.overlay_global_init(marker, @marker_suffix_variable + "#{ap.name.gsub(/\-/,'_')}")
       end
