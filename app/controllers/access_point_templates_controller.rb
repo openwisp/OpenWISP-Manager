@@ -1,7 +1,7 @@
 class AccessPointTemplatesController < ApplicationController
 
   before_filter :load_wisp
-  before_filter :load_access_point_template, :except => [:index, :new, :create, :ajax_stats]
+  before_filter :load_access_point_template, :except => [:index, :new, :create]
 
   access_control do
     default :deny
@@ -101,8 +101,6 @@ class AccessPointTemplatesController < ApplicationController
 
   # Ajax Methods
   def ajax_stats
-    @access_point_template = AccessPointTemplate.find(params[:id])
-
     respond_to do |format|
       format.html { render :partial => "stats", :object =>  @access_point_template }
     end
