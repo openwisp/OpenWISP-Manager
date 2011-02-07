@@ -202,16 +202,18 @@ class AccessPointsController < ApplicationController
             raise ActiveRecord::Rollback
           end
         end
-        worker = MiddleMan.worker(:configuration_worker)
-        worker.async_create_access_points_configuration(
-            :arg => { :access_point_ids => [ @access_point.id ] }
-        )
       else
         save_success = false
       end
     end
 
     if save_success
+      # Starts an async job for ap configuration creation
+      worker = MiddleMan.worker(:configuration_worker)
+      worker.async_create_access_points_configuration(
+          :arg => { :access_point_ids => [ @access_point.id ] }
+      )
+ 
       respond_to do |format|
         flash[:notice] = t(:AccessPoint_was_successfully_created)
         format.html { redirect_to(wisp_access_point_url(@wisp, @access_point)) }

@@ -287,6 +287,9 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def is_outdated?
+    if self.committed_at.nil?
+      return false
+    end
     (self.access_point_template.updated_at > self.updated_at) or (self.updated_at > self.committed_at)
   end
 
