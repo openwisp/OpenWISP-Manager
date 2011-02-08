@@ -128,10 +128,10 @@ class AccessPointsController < ApplicationController
     @zoom = llz[2]
 
     @map = GMap.new(@div_variable, @map_variable)
-    @map.control_init(:large_map => true,:map_type => true)
-    @map.set_map_type_init(GMapType::G_HYBRID_MAP)
+    @map.control_init(:small_map => true,:map_type => true)
+    @map.set_map_type_init(GMapType::G_NORMAL_MAP)
     @map.center_zoom_init(@latlon, @zoom)
-    @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true )
+    @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true, :icon => draggable_marker_icon )
     @map.overlay_global_init(@marker,@marker_variable)
     @map.record_init @marker.on_dragend("gmap_update_position")
 
@@ -145,8 +145,7 @@ class AccessPointsController < ApplicationController
     @access_point_groups = @wisp.access_point_groups
     @selected_access_point_groups = @access_point.access_point_groups.map { |g| g.id.to_s }
     @access_point_templates = @wisp.access_point_templates
-    @selected_access_point_template =
-        !@access_point.access_point_template.nil? ? @access_point.access_point_template.id.to_s : nil
+    @selected_access_point_template = !@access_point.access_point_template.nil? ? @access_point.access_point_template.id.to_s : nil
 
     @map_variable = "map_new"
     @marker_variable = "marker_new"
@@ -155,13 +154,20 @@ class AccessPointsController < ApplicationController
     @zoom = 14
 
     @map = GMap.new(@div_variable, @map_variable)
-    @map.control_init(:large_map => true,:map_type => true)
-    @map.set_map_type_init(GMapType::G_HYBRID_MAP)
+    @map.control_init(:small_map => true,:map_type => true)
+    @map.set_map_type_init(GMapType::G_NORMAL_MAP)
     @map.center_zoom_init(@latlon, @zoom)
-    @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true )
-    @map.overlay_global_init(@marker,@marker_variable)
-    @map.record_init @marker.on_dragend("gmap_update_position")
+    @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true, :icon => draggable_marker_icon )
 
+    @near_aps = AccessPoint.find(:all, :origin => @latlon, :within => 1)
+    @near_aps.delete @access_point
+    @near_aps.each do |ap| 
+      info = render_to_string(:partial => "info_window", :layout => false, :locals => { :access_point => ap })
+      @map.overlay_init(GMarker.new([ap.lat, ap.lon], :title => ap.name, :info_window => info))
+    end
+
+    @map.overlay_global_init(@marker, @marker_variable)
+    @map.record_init @marker.on_dragend("gmap_update_position")
   end
 
   # POST /wisps/:wisp_id/access_points
@@ -330,14 +336,20 @@ class AccessPointsController < ApplicationController
 
     req_location = Geokit::Geocoders::GoogleGeocoder.geocode(location)
     if req_location.success
-      @latlon = [req_location.lat, req_location.lng]
+      latlon_arr = [req_location.lat, req_location.lng]
+      @latlon = GLatLng.new(latlon_arr)
+
+      @near_aps = AccessPoint.find(:all, :origin => latlon_arr, :within => 1)
+      @near_aps.map! do |ap| 
+        info = render_to_string(:partial => "info_window", :layout => false, :locals => { :access_point => ap })
+	GMarker.new([ap.lat, ap.lon], :title => ap.name, :info_window => info)
+      end
+
       @map = Variable.new(@map_variable)
-      @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true)
-      @map.overlay_global_init(@marker,@marker_variable)
+      @marker = GMarker.new(latlon_arr, :title => t(:Select_location), :draggable => true, :icon => draggable_marker_icon)
+      @map.overlay_init([@marker, @near_aps].flatten,@marker_variable)
       @map.record_init @marker.on_dragend("gmap_update_position")
       @zoom = (req_location.accuracy * 2.3).floor
-    else
-      @zoom = 12
     end
   end
 
@@ -345,5 +357,14 @@ class AccessPointsController < ApplicationController
 
   def load_access_point
     @access_point = @wisp.access_points.find(params[:id])
+  end
+
+  def draggable_marker_icon
+    GIcon.new(
+	:image => 'http://maps.gstatic.com/intl/en_en/mapfiles/ms/micons/grn-pushpin.png', 
+	:icon_size => GSize.new(32,32), 
+	:icon_anchor => GPoint.new(12,38),
+	:shadow => 'http://maps.gstatic.com/intl/en_en/mapfiles/ms/micons/pushpin_shadow.png'
+    )
   end
 end
