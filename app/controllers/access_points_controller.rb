@@ -232,10 +232,10 @@ class AccessPointsController < ApplicationController
       @zoom = 14
 
       @map = GMap.new(@div_variable, @map_variable)
-      @map.control_init(:large_map => true,:map_type => true)
-      @map.set_map_type_init(GMapType::G_HYBRID_MAP)
+      @map.control_init(:small_map => true,:map_type => true)
+      @map.set_map_type_init(GMapType::G_NORMAL_MAP)
       @map.center_zoom_init(@latlon, @zoom)
-      @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true )
+      @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true, :icon => draggable_marker_icon )
       @map.overlay_global_init(@marker,@marker_variable)
       @map.record_init @marker.on_dragend("gmap_update_position")
 
@@ -280,11 +280,20 @@ class AccessPointsController < ApplicationController
       @zoom = 14
 
       @map = GMap.new(@div_variable, @map_variable)
-      @map.control_init(:large_map => true,:map_type => true)
-      @map.set_map_type_init(GMapType::G_HYBRID_MAP)
+      @map.control_init(:small_map => true,:map_type => true)
+      @map.set_map_type_init(GMapType::G_NORMAL_MAP)
       @map.center_zoom_init(@latlon, @zoom)
-      @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true )
+      @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true, :icon => draggable_marker_icon )
       @map.overlay_global_init(@marker,@marker_variable)
+
+      @near_aps = AccessPoint.find(:all, :origin => @latlon, :within => 1)
+      @near_aps.delete @access_point
+      @near_aps.each do |ap| 
+        info = render_to_string(:partial => "info_window", :layout => false, :locals => { :access_point => ap })
+        @map.overlay_init(GMarker.new([ap.lat, ap.lon], :title => ap.name, :info_window => info))
+      end
+
+      @map.overlay_global_init(@marker, @marker_variable)
       @map.record_init @marker.on_dragend("gmap_update_position")
 
       respond_to do |format|
@@ -342,13 +351,12 @@ class AccessPointsController < ApplicationController
       @near_aps = AccessPoint.find(:all, :origin => latlon_arr, :within => 1)
       @near_aps.map! do |ap| 
         info = render_to_string(:partial => "info_window", :layout => false, :locals => { :access_point => ap })
-	GMarker.new([ap.lat, ap.lon], :title => ap.name, :info_window => info)
+	GMarker.new([ap.lat, ap.lon], :title => ap.name)
       end
 
       @map = Variable.new(@map_variable)
       @marker = GMarker.new(latlon_arr, :title => t(:Select_location), :draggable => true, :icon => draggable_marker_icon)
-      @map.overlay_init([@marker, @near_aps].flatten,@marker_variable)
-      @map.record_init @marker.on_dragend("gmap_update_position")
+      @map.overlay_init([@near_aps, @marker].flatten, @marker_variable)
       @zoom = (req_location.accuracy * 2.3).floor
     end
   end
