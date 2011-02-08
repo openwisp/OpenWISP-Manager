@@ -320,7 +320,7 @@ it:
       separator: ","
       delimiter: "."
       precision: 3
-      
+
     currency:
       format:
         format: "%n %u"
@@ -328,21 +328,21 @@ it:
         separator: "."
         delimiter: ","
         precision: 2
-        
+
     percentage:
       format:
         delimiter: ""
-        # precision: 
-        
+        # precision:
+
     precision:
       format:
         # separator:
         delimiter: ""
         # precision:
-        
+
     human:
       format:
-        # separator: 
+        # separator:
         delimiter: ""
         precision: 1
       storage_units:
@@ -355,29 +355,29 @@ it:
           mb: "Mb"
           gb: "Gb"
           tb: "Tb"
- 
+
   date:
     formats:
       default: "%d-%m-%Y"
       short: "%d %b"
       long: "%d %B %Y"
- 
+
     day_names: [Domenica, Lunedì, Martedì, Mercoledì, Giovedì, Venerdì, Sabato]
     abbr_day_names: [Dom, Lun, Mar, Mer, Gio, Ven, Sab]
- 
+
     month_names: [~, Gennaio, Febbraio, Marzo, Aprile, Maggio, Giugno, Luglio, Agosto, Settembre, Ottobre, Novembre, Dicembre]
     abbr_month_names: [~, Gen, Feb, Mar, Apr, Mag, Giu, Lug, Ago, Set, Ott, Nov, Dic]
     order: [ :day, :month, :year ]
-  
+
   time:
     formats:
       default: "%a %d %b %Y, %H:%M:%S %z"
       short: "%d %b %H:%M"
       long: "%d %B %Y %H:%M"
-          
+
     am: "am"
     pm: "pm"
-      
+
   datetime:
     distance_in_words:
       half_a_minute: "mezzo minuto"
@@ -418,17 +418,17 @@ it:
       hour:   "Ora"
       minute: "Minuto"
       second: "Secondi"
- 
+
   support:
     array:
       words_connector: ", "
       two_words_connector: " e "
       last_word_connector: ", e "
-        
+
   activerecord:
     errors:
       template:
-        header: 
+        header:
           one: "Non posso salvare questo {{model}}: 1 errore"
           other: "Non posso salvare questo {{model}}: {{count}} errori."
         body: "Per favore ricontrolla i seguenti campi:"
@@ -475,7 +475,7 @@ it:
       x509_certificates: "Certificati x509"
       l2vpn: "VPN layer 2"
       l2vpns: "VPN layer 2"
-      
+
       access_point_template: "template di access point"
       access_point_templates: "templates di access point"
       vap_template: "template di vap"
@@ -490,7 +490,7 @@ it:
       vlan_templates: "templates di interfaccia vlan"
       l2vpn_template: "template di VPN layer 2"
       l2vpn_templates: "templates di VPN layer 2"
-      
+
 
     # Translate model attribute names. Used in Model.human_attribute_name(attribute).
     attributes:
@@ -506,7 +506,7 @@ it:
         notes: "note"
         shape_up: "shape up"
         shape_down: "shape down"
-      
+
       radio:
         name: "nome"
         mode: "modalità"

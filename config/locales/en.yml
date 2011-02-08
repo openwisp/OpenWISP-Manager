@@ -316,7 +316,7 @@ en:
   OWISPManager_servers: "Server per Wireless ISP"
   vWisps_manager: "OWM"
 
-
+  activerecord:
     # Translate model names. Used in Model.human_name().
     models:
       access_point: "access point"
@@ -352,7 +352,6 @@ en:
       vlan_templates: "templates di interfaccia vlan"
       l2vpn_template: "template di VPN layer 2"
       l2vpn_templates: "templates di VPN layer 2"
-
 
     # Translate model attribute names. Used in Model.human_attribute_name(attribute).
     attributes:
