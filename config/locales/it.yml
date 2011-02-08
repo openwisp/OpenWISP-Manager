@@ -3,321 +3,321 @@
 # and choose between available tags.
  
 it:
-  AccessPointGroup_was_successfully_created: Gruppo di access point creato correttamente
-  AccessPointGroup_was_successfully_updated: Gruppo di access point aggiornato correttamente
-  AccessPoint_groups: Gruppi di access point
-  AccessPoint_template: Template di access point
-  AccessPoint_templates: Template di access point
-  AccessPoint_template_Status_Configuration: Status Sincronizzazione Template
-  AccessPoint_template_synchronized: Template aggiornato con gli APs
-  AccessPoint_template_without_aps: Template senza APs
-  AccessPoint_template_unsynchronized: Richiesto Aggiornamento Template 
-  AccessPoint_was_successfully_created: Access point creato correttamente
-  AccessPoint_was_successfully_updated: Access point aggiornato correttamente
-  AccessPoints: Access point
-  Access_point: Access point
-  Access_point_group: Gruppo di access point
-  Access_point_groups: Gruppi di access point
-  Access_point_groups_list: Lista dei gruppi di access point
-  Access_point_position: Posizione access point
-  Access_point_statistics: Statistiche access point
-  Access_point_uptime_statistics: Uptime access point
-  Access_point_template: Template di access point
-  Access_point_templates_list: Lista dei template di access point
-  Access_points_in_group: Access point nel gruppo
-  Access_points_list: Lista degli access point
+  AccessPointGroup_was_successfully_created: "Gruppo di access point creato correttamente"
+  AccessPointGroup_was_successfully_updated: "Gruppo di access point aggiornato correttamente"
+  AccessPoint_groups: "Gruppi di access point"
+  AccessPoint_template: "Template di access point"
+  AccessPoint_templates: "Template di access point"
+  AccessPoint_template_Status_Configuration: "Status Sincronizzazione Template"
+  AccessPoint_template_synchronized: "Template aggiornato con gli APs"
+  AccessPoint_template_without_aps: "Template senza APs"
+  AccessPoint_template_unsynchronized: "Richiesto Aggiornamento Template"
+  AccessPoint_was_successfully_created: "Access point creato correttamente"
+  AccessPoint_was_successfully_updated: "Access point aggiornato correttamente"
+  AccessPoints: "Access point"
+  Access_point: "Access point"
+  Access_point_group: "Gruppo di access point"
+  Access_point_groups: "Gruppi di access point"
+  Access_point_groups_list: "Lista dei gruppi di access point"
+  Access_point_position: "Posizione access point"
+  Access_point_statistics: "Statistiche access point"
+  Access_point_uptime_statistics: "Uptime access point"
+  Access_point_template: "Template di access point"
+  Access_point_templates_list: "Lista dei template di access point"
+  Access_points_in_group: "Access point nel gruppo"
+  Access_points_list: "Lista degli access point"
   Access_points_updated: "Tutti gli access point sono aggiornati"
-  Account_registered: Account creato
-  Account_updated:  Account aggiornato
-  Activation_date: Data di attivazione
-  Add: Aggiungi
-  Add_access_point_template: Aggiungi template di access point 
-  Add_l2vpn_template:  Aggiungi template di vpn layer 2
-  Address: Indrizzo
-  Addressing_mode: Modalità indirizzamento
-  Adjust_position: Correggi la posizione
+  Account_registered: "Account creato"
+  Account_updated: " Account aggiornato"
+  Activation_date: "Data di attivazione"
+  Add: "Aggiungi"
+  Add_access_point_template: "Aggiungi template di access point"
+  Add_l2vpn_template: "Aggiungi template di vpn layer 2"
+  Address: "Indrizzo"
+  Addressing_mode: "Modalità indirizzamento"
+  Adjust_position: "Correggi la posizione"
   All: "Tutti"
-  Are_you_sure_access_point_destroy: Sei sicuro di voler eliminare l'access point?
-  Are_you_sure_access_point_group_destroy: Sei sicuro di voler eliminare il gruppo di access point?
+  Are_you_sure_access_point_destroy: "Sei sicuro di voler eliminare l'access point?"
+  Are_you_sure_access_point_group_destroy: "Sei sicuro di voler eliminare il gruppo di access point?"
   Are_you_sure_access_point_template_destroy: "Sei sicuro di voler eliminare il template di access point? (ATTENZIONE: tutti gli access point collegati a questo template saranno cancellati automaticamente!)"
-  Are_you_sure_bridge_destroy: Sei sicuro di voler eliminare il bridge?
-  Are_you_sure_bridge_template_destroy: Sei sicuro di voler eliminare il template di bridge?
-  Are_you_sure_certificate_revoke: Sei sicuro di voler revocare il certificato?
-  Are_you_sure_custom_script_destroy: Sei sicuro di voler eliminare lo script?
-  Are_you_sure_custom_script_template_destroy: Sei sicuro di voler eliminare il template di script?
-  Are_you_sure_ethernet_destroy: Sei sicuro di voler eliminare la interfaccia ethernet?
-  Are_you_sure_ethernet_template_destroy: Sei sicuro di voler eliminare il template di interfaccia ethernet?
-  Are_you_sure_l2tc_template_clear: Sei sicuro di voler azzerare i valori del traffic shaping?
+  Are_you_sure_bridge_destroy: "Sei sicuro di voler eliminare il bridge?"
+  Are_you_sure_bridge_template_destroy: "Sei sicuro di voler eliminare il template di bridge?"
+  Are_you_sure_certificate_revoke: "Sei sicuro di voler revocare il certificato?"
+  Are_you_sure_custom_script_destroy: "Sei sicuro di voler eliminare lo script?"
+  Are_you_sure_custom_script_template_destroy: "Sei sicuro di voler eliminare il template di script?"
+  Are_you_sure_ethernet_destroy: "Sei sicuro di voler eliminare la interfaccia ethernet?"
+  Are_you_sure_ethernet_template_destroy: "Sei sicuro di voler eliminare il template di interfaccia ethernet?"
+  Are_you_sure_l2tc_template_clear: "Sei sicuro di voler azzerare i valori del traffic shaping?"
   Are_you_sure_l2vpn_server_destroy: "Sei sicuro di voler eliminare il server vpn layer 2? (ATTENZIONE: la vpn sarà rimossa dalla configurazione di tutti gli access point e da tutti i template di access point!)"
-  Are_you_sure_l2vpn_template_destroy: Sei sicuro di voler eliminare il template di vpn layer 2?
-  Are_you_sure_operator_destroy: Sei sicuro di voler eliminare l'operatore?
-  Are_you_sure_radio_template_destroy: Sei sicuro di voler eliminare il template di interfaccia radio?
-  Are_you_sure_server_destroy: Sei sicuro di voler eliminare il server?
-  Are_you_sure_template_group_destroy: Sei sicuro di voler eliminare il gruppo di template?
-  Are_you_sure_vlan_destroy: Sei sicuro di voler eliminare la vlan?
-  Are_you_sure_vlan_template_destroy:  Sei sicuro di voler eliminare il template di vlan?
+  Are_you_sure_l2vpn_template_destroy: "Sei sicuro di voler eliminare il template di vpn layer 2?"
+  Are_you_sure_operator_destroy: "Sei sicuro di voler eliminare l'operatore?"
+  Are_you_sure_radio_template_destroy: "Sei sicuro di voler eliminare il template di interfaccia radio?"
+  Are_you_sure_server_destroy: "Sei sicuro di voler eliminare il server?"
+  Are_you_sure_template_group_destroy: "Sei sicuro di voler eliminare il gruppo di template?"
+  Are_you_sure_vlan_destroy: "Sei sicuro di voler eliminare la vlan?"
+  Are_you_sure_vlan_template_destroy: " Sei sicuro di voler eliminare il template di vlan?"
   Are_you_sure_wisp_destroy: "Sei sicuro di voler eliminare il WISP? (ATTENZIONE: saranno cancellate definitivamente tutte le informazioni del WISP compresi gli access point definiti!!)"
-  Back: Indietro
-  Bridgeables: Interfacce collegabili ad un bridge
-  Bridged_interfaces: Interfacce in bridging
-  Bridges: Bridge
-  Certification_authority: Certification authority
-  Certification_authority_infos: Informazioni della certification authority
-  Change_password: Nuova password
-  Channel: Canale
-  City: Città
-  Clear: Azzera
-  Clear_l2tc_template: Azzera informazioni di traffic shaping
-  Cn: Common name
-  Configure: Configura
-  Country: Nazione
-  Create: Crea
-  Create_New: Crea nuovo 
-  Cron_info: Informazioni Cron
-  Cron_minute: Minuti
-  Cron_hour: Ore
-  Cron_day: Giorni
-  Cron_month: Mesi
-  Cron_dayweek: Giorni Settimana  
-  Cron_body: Body Script
+  Back: "Indietro"
+  Bridgeables: "Interfacce collegabili ad un bridge"
+  Bridged_interfaces: "Interfacce in bridging"
+  Bridges: "Bridge"
+  Certification_authority: "Certification authority"
+  Certification_authority_infos: "Informazioni della certification authority"
+  Change_password: "Nuova password"
+  Channel: "Canale"
+  City: "Città"
+  Clear: "Azzera"
+  Clear_l2tc_template: "Azzera informazioni di traffic shaping"
+  Cn: "Common name"
+  Configure: "Configura"
+  Country: "Nazione"
+  Create: "Crea"
+  Create_New: "Crea nuovo"
+  Cron_info: "Informazioni Cron"
+  Cron_minute: "Minuti"
+  Cron_hour: "Ore"
+  Cron_day: "Giorni"
+  Cron_month: "Mesi"
+  Cron_dayweek: "Giorni Settimana"
+  Cron_body: "Body Script"
   Current_login_at: "Data dell'accesso corrente"
   Current_login_ip: "Indirizzo dell'accesso corrente"
-  Custom_script: Script Personalizzato
-  Custom_scripts: Script Personalizzabili
-  Custom_script_template: Template di Script Personalizzabili
-  Custom_script_templates: Templates di Script Personalizzabili
-  Default_Channel: Canale di default
-  Deleted: Cancellato
-  Destroy: Elimina
-  Destroy_access_point: Elimina access point
-  Destroy_access_point_group: Elimina gruppo di access point
-  Destroy_access_point_template: Elimina template access point
-  Destroy_bridge: Elimina bridge
-  Destroy_bridge_template: Elimina template di bridge
-  Destroy_custom_script: Elimina script personalizzato
-  Destroy_custom_script_template: Elimina template di script personalizzati
-  Destroy_ethernet: Elimina interfaccia ethernet
-  Destroy_ethernet_template: Elimina template di interfaccia ethernet
-  Destroy_l2vpn_server: Elimina server vpn layer 2
-  Destroy_l2vpn_template: Elimina template di server vpn layer 2
-  Destroy_operator: Elimina operatore
-  Destroy_server: Elimina server
-  Destroy_vlan: Elimina vlan
-  Destroy_vlan_template: Elimina template di vlan
-  Destroy_wisp: Elimina WISP
-  Detailed_info: Informazioni dettagliate
-  Device_name: Nome del dispositivo
-  Dn_prefix: Prefisso per il distinguish name
-  Dns: DNS
-  Download: Scarica 
-  Edit: Modifica
-  Edit_access_point: Modifica access point
-  Edit_access_point_group: Modifica gruppo di access point
-  Edit_bridge_template: Modifica template di bridge
-  Edit_ethernet_template: Modifica template di interfaccia ethernet
-  Edit_info: Modifica informazioni
-  Edit_server: Modifica server
-  Edit_template_group: Modifica gruppo di template
-  Editing_access_point: Modifica access point
-  Editing_access_point_group: Modifica gruppo di access point
-  Editing_access_point_template: Modifica template di access point
-  Editing_bridge: Modifica bridge
-  Editing_ethernet: Modifica interfaccia ethernet
-  Editing_l2tc: Modifica traffic shaping
-  Editing_l2tc_template: Modifica template di traffic shaping
-  Editing_l2vpn_template: Modifica template di vpn layer 2
-  Editing_operator: Modifica operatore
-  Editing_radio: Modifica interfaccia radio
-  Editing_radio_template: Modifica template di interfaccia radio
-  Editing_template_group: Modifica gruppo di template
-  Editing_wisp: Modifica WISP
-  Encryption: Cifratura
-  Essid: eSSID
-  EthernetTemplates: Template di interfaccia ethernet 
-  Ethernets: Interfacce ethernet
-  Expired: Scaduto
-  Gateway: Gateway
-  General_infos: Informazioni generali
-  Get_crl_list: Ottieni Lista Crl
-  Groups_for_access_point: Gruppi di access point
-  Home: Home
-  Inherited: Ereditato
-  Interface: Interfaccia
-  Internal: Interno
-  Internal_qm: Interno?
-  Ip: IP
-  Ip_address: Indirizzo IP
-  Ip_range_begin: Indirizzo iniziale del range
-  Ip_range_end: Indirizzo finale del range
-  Issued_certificates: Certificati emessi
-  Key_or_radius_secret: Chiave o RADIUS 'shared secret'
-  L2tcs: Layer 2 traffic shaping
-  L2vpn_server: Server vpn layer 2
-  L2vpn_server_cipher: Cifrario
-  L2vpn_server_created: Server
-  L2vpn_server_ip: IP Server vpn layer 2
-  L2vpn_server_bindall: Bind all
-  L2vpn_server_name: Nome
-  L2vpn_server_port: Porta
-  L2vpn_server_protocol: Protocollo
-  L2vpn_server_mtu: MTU
-  L2vpn_server_mtu_discovery: MTU Discovery
-  L2vpn_server_updated: Server vpn layer 2 aggiornato
-  L2vpn_server_configuration: Configurazione Server vpn layer 2
-  L2vpn_servers: Server vpn layer 2
-  L2vpns: VPN layer 2
+  Custom_script: "Script Personalizzato"
+  Custom_scripts: "Script Personalizzabili"
+  Custom_script_template: "Template di Script Personalizzabili"
+  Custom_script_templates: "Templates di Script Personalizzabili"
+  Default_Channel: "Canale di default"
+  Deleted: "Cancellato"
+  Destroy: "Elimina"
+  Destroy_access_point: "Elimina access point"
+  Destroy_access_point_group: "Elimina gruppo di access point"
+  Destroy_access_point_template: "Elimina template access point"
+  Destroy_bridge: "Elimina bridge"
+  Destroy_bridge_template: "Elimina template di bridge"
+  Destroy_custom_script: "Elimina script personalizzato"
+  Destroy_custom_script_template: "Elimina template di script personalizzati"
+  Destroy_ethernet: "Elimina interfaccia ethernet"
+  Destroy_ethernet_template: "Elimina template di interfaccia ethernet"
+  Destroy_l2vpn_server: "Elimina server vpn layer 2"
+  Destroy_l2vpn_template: "Elimina template di server vpn layer 2"
+  Destroy_operator: "Elimina operatore"
+  Destroy_server: "Elimina server"
+  Destroy_vlan: "Elimina vlan"
+  Destroy_vlan_template: "Elimina template di vlan"
+  Destroy_wisp: "Elimina WISP"
+  Detailed_info: "Informazioni dettagliate"
+  Device_name: "Nome del dispositivo"
+  Dn_prefix: "Prefisso per il distinguish name"
+  Dns: "DNS"
+  Download: "Scarica"
+  Edit: "Modifica"
+  Edit_access_point: "Modifica access point"
+  Edit_access_point_group: "Modifica gruppo di access point"
+  Edit_bridge_template: "Modifica template di bridge"
+  Edit_ethernet_template: "Modifica template di interfaccia ethernet"
+  Edit_info: "Modifica informazioni"
+  Edit_server: "Modifica server"
+  Edit_template_group: "Modifica gruppo di template"
+  Editing_access_point: "Modifica access point"
+  Editing_access_point_group: "Modifica gruppo di access point"
+  Editing_access_point_template: "Modifica template di access point"
+  Editing_bridge: "Modifica bridge"
+  Editing_ethernet: "Modifica interfaccia ethernet"
+  Editing_l2tc: "Modifica traffic shaping"
+  Editing_l2tc_template: "Modifica template di traffic shaping"
+  Editing_l2vpn_template: "Modifica template di vpn layer 2"
+  Editing_operator: "Modifica operatore"
+  Editing_radio: "Modifica interfaccia radio"
+  Editing_radio_template: "Modifica template di interfaccia radio"
+  Editing_template_group: "Modifica gruppo di template"
+  Editing_wisp: "Modifica WISP"
+  Encryption: "Cifratura"
+  Essid: "eSSID"
+  EthernetTemplates: "Template di interfaccia ethernet"
+  Ethernets: "Interfacce ethernet"
+  Expired: "Scaduto"
+  Gateway: "Gateway"
+  General_infos: "Informazioni generali"
+  Get_crl_list: "Ottieni Lista Crl"
+  Groups_for_access_point: "Gruppi di access point"
+  Home: "Home"
+  Inherited: "Ereditato"
+  Interface: "Interfaccia"
+  Internal: "Interno"
+  Internal_qm: "Interno?"
+  Ip: "IP"
+  Ip_address: "Indirizzo IP"
+  Ip_range_begin: "Indirizzo iniziale del range"
+  Ip_range_end: "Indirizzo finale del range"
+  Issued_certificates: "Certificati emessi"
+  Key_or_radius_secret: "Chiave o RADIUS 'shared secret'"
+  L2tcs: "Layer 2 traffic shaping"
+  L2vpn_server: "Server vpn layer 2"
+  L2vpn_server_cipher: "Cifrario"
+  L2vpn_server_created: "Server"
+  L2vpn_server_ip: "IP Server vpn layer 2"
+  L2vpn_server_bindall: "Bind all"
+  L2vpn_server_name: "Nome"
+  L2vpn_server_port: "Porta"
+  L2vpn_server_protocol: "Protocollo"
+  L2vpn_server_mtu: "MTU"
+  L2vpn_server_mtu_discovery: "MTU Discovery"
+  L2vpn_server_updated: "Server vpn layer 2 aggiornato"
+  L2vpn_server_configuration: "Configurazione Server vpn layer 2"
+  L2vpn_servers: "Server vpn layer 2"
+  L2vpns: "VPN layer 2"
   Last_configuration_retrieve_ip: "Ultimo IP che ha scaricato la configurazione"
   Last_login_ip: "Indirizzo dell'accesso precedente"
   Last_login_at: "Data dell'accesso precedente"
-  Lat: Latitudine
-  Linked_access_point: Access point associati
-  List: Lista
-  List_all: Mostra tutti
-  List_all_access_point_templates: Mostra tutti
-  List_all_access_points: Mostra tutti gli access point
-  Listing_Access_Points_Modified_short: Lista APs da aggiornare
-  Listing_Access_Points_Modified: Lista degli access point che verranno aggiornati
-  Listing_access_point_groups: Gruppi di access point definiti
-  Listing_access_point_templates: Template di access point definiti
-  Listing_access_points: Access point definiti
+  Lat: "Latitudine"
+  Linked_access_point: "Access point associati"
+  List: "Lista"
+  List_all: "Mostra tutti"
+  List_all_access_point_templates: "Mostra tutti"
+  List_all_access_points: "Mostra tutti gli access point"
+  Listing_Access_Points_Modified_short: "Lista APs da aggiornare"
+  Listing_Access_Points_Modified: "Lista degli access point che verranno aggiornati"
+  Listing_access_point_groups: "Gruppi di access point definiti"
+  Listing_access_point_templates: "Template di access point definiti"
+  Listing_access_points: "Access point definiti"
   Listing_access_points_for_template: "Access point per il template {{template}}"
-  Listing_bridge_templates: Template di bridge definiti
-  Listing_bridges: Bridge presenti
-  Listing_custom_script_templates: Template di Custom Script definiti
-  Listing_custom_scripts: Custom Script presenti
-  Listing_ethernet_templates: Template di interfacce ethernet presenti
-  Listing_ethernets: Interfacce ethernet presenti
-  Listing_l2tcs: Layer 2 traffic shaping presenti
-  Listing_l2tc_templates: Template di layer 2 traffic shaping presenti
-  Listing_l2vpn_clients: Client vpn layer 2 presenti
-  Listing_l2vpn_servers: Server vpn layer 2 presenti
-  Listing_l2vpn_templates: Template di vpn layer 2 presenti
-  Listing_operators: Operatori presenti
+  Listing_bridge_templates: "Template di bridge definiti"
+  Listing_bridges: "Bridge presenti"
+  Listing_custom_script_templates: "Template di Custom Script definiti"
+  Listing_custom_scripts: "Custom Script presenti"
+  Listing_ethernet_templates: "Template di interfacce ethernet presenti"
+  Listing_ethernets: "Interfacce ethernet presenti"
+  Listing_l2tcs: "Layer 2 traffic shaping presenti"
+  Listing_l2tc_templates: "Template di layer 2 traffic shaping presenti"
+  Listing_l2vpn_clients: "Client vpn layer 2 presenti"
+  Listing_l2vpn_servers: "Server vpn layer 2 presenti"
+  Listing_l2vpn_templates: "Template di vpn layer 2 presenti"
+  Listing_operators: "Operatori presenti"
   Listing_outdated_access_points: "Elenco degli access point da aggiornare"
-  Listing_radios: Interfacce radio presenti
-  Listing_radio_templates: Template di interfacce radio presenti
-  Listing_servers: Server presenti
-  Listing_template_groups: Gruppi di template presenti
-  Listing_vlan_templates: Template di vlan presenti
-  Listing_vlans: Vlan presenti
-  Listing_wisps: WISP presenti
-  Locality: Località
+  Listing_radios: "Interfacce radio presenti"
+  Listing_radio_templates: "Template di interfacce radio presenti"
+  Listing_servers: "Server presenti"
+  Listing_template_groups: "Gruppi di template presenti"
+  Listing_vlan_templates: "Template di vlan presenti"
+  Listing_vlans: "Vlan presenti"
+  Listing_wisps: "WISP presenti"
+  Locality: "Località"
   Logged_in_as: "Effettuato l'accesso come"
   Login: "Accedi"
   Login_count: "Numero totale di acessi"
   Login_successful: "Accesso riuscito"
-  Logout: Logout
-  Logout_successful: Logout riuscito
-  Lon: Longitudine
-  Mac_address: MAC address
-  Mode: Modalità
-  Name: Nome
-  Netmask: Netmask
-  Network_parameters: Parametri di rete
-  Network_parameters_acquiring: Acquisizione parametri di rete
-  New_access_point: Nuovo access point
-  New_access_point_group: Nuovo gruppo di access point
-  New_bridge: Nuovo bridge
-  New_bridge_template: Nuovo template di bridge
-  New_ethernet: Nuova interfaccia ethernet
-  New_ethernet_template: Nuovo template di ethernet
-  New_operator: Nuovo operatore
-  New_radio_template: Nuovo template di interfaccia radio
-  New_server: Nuovo server
-  New_template_group: Nuovo gruppo di template
-  New_vlan: Nuova vlan
-  New_vlan_template: Nuovo template di vlan
-  New_wisp: Nuovo WISP
-  No_access_point: Nessun access point
-  No_access_point_template: Nessun template di access point
-  None: Nessuno
-  Not_logged_in: Non hai effettuato l'accesso
-  Notes: Note
-  Openwrt_configuration: Configurazione openWRT
-  Operations: Operazioni
+  Logout: "Logout"
+  Logout_successful: "Logout riuscito"
+  Lon: "Longitudine"
+  Mac_address: "MAC address"
+  Mode: "Modalità"
+  Name: "Nome"
+  Netmask: "Netmask"
+  Network_parameters: "Parametri di rete"
+  Network_parameters_acquiring: "Acquisizione parametri di rete"
+  New_access_point: "Nuovo access point"
+  New_access_point_group: "Nuovo gruppo di access point"
+  New_bridge: "Nuovo bridge"
+  New_bridge_template: "Nuovo template di bridge"
+  New_ethernet: "Nuova interfaccia ethernet"
+  New_ethernet_template: "Nuovo template di ethernet"
+  New_operator: "Nuovo operatore"
+  New_radio_template: "Nuovo template di interfaccia radio"
+  New_server: "Nuovo server"
+  New_template_group: "Nuovo gruppo di template"
+  New_vlan: "Nuova vlan"
+  New_vlan_template: "Nuovo template di vlan"
+  New_wisp: "Nuovo WISP"
+  No_access_point: "Nessun access point"
+  No_access_point_template: "Nessun template di access point"
+  None: "Nessuno"
+  Not_logged_in: "Non hai effettuato l'accesso"
+  Notes: "Note"
+  Openwrt_configuration: "Configurazione openWRT"
+  Operations: "Operazioni"
   Operator_of: "Operatore di {{wisp}}"
-  Operator_name: Nome dell'operatore
-  Operators: Operatori
-  Operators_list: Lista operatori
-  Organization: Organizzazione
+  Operator_name: "Nome dell'operatore"
+  Operators: "Operatori"
+  Operators_list: "Lista operatori"
+  Organization: "Organizzazione"
   Outdated: "Da aggiornare"
   Outdated_access_points_list: "Lista degli access point da aggiornare"
-  Output_band: Banda di output
-  Output_band_for: Banda di output per
-  Owner: Possessore
-  Password: Password
-  Password_confirmation: Conferma 
-  Please_login: Per piacere autenticati
-  Position_infos: Informazioni sulla posizione
-  Radios: Interfacce radio
-  Radius_acct_server: Server RADIUS per accounting
-  Radius_acct_server_port: Port server RADIUS per accounting
-  Radius_auth_server: Server RADIUS per autenticazione
-  Radius_auth_server_port: Port server RADIUS per autenticazione
-  Remember_me: Ricordami
-  Remove_Vap: Rimuovi Vap
-  Renew_certificate: Rinnova certificato
-  Revoke_certificate: Revoca certificato
-  Revoked: Revocato
+  Output_band: "Banda di output"
+  Output_band_for: "Banda di output per"
+  Owner: "Possessore"
+  Password: "Password"
+  Password_confirmation: "Conferma"
+  Please_login: "Per piacere autenticati"
+  Position_infos: "Informazioni sulla posizione"
+  Radios: "Interfacce radio"
+  Radius_acct_server: "Server RADIUS per accounting"
+  Radius_acct_server_port: "Port server RADIUS per accounting"
+  Radius_auth_server: "Server RADIUS per autenticazione"
+  Radius_auth_server_port: "Port server RADIUS per autenticazione"
+  Remember_me: "Ricordami"
+  Remove_Vap: "Rimuovi Vap"
+  Renew_certificate: "Rinnova certificato"
+  Revoke_certificate: "Revoca certificato"
+  Revoked: "Revocato"
   Roles: "Ruoli"
-  Select: Seleziona
-  Select_location: Seleziona la posizione
-  Select_operation_from_menu: Seleziona l'operazione dal menù
-  Server_created: Server creato
-  Server_name: Nome del server
-  Server_updated: Server aggiornato
-  Servers_list: Lista dei server
-  State_or_province: Stato o provincia
-  Stats: Statistiche
-  Status: Stato
-  Subinterface: Subinterface
-  Subinterface_template: Template di subinterface
-  Super_admin: Super amministratore
-  Tag: Tag
-  TapTemplates: Template di tap
-  Taps: Tap
-  Template: Template
-  Templates: Template
-  TemplateGroup_was_successfully_created: Il gruppo di template è stato creato correttamente
-  TemplateGroup_was_successfully_updated: Il gruppo di template è stato aggiornato correttamente
-  Template_configuration_uncommitted: Modifiche non applicate
-  Template_groups: Gruppi di template
-  Template_updated: Stato aggiornamento
-  Update: Aggiorna
-  Update_configuration: Aggiornamento Configurazione
+  Select: "Seleziona"
+  Select_location: "Seleziona la posizione"
+  Select_operation_from_menu: "Seleziona l'operazione dal menù"
+  Server_created: "Server creato"
+  Server_name: "Nome del server"
+  Server_updated: "Server aggiornato"
+  Servers_list: "Lista dei server"
+  State_or_province: "Stato o provincia"
+  Stats: "Statistiche"
+  Status: "Stato"
+  Subinterface: "Subinterface"
+  Subinterface_template: "Template di subinterface"
+  Super_admin: "Super amministratore"
+  Tag: "Tag"
+  TapTemplates: "Template di tap"
+  Taps: "Tap"
+  Template: "Template"
+  Templates: "Template"
+  TemplateGroup_was_successfully_created: "Il gruppo di template è stato creato correttamente"
+  TemplateGroup_was_successfully_updated: "Il gruppo di template è stato aggiornato correttamente"
+  Template_configuration_uncommitted: "Modifiche non applicate"
+  Template_groups: "Gruppi di template"
+  Template_updated: "Stato aggiornamento"
+  Update: "Aggiorna"
+  Update_configuration: "Aggiornamento Configurazione"
   Update_access_point_warning: "Attenzione, saranno modificati i seguenti access point"
   Update_one_access_point_warning: "Attenzione, la configurazione del access point è stata modificata ma non è ancora stata applicata."
-  Valid: Valido
-  VapTemplates: Template di vap
-  Vap_template: Template di vap
-  Vaps: Vaps
-  Visibility: Visibilità
-  VlanTemplates: Template di vlan
-  Vlans: Vlan
-  Warning: Attenzione
-  Welcome: Benvenuto {{operator}}
-  Wisp: WISP
-  Wisp_name: Nome WISP
-  Wisp_access_points: AP presenti nel WISP
-  Wisp_services: Servizi WISP
-  Wisp_was_successfully_created: Il WISP è stato creato correttamente
-  Wisp_was_successfully_updated: Il WISP è stato aggiornato correttamente
-  Wisp_still_without_aps: Il WISP non possiede ancora APs
-  Wisp_for_creation_of_ap_use_panel: Per crearli utilizza il pannello in alto
-  Wisps: Wireless ISPs
-  Wisps_list: Lista dei WISP
-  X509_certificate: Certificato X509
-  You_must_be_logged_in_to_access_this_page: Devi effettuare l'accesso per accedere a questa pagina
-  You_must_be_logged_out_to_access_this_page: Devi effettuare il logout per accedere a questa pagina
-  Zip: CAP
-  _no: no
-  _yes: si
-  dynamic: dinamico
-  internal: interno
-  none: nessuno
-  static: statico
-  OWISPManager_servers: Server per Wireless ISP
-  vWisps_manager: OWM
+  Valid: "Valido"
+  VapTemplates: "Template di vap"
+  Vap_template: "Template di vap"
+  Vaps: "Vaps"
+  Visibility: "Visibilità"
+  VlanTemplates: "Template di vlan"
+  Vlans: "Vlan"
+  Warning: "Attenzione"
+  Welcome: "Benvenuto {{operator}}"
+  Wisp: "WISP"
+  Wisp_name: "Nome WISP"
+  Wisp_access_points: "AP presenti nel WISP"
+  Wisp_services: "Servizi WISP"
+  Wisp_was_successfully_created: "Il WISP è stato creato correttamente"
+  Wisp_was_successfully_updated: "Il WISP è stato aggiornato correttamente"
+  Wisp_still_without_aps: "Il WISP non possiede ancora APs"
+  Wisp_for_creation_of_ap_use_panel: "Per crearli utilizza il pannello in alto"
+  Wisps: "Wireless ISPs"
+  Wisps_list: "Lista dei WISP"
+  X509_certificate: "Certificato X509"
+  You_must_be_logged_in_to_access_this_page: "Devi effettuare l'accesso per accedere a questa pagina"
+  You_must_be_logged_out_to_access_this_page: "Devi effettuare il logout per accedere a questa pagina"
+  Zip: "CAP"
+  _no: "no"
+  _yes: "si"
+  dynamic: "dinamico"
+  internal: "interno"
+  none: "nessuno"
+  static: "statico"
+  OWISPManager_servers: "Server per Wireless ISP"
+  vWisps_manager: "OWM"
 
   number:
     format:
@@ -379,8 +379,8 @@ it:
       short: "%d %b %H:%M"
       long: "%d %B %Y %H:%M"
           
-    am: 'am'
-    pm: 'pm'
+    am: "am"
+    pm: "pm"
       
   datetime:
     distance_in_words:
@@ -461,55 +461,55 @@ it:
 
     # Translate model names. Used in Model.human_name().
     models:
-      access_point: access point
-      access_points: access points
-      vap: vap
-      vaps: vaps
-      radio: interfaccia radio
-      radios: schede radio
-      ethernet: interfaccia ethernet
-      ethernets: interfacce ethernet
-      bridge: interfaccia bridge
-      bridges: interfacce bridge
-      vlan: interfaccia vlan
-      vlans: interfacce vlan
-      wisp: Wireless ISP
-      wisps: Wireless ISPs
-      x509_certificate: Certificato x509
-      x509_certificates: Certificati x509
-      l2vpn: VPN layer 2
-      l2vpns: VPN layer 2
+      access_point: "access point"
+      access_points: "access points"
+      vap: "vap"
+      vaps: "vaps"
+      radio: "interfaccia radio"
+      radios: "schede radio"
+      ethernet: "interfaccia ethernet"
+      ethernets: "interfacce ethernet"
+      bridge: "interfaccia bridge"
+      bridges: "interfacce bridge"
+      vlan: "interfaccia vlan"
+      vlans: "interfacce vlan"
+      wisp: "Wireless ISP"
+      wisps: "Wireless ISPs"
+      x509_certificate: "Certificato x509"
+      x509_certificates: "Certificati x509"
+      l2vpn: "VPN layer 2"
+      l2vpns: "VPN layer 2"
       
-      access_point_template: template di access point
-      access_point_templates: templates di access point
-      vap_template: template di vap
-      vap_templates: templates di vap
-      radio_template: template di interfaccia radio
-      radio_templates: templates di interfaccia radio
-      ethernet_template: template di interfaccia ethernet
-      ethernet_templates: templates di interfaccia ethernet
-      bridge_template: template di interfaccia bridge
-      bridge_templates: templates di interfaccia bridge
-      vlan_template: template di interfaccia vlan
-      vlan_templates: templates di interfaccia vlan
-      l2vpn_template: template di VPN layer 2
-      l2vpn_templates: templates di VPN layer 2
+      access_point_template: "template di access point"
+      access_point_templates: "templates di access point"
+      vap_template: "template di vap"
+      vap_templates: "templates di vap"
+      radio_template: "template di interfaccia radio"
+      radio_templates: "templates di interfaccia radio"
+      ethernet_template: "template di interfaccia ethernet"
+      ethernet_templates: "templates di interfaccia ethernet"
+      bridge_template: "template di interfaccia bridge"
+      bridge_templates: "templates di interfaccia bridge"
+      vlan_template: "template di interfaccia vlan"
+      vlan_templates: "templates di interfaccia vlan"
+      l2vpn_template: "template di VPN layer 2"
+      l2vpn_templates: "templates di VPN layer 2"
       
 
     # Translate model attribute names. Used in Model.human_attribute_name(attribute).
     attributes:
       access_point:
-        name: nome
-        internal: interno
-        activation_date: data di attivazione
-        address: indirizzo
-        city: città
-        zip: CAP
-        lat: latitudine
-        lon: longitudine
-        notes: note
-        shape_up: shape up
-        shape_down: shape down
+        name: "nome"
+        internal: "interno"
+        activation_date: "data di attivazione"
+        address: "indirizzo"
+        city: "città"
+        zip: "CAP"
+        lat: "latitudine"
+        lon: "longitudine"
+        notes: "note"
+        shape_up: "shape up"
+        shape_down: "shape down"
       
       radio:
         name: "nome"
@@ -537,5 +537,3 @@ it:
         email: "email"
         password: "password"
         remember_me: "ricorda il mio login"
-
-        
