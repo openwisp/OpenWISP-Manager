@@ -33,7 +33,9 @@
 <div class="container_16">
   <div class="grid_16">
     <h1 id="branding">
-      <a href=""><%= image_tag("logo_caspur.png", :border => 0, :size => "58x45", :alt => 'Open WISP Manager', :class => "wispmanager_logo") %> Open WISP Manager</a>
+      <%= link_to image_tag("logo_caspur.png", :border => 0, :size => "58x45", :alt => 'Open WISP Manager', :class => "wispmanager_logo") %> Open WISP Manager
+      <br />
+      <%= link_to_locale 'it' %> <%= link_to_locale 'en' %>
     </h1>
   </div>
   <div class="clear">&nbsp;</div>

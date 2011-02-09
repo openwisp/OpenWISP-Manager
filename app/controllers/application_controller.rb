@@ -4,7 +4,7 @@ require 'yaml'
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  before_filter :configure_gmap_key
+  before_filter :configure_gmap_key, :set_locale
 
   helper_method :current_operator_session, :current_operator, :home_path_for
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
@@ -13,7 +13,18 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
   filter_parameter_logging :password, :password_confirmation
 
+  def set_session_locale
+    session[:locale] = params[:locale]
+    redirect_to request.env['HTTP_REFERER'] || :root
+  end
+
   private
+
+  def available_locales; AVAILABLE_LOCALES; end
+
+  def set_locale
+    I18n.locale = available_locales.include?(session[:locale]) ? session[:locale] : nil
+  end
 
   def configure_gmap_key
     #Read the API key config for the current ENV
