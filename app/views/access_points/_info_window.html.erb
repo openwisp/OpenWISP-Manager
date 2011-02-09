@@ -1,4 +1,4 @@
-<% @access_point ||= access_point %>
+<% @access_point = access_point if defined?(access_point) %>
 <table>
   <tr>
     <td><strong><%=t :Name %></strong></td>
