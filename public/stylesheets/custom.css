@@ -65,6 +65,12 @@ h1#branding {
     font-size:2em;
 }
 
+#locales {
+    float: right;
+    margin-top:-30px;
+    margin-right:5px;
+}
+
 .warn {
     font-size:1.5em;
     color:red;
@@ -102,3 +108,4 @@ h1#branding {
 .pad_top_5 {
     padding-top:5px;
 }
+
