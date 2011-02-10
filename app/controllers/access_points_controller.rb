@@ -161,7 +161,7 @@ class AccessPointsController < ApplicationController
 
     @near_aps = AccessPoint.find(:all, :origin => @latlon, :within => 1)
     @near_aps.delete @access_point
-    @near_aps.each do |ap| 
+    @near_aps.each do |ap|
       info = render_to_string(:partial => "info_window", :layout => false, :locals => { :access_point => ap })
       @map.overlay_init(GMarker.new([ap.lat, ap.lon], :title => ap.name, :info_window => info))
     end
@@ -219,7 +219,7 @@ class AccessPointsController < ApplicationController
       worker.async_create_access_points_configuration(
           :arg => { :access_point_ids => [ @access_point.id ] }
       )
- 
+
       respond_to do |format|
         flash[:notice] = t(:AccessPoint_was_successfully_created)
         format.html { redirect_to(wisp_access_point_url(@wisp, @access_point)) }
@@ -288,7 +288,7 @@ class AccessPointsController < ApplicationController
 
       @near_aps = AccessPoint.find(:all, :origin => @latlon, :within => 1)
       @near_aps.delete @access_point
-      @near_aps.each do |ap| 
+      @near_aps.each do |ap|
         info = render_to_string(:partial => "info_window", :layout => false, :locals => { :access_point => ap })
         @map.overlay_init(GMarker.new([ap.lat, ap.lon], :title => ap.name, :info_window => info))
       end
@@ -349,9 +349,9 @@ class AccessPointsController < ApplicationController
       @latlon = GLatLng.new(latlon_arr)
 
       @near_aps = AccessPoint.find(:all, :origin => latlon_arr, :within => 1)
-      @near_aps.map! do |ap| 
+      @near_aps.map! do |ap|
         info = render_to_string(:partial => "info_window", :layout => false, :locals => { :access_point => ap })
-	GMarker.new([ap.lat, ap.lon], :title => ap.name)
+        GMarker.new([ap.lat, ap.lon], :title => ap.name)
       end
 
       @map = Variable.new(@map_variable)
@@ -369,10 +369,10 @@ class AccessPointsController < ApplicationController
 
   def draggable_marker_icon
     GIcon.new(
-	:image => 'http://maps.gstatic.com/intl/en_en/mapfiles/ms/micons/grn-pushpin.png', 
-	:icon_size => GSize.new(32,32), 
-	:icon_anchor => GPoint.new(12,38),
-	:shadow => 'http://maps.gstatic.com/intl/en_en/mapfiles/ms/micons/pushpin_shadow.png'
+        :image => 'http://maps.gstatic.com/intl/en_en/mapfiles/ms/micons/grn-pushpin.png',
+        :icon_size => GSize.new(32,32),
+        :icon_anchor => GPoint.new(12,38),
+        :shadow => 'http://maps.gstatic.com/intl/en_en/mapfiles/ms/micons/pushpin_shadow.png'
     )
   end
 end
