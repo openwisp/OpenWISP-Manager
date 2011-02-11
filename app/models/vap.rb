@@ -3,25 +3,29 @@ class Vap < ActiveRecord::Base
 
   NAME_PREFIX = "vap"
 
-  ENC_TYPES = %w(none wep psk psk2 wpa wpa2)
+  ENC_TYPES = %w(none wep psk psk2 wpa wpa2 pskmixed wpamixed)
   ENC_TYPES_SELECT = {
-      'none'        => 'none',
-      'WEP'         => 'wep',
-      'WPA psk'     => 'psk',
-      'WPA2 psk'    => 'psk2',
-      'WPA 802.1x'  => 'wpa',
-      'WPA2 802.1x' => 'wpa2'
+      'none'            => 'none',
+      'WEP'             => 'wep',
+      'WPA psk'         => 'psk',
+      'WPA2 psk'        => 'psk2',
+      'WPA 802.1x'      => 'wpa',
+      'WPA2 802.1x'     => 'wpa2',
+      'WPA/WPA2 psk'    => 'pskmixed',
+      'WPA/WPA2 802.1x' => 'wpamixed'
   }
   ENC_TYPES_FSELECT = {
-      'none' => 'none',
-      'wep'  => 'WEP',
-      'psk'  => 'WPA psk',
-      'psk2' => 'WPA2 psk',
-      'wpa'  => 'WPA 802.1x',
-      'wpa2' => 'WPA2 802.1x'
+      'none'        => 'none',
+      'wep'         => 'WEP',
+      'psk'         => 'WPA psk',
+      'psk2'        => 'WPA2 psk',
+      'wpa'         => 'WPA 802.1x',
+      'wpa2'        => 'WPA2 802.1x',
+      'pskmixed' => 'WPA/WPA2 psk',
+      'wpamixed'    => 'WPA/WPA2 802.1x'
   }
-  ENC_TYPES_WKEY = %w(wep psk psk2 wpa wpa2)
-  ENC_TYPES_WRADIUS = %w(wpa wpa2)
+  ENC_TYPES_WKEY = %w(wep psk psk2 wpa wpa2 pskmixed wpamixed)
+  ENC_TYPES_WRADIUS = %w(wpa wpa2 wpamixed)
 
   VISIBILITIES = %w(hidden broadcasted)
   VISIBILITIES_SELECT = {
