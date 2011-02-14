@@ -24,6 +24,10 @@ module MarkableOnChange
 
 
   module InstanceMethods
+
+    # Look for :watch_for specified attributes. Find with reflect_on_all_associations
+    # if we need to look recursively inside other associations. Otherwise, we simply
+    # call _changed? method on a specified attribute.
     def changing?
       klass = self.class
 
@@ -48,21 +52,30 @@ module MarkableOnChange
       end
     end
 
+    # Gets the timestamp of last change
     def changed_at
       mark.changed_at unless mark.blank?
     end
 
+    # is the Model changed_from? some_date ???
+    # if it's blank, IT HAS CHANGED!
     def has_changed_from?(from_date)
       return true if changed_at.blank?
       changed_at.to_i > from_date.to_i
     end
 
+    # Write the timestamp (mark.changed_at).
+    # If force is true, the mark is written even if the model
+    # is not changing.
     def mark!(force = true)
       if changing? or force
         mark.blank? ? self.mark = Mark.new(:changed_at => Time.now) : self.mark.changed_at = Time.now
       end
     end
 
+    # Look for belongs_to associations specified by
+    # :notify_on_destroy and mark! them (so when destroy happens, the
+    # "father" attribute is marked as changed)
     def notify!
       klass = self.class
       belongs = klass.reflect_on_all_associations(:belongs_to).collect{|assoc| assoc.name}
@@ -75,6 +88,7 @@ module MarkableOnChange
       end
     end
 
+    # Just a placeholder... clear the timestamp mark
     def clear_changes!
       mark.clear!
     end
