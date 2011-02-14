@@ -83,6 +83,7 @@ it:
   Custom_script_template: "Template di Script Personalizzabili"
   Custom_script_templates: "Templates di Script Personalizzabili"
   Default_Channel: "Canale di default"
+  Default_network_parameters: "Parametro di rete di default"
   Deleted: "Cancellato"
   Destroy: "Elimina"
   Destroy_access_point: "Elimina access point"

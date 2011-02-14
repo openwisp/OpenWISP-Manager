@@ -83,6 +83,7 @@ en:
   Custom_script_template: "Custom script template"
   Custom_script_templates: "Custom script templates"
   Default_Channel: "Default channel"
+  Default_network_parameters: "Default network parameters"
   Deleted: "Deleted"
   Destroy: "Delete"
   Destroy_access_point: "Delete access point"
