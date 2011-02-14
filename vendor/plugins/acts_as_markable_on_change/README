@@ -1,0 +1,63 @@
+ActsAsMarkableOnChange
+======================
+
+ActsAsMarkableOnChange is a acts_as plugin that makes it easy to keep track of model changes
+on certain attributes. It's handy when you need to check if only certain attributes where
+changed over time.
+This plugin lets you define a "model change hierarchy" that makes it easy to know when
+a "dependant" model has its dependencies changed.
+This is very useful if you use some kind of templateing for your models.
+
+For example, you have a model PizzaTemplate called "Margherita". Every pizza that inherits
+from the "Margherita" model, has to change when the :ingredients attribute changes on
+"Margherita". It would be difficult to track changes by using :updated_at, since it changes
+whenever you .touch a record.
+With this plugin, instead, you get a model Mark with which you can keep track of when a
+specific model changes (just on certain attributes). The "Margherita"'s inherited models
+would then get methods such as .changing?, .has_changed?, ... that return true if and when
+the :ingredients attribute has changed on the root model "Margherita".
+
+To use the plugin you need to run:
+
+script/generate aamoc_migration
+
+to create the required Marks table.
+
+I hope sometime soon this plugin will evolve in a Rails 3 gem. For now
+it's sad :( legacy code.
+
+Example
+=======
+
+Both models having ingredients:string attribute:
+
+PizzaTemplate < ActiveRecord::Base
+    has_many :pizzas
+
+    acts_as_markable_on_change :watch_for => [ :name, :ingredients ]
+end
+
+Pizza < ActiveRecord::Base
+    belongs_to :pizza_template
+
+    acts_as_markable_on_change :watch_for => :name, :notify_on_destroy => :pizza_template
+end
+
+Whenever the attributes specified with :watch_for change, a timestamp is updated
+inside the Mark model (which is a polymorphic association). :watch_for can specify
+either real attributes or has_many, belongs_to and has_one associations. In case
+of an association, the plugin looks recursively inside other associations (which also
+need to define acts_as_markable_on_change at least for 1 attribute).
+:notify_on_destroy instead lets you mark as changed a belongs_to association whenever
+the model for which the notify was defined is destroyed.
+
+Once configured, you have the following methods:
+
+my_pizza.changed_at (the last change timestamp)
+my_pizza.has_changed_from?(1.day.ago) (looks if changed_at timestamp is older than 1.day.ago or nil)
+my_pizza.changing? (has associations that .has_changed_from? my_pizza.changed_at)
+my_pizza.mark! (mark my_pizza as changed)
+my_pizza.notify! (mark :pizza_template of my_pizza with .mark! method)
+
+
+Copyright (c) 2011 Matteo Latini (mtylty@gmail.com, m.latini@caspur.it), released under the MIT license

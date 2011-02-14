@@ -2,6 +2,10 @@ require "ipaddr"
 
 class BridgeTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
+
+  acts_as_markable_on_change :watch_for => [
+      :name, :ethernet_templates
+  ], :notify_on_destroy => :access_point_template
   
   ADDRESSING_MODES = %w( static dynamic none )
   

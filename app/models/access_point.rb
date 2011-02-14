@@ -7,6 +7,10 @@ class AccessPoint < ActiveRecord::Base
                    :lat_column_name => :lat,
                    :lng_column_name => :lon
 
+  acts_as_markable_on_change :watch_for => [
+      :name, :mac_address, :access_point_template
+  ]
+
   validates_presence_of :name, :mac_address, :address, :city, :zip
   validates_presence_of :lat, :lon, :message => :not_valid_f
 
@@ -287,10 +291,19 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def is_outdated?
-    if self.committed_at.nil?
+    if self.committed_at.blank?
       return false
     end
-    (self.access_point_template.updated_at > self.updated_at) or (self.updated_at > self.committed_at)
+
+    if self.changing?
+      return true
+    end
+
+    if self.changed_at > self.committed_at
+      return true
+    end
+
+    false
   end
 
 end

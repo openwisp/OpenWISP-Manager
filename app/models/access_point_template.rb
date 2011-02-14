@@ -1,6 +1,10 @@
 class AccessPointTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
-  
+
+  acts_as_markable_on_change :watch_for => [
+      :name, :radio_templates, :bridge_templates
+  ]
+
   validates_presence_of :name
   validates_format_of :name, :with => /\A[\w\d_\s\.\-]+\Z/i
   validates_length_of :name, :maximum => 32
@@ -35,8 +39,8 @@ class AccessPointTemplate < ActiveRecord::Base
 
   def vlan_templates
     # TODO: this should return an activerecord array
-    (self.ethernet_templates.map { | e | e.vlan_templates } + 
-      self.tap_templates.map { |t| t.vlan_templates }).flatten
+    (self.ethernet_templates.map { | e | e.vlan_templates } +
+        self.tap_templates.map { |t| t.vlan_templates }).flatten
   end
 
 end
