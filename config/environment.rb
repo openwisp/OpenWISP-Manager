@@ -23,7 +23,6 @@ Rails::Initializer.run do |config|
   config.gem "authlogic", :version => ">= 2.1.3"
   config.gem "acl9", :version => ">= 0.12.0"
   config.gem "libarchive", :lib => "libarchive_ruby", :version => ">= 0.1.2"
-  config.gem "memcache-client", :lib => "memcache", :version => ">= 1.7.7"
   config.gem "system_timer", :version => ">= 1.0"
   config.gem "chronic", :version => ">= 0.2.3"
   config.gem "packet", :version => ">= 0.1.15"
