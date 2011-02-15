@@ -28,6 +28,11 @@ class L2vpnServer < ActiveRecord::Base
 
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  acts_as_markable_on_change :watch_for => [
+      :name, :port, :cipher, :protocol,
+      :bindall, :mtu, :mtu_disc, :ip
+  ]
+
   validates_presence_of :name, :port, :cipher, :protocol
   # Avoids 2 servers on the same port
   validates_uniqueness_of :port, :scope => [ :protocol, :server_id ]

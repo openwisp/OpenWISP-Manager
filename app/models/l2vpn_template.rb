@@ -1,6 +1,8 @@
 class L2vpnTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  acts_as_markable_on_change :watch_for => :l2vpn_server, :notify_on_destroy => :access_point_template
+
   validates_uniqueness_of :l2vpn_server_id, :scope => :access_point_template_id
   validates_presence_of :l2vpn_server_id
 

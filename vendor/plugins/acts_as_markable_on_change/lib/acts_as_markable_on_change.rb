@@ -11,11 +11,11 @@ module MarkableOnChange
       const_set('CRITICAL_ATTRIBUTES_ON_SAVE', [params[:watch_for]].flatten)
       const_set('CRITICAL_ATTRIBUTES_ON_DESTROY', [params[:notify_on_destroy]].flatten)
 
-      before_save do |instance|
+      after_save do |instance|
         instance.mark!
       end
 
-      before_destroy do |instance|
+      after_destroy do |instance|
         instance.notify!
       end
     end
@@ -28,8 +28,9 @@ module MarkableOnChange
     # Look for :watch_for specified attributes. Find with reflect_on_all_associations
     # if we need to look recursively inside other associations. Otherwise, we simply
     # call _changed? method on a specified attribute.
-    def changing?
+    def changing?(from_date = nil)
       klass = self.class
+      from_date ||= self.changed_at
 
       many = klass.reflect_on_all_associations(:has_many).collect{|assoc| assoc.name}
       one = [
@@ -40,9 +41,9 @@ module MarkableOnChange
       begin
         klass.const_get('CRITICAL_ATTRIBUTES_ON_SAVE').any? do |attr|
           if many.include?(attr.to_sym)
-            send("#{attr}").any?{|instance| instance.has_changed_from? self.changed_at }
+            send("#{attr}").any?{|instance| instance.has_changed_from?(from_date) or instance.changing? }
           elsif one.include?(attr.to_sym)
-            send("#{attr}").has_changed_from? self.changed_at
+            send("#{attr}").has_changed_from?(from_date) or send("#{attr}").changing?
           else
             send("#{attr}_changed?")
           end
@@ -67,9 +68,10 @@ module MarkableOnChange
     # Write the timestamp (mark.changed_at).
     # If force is true, the mark is written even if the model
     # is not changing.
-    def mark!(force = true)
-      if changing? or force
+    def mark!(force = false)
+      if force or changing?
         mark.blank? ? self.mark = Mark.new(:changed_at => Time.now) : self.mark.changed_at = Time.now
+        self.mark.save
       end
     end
 
@@ -80,11 +82,13 @@ module MarkableOnChange
       klass = self.class
       belongs = klass.reflect_on_all_associations(:belongs_to).collect{|assoc| assoc.name}
 
-      to_notify = klass.const_get('CRITICAL_ATTRIBUTES_ON_DESTROY')
-      if to_notify and belongs.include?(to_notify)
+      begin
+        to_notify = klass.const_get('CRITICAL_ATTRIBUTES_ON_DESTROY')
         to_notify.each do |attr|
-          send("#{attr}").mark!(true)
+          send("#{attr}").mark!(true) if belongs.include?(attr.to_sym)
         end
+      rescue
+        raise "acts_as_markable_on_change not defined for #{klass} or for its :notify_on_destroy attributes"
       end
     end
 
@@ -92,6 +96,8 @@ module MarkableOnChange
     def clear_changes!
       mark.clear!
     end
+
+    # TODO: write a method to mark all :watch_for associations with callee mark timestamp
   end
 
   ActiveRecord::Base.send :include, MarkableOnChange

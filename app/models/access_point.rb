@@ -8,7 +8,8 @@ class AccessPoint < ActiveRecord::Base
                    :lng_column_name => :lon
 
   acts_as_markable_on_change :watch_for => [
-      :name, :mac_address, :access_point_template
+      :name, :mac_address, :access_point_template,
+      :custom_scripts
   ]
 
   validates_presence_of :name, :mac_address, :address, :city, :zip
@@ -299,7 +300,7 @@ class AccessPoint < ActiveRecord::Base
       return true
     end
 
-    if self.changed_at > self.committed_at
+    if has_changed_from?(self.committed_at)
       return true
     end
 

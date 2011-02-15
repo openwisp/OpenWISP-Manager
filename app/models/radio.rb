@@ -1,6 +1,8 @@
 class Radio < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  acts_as_markable_on_change :watch_for => :channel
+
   DEFAULT_CHANNEL = 6
   DEFAULT_MODE = "11bg"
   MODES = %w( 11bg 11g 11b 11a 11n )

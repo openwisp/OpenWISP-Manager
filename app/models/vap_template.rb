@@ -1,6 +1,12 @@
 class VapTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  acts_as_markable_on_change :watch_for => [
+      :essid, :visibility, :key, :encryption,
+      :radius_auth_server, :radius_auth_server_port,
+      :radius_acct_server, :radius_acct_server_port
+  ], :notify_on_destroy => :radio_template
+
   NAME_PREFIX = "vap"
 
   ENC_TYPES = %w(none wep psk psk2 wpa wpa2 pskmixed wpamixed)

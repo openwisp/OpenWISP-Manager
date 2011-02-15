@@ -1,5 +1,10 @@
 class CustomScript < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
+
+  acts_as_markable_on_change :watch_for => [
+      :name, :body, :cron_minute, :cron_hour,
+      :cron_day, :cron_month, :cron_dayweek
+  ], :notify_on_destroy => :access_point
   
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :access_point_id
