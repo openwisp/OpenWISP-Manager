@@ -43,6 +43,7 @@ it:
   Are_you_sure_custom_script_template_destroy: "Sei sicuro di voler eliminare il template di script?"
   Are_you_sure_ethernet_destroy: "Sei sicuro di voler eliminare la interfaccia ethernet?"
   Are_you_sure_ethernet_template_destroy: "Sei sicuro di voler eliminare il template di interfaccia ethernet?"
+  Are_you_sure_l2tc_clear: "Sei sicuro di voler azzerare i valori del traffic shaping?"
   Are_you_sure_l2tc_template_clear: "Sei sicuro di voler azzerare i valori del traffic shaping?"
   Are_you_sure_l2vpn_server_destroy: "Sei sicuro di voler eliminare il server vpn layer 2? (ATTENZIONE: la vpn sarà rimossa dalla configurazione di tutti gli access point e da tutti i template di access point!)"
   Are_you_sure_l2vpn_template_destroy: "Sei sicuro di voler eliminare il template di vpn layer 2?"
@@ -455,6 +456,8 @@ it:
         even: "deve essere pari"
         not_valid_f: "non valida"
         not_valid_m: "non valido"
+        needed_for_static_addressent: "necessario per indirizzamento statico"
+        cannot_update_addressing_on_linked_template: "Non puo' essere aggiornato l'indirizzamento per un template in uso"
 
     # Translate model names. Used in Model.human_name().
     models:

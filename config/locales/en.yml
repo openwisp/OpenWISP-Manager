@@ -43,6 +43,7 @@ en:
   Are_you_sure_custom_script_template_destroy: "Are you sure you want to delete this script template?"
   Are_you_sure_ethernet_destroy: "Are you sure you want to delete this ethernet interface?"
   Are_you_sure_ethernet_template_destroy: "Are you sure you want to delete this ethernet interface template?"
+  Are_you_sure_l2tc_clear: "Are you sure you want to clear traffic shaping rules?"
   Are_you_sure_l2tc_template_clear: "Are you sure you want to clear traffic shaping rules?"
   Are_you_sure_l2vpn_server_destroy: "Are you sure you want to delete this layer 2 vpn server? (WARNING: the vpn will be delete from every access point and every access point template!)"
   Are_you_sure_l2vpn_template_destroy: "Are you sure you want to delete the layer 2 vpn template?"
@@ -352,6 +353,10 @@ en:
       vlan_templates: "vlan interface templates"
       l2vpn_template: "Layer 2 VPN template"
       l2vpn_templates: "Layer 2 VPN templates"
+    errors:
+      messages:
+        needed_for_static_addressent: "needed for static addressing"
+        cannot_update_addressing_on_linked_template: "Cannot update addressing for a template in use"
 
     # Translate model attribute names. Used in Model.human_attribute_name(attribute).
     attributes:
