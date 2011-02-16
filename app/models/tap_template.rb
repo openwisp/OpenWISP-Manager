@@ -1,6 +1,12 @@
 class TapTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  acts_as_markable_on_change :watch_for => [
+      :output_band,
+      :vlan_templates, :l2vpn_template,
+      :bridge_template_id
+  ], :notify_on_destroy => :l2vpn_template
+
   belongs_to :bridge_template
   belongs_to :l2vpn_template, :touch => true
 

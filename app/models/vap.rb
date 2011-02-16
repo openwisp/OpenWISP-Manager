@@ -1,6 +1,8 @@
 class Vap < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  acts_as_markable_on_change :watch_for => :output_band_percent
+  
   NAME_PREFIX = "vap"
 
   ENC_TYPES = %w(none wep psk psk2 wpa wpa2 pskmixed wpamixed)

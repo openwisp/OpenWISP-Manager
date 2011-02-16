@@ -2,7 +2,7 @@ class RadioTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   acts_as_markable_on_change :watch_for => [
-      :name, :mode, :channel
+      :name, :mode, :channel, :output_band
   ], :notify_on_destroy => :access_point_template
 
   NAME_PREFIX = 'wifi'

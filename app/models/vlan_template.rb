@@ -1,6 +1,10 @@
 class VlanTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  acts_as_markable_on_change :watch_for => [
+      :tag, :output_band_percent, :bridge_template_id
+  ], :notify_on_destroy => :interface_template
+
   validates_uniqueness_of :tag, :scope => [ :interface_template_id, :interface_template_type ]
   validates_numericality_of :tag,
                             :greater_than_or_equal_to => 1,

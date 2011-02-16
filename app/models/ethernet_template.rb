@@ -1,7 +1,10 @@
 class EthernetTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => :name, :notify_on_destroy => :access_point_template
+  acts_as_markable_on_change :watch_for => [
+      :name, :output_band,
+      :vlan_templates, :bridge_template_id
+  ], :notify_on_destroy => :access_point_template
 
   NAME_PREFIX = "eth"
 

@@ -58,6 +58,7 @@ my_pizza.has_changed_from?(1.day.ago) (looks if changed_at timestamp is older th
 my_pizza.changing? (has associations that .has_changed_from? my_pizza.changed_at)
 my_pizza.mark! (mark my_pizza as changed)
 my_pizza.notify! (mark :pizza_template of my_pizza with .mark! method)
+Mark.clear! (delete_all marks and make sure changes are saved, applied and committed)
 
 
 Copyright (c) 2011 Matteo Latini (mtylty@gmail.com, m.latini@caspur.it), released under the MIT license

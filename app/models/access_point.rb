@@ -9,8 +9,9 @@ class AccessPoint < ActiveRecord::Base
 
   acts_as_markable_on_change :watch_for => [
       :name, :mac_address, :access_point_template,
-      :custom_scripts
-  ]
+      :custom_scripts, :radios,
+      :ethernets, :taps
+  ], :clear_marks_on => :generate_configuration
 
   validates_presence_of :name, :mac_address, :address, :city, :zip
   validates_presence_of :lat, :lon, :message => :not_valid_f
@@ -50,6 +51,7 @@ class AccessPoint < ActiveRecord::Base
   belongs_to :access_point_template
   belongs_to :template, :class_name => 'AccessPointTemplate', :foreign_key => :access_point_template_id
 
+  alias :is_outdated? :changing?
 
   def generate_configuration
 
@@ -290,21 +292,4 @@ class AccessPoint < ActiveRecord::Base
     # TODO: this should return an activerecord array
     (self.ethernets.map { | e | e.vlans } + self.taps.map { |t| t.vlans }).flatten
   end
-
-  def is_outdated?
-    if self.committed_at.blank?
-      return false
-    end
-
-    if self.changing?
-      return true
-    end
-
-    if has_changed_from?(self.committed_at)
-      return true
-    end
-
-    false
-  end
-
 end

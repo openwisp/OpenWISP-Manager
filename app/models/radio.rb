@@ -1,7 +1,9 @@
 class Radio < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => :channel
+  acts_as_markable_on_change :watch_for => [
+      :channel, :output_band, :vaps
+  ]
 
   DEFAULT_CHANNEL = 6
   DEFAULT_MODE = "11bg"

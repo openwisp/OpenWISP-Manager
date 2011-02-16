@@ -20,7 +20,7 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
         end
         ap.generate_configuration
         ap.generate_configuration_md5
-        ap.touch(:committed_at)
+        Mark.clear!
       end
     end
 

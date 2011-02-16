@@ -8,9 +8,7 @@ class Mark < ActiveRecord::Base
 
   belongs_to :markable, :polymorphic => true
 
-  # Clear changed_at value
-  def clear!
-    self.changed_at = nil
-    self.save
+  class << self
+    alias :clear! :delete_all
   end
 end

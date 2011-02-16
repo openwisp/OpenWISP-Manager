@@ -4,7 +4,8 @@ class BridgeTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   acts_as_markable_on_change :watch_for => [
-      :name, :ethernet_templates
+      :name, :ip_range_begin, :ip_range_end,
+      :netmask, :gateway, :dns, :addressing_mode
   ], :notify_on_destroy => :access_point_template
   
   ADDRESSING_MODES = %w( static dynamic none )

@@ -1,6 +1,10 @@
 class Tap < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  acts_as_markable_on_change :watch_for => [
+      :output_band, :vlans
+  ]
+
   belongs_to :l2vpn, :polymorphic => true, :touch => true
   
   belongs_to :bridge

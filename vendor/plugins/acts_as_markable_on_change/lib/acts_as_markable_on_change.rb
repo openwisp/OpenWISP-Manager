@@ -8,15 +8,15 @@ module MarkableOnChange
     def acts_as_markable_on_change(params = nil)
       has_one :mark, :as => :markable
 
-      const_set('CRITICAL_ATTRIBUTES_ON_SAVE', [params[:watch_for]].flatten)
-      const_set('CRITICAL_ATTRIBUTES_ON_DESTROY', [params[:notify_on_destroy]].flatten)
+      const_set('CRITICAL_ATTRIBUTES_ON_SAVE', [params[:watch_for]].flatten) if params[:watch_for]
+      const_set('CRITICAL_ATTRIBUTES_ON_DESTROY', [params[:notify_on_destroy]].flatten) if params[:notify_on_destroy]
 
       after_save do |instance|
-        instance.mark!
+        instance.mark! if const_defined?('CRITICAL_ATTRIBUTES_ON_SAVE')
       end
 
       after_destroy do |instance|
-        instance.notify!
+        instance.notify! if const_defined?('CRITICAL_ATTRIBUTES_ON_DESTROY')
       end
     end
   end
@@ -55,14 +55,22 @@ module MarkableOnChange
 
     # Gets the timestamp of last change
     def changed_at
-      mark.changed_at unless mark.blank?
+      mark.changed_at if respond_to?(:mark) && !mark.blank?
     end
 
     # is the Model changed_from? some_date ???
-    # if it's blank, IT HAS CHANGED!
+    # if callee and from_date are blank, it means changes are not being tracked
+    # or have been cleared (so it has not changed).
+    # if callee is nil, but from_date is blank, it means the callee has changes
+    # that need to be applied
     def has_changed_from?(from_date)
-      return true if changed_at.blank?
-      changed_at.to_i > from_date.to_i
+      if changed_at.blank? && from_date.blank?
+        false
+      elsif changed_at.blank?
+        true
+      else
+        changed_at.to_i > from_date.to_i
+      end
     end
 
     # Write the timestamp (mark.changed_at).
@@ -91,13 +99,6 @@ module MarkableOnChange
         raise "acts_as_markable_on_change not defined for #{klass} or for its :notify_on_destroy attributes"
       end
     end
-
-    # Just a placeholder... clear the timestamp mark
-    def clear_changes!
-      mark.clear!
-    end
-
-    # TODO: write a method to mark all :watch_for associations with callee mark timestamp
   end
 
   ActiveRecord::Base.send :include, MarkableOnChange

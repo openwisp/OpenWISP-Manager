@@ -1,6 +1,8 @@
 class L2tcTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
-  
+
+  acts_as_markable_on_change :watch_for => :shapeable_template, :notify_on_destroy => :access_point_template
+
   belongs_to :shapeable_template, :polymorphic => true
   belongs_to :access_point_template, :touch => true
   

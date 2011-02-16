@@ -2,10 +2,10 @@ class AccessPointTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   acts_as_markable_on_change :watch_for => [
-      :name, :radio_templates, :bridge_templates,
+      :radio_templates, :bridge_templates,
       :vap_templates, :ethernet_templates,
-      :l2vpn_templates, :bridge_templates,
-      :custom_script_templates
+      :l2vpn_templates, :l2tc_templates,
+      :tap_templates, :custom_script_templates
   ]
 
   validates_presence_of :name

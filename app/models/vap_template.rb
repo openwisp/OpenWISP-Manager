@@ -4,7 +4,8 @@ class VapTemplate < ActiveRecord::Base
   acts_as_markable_on_change :watch_for => [
       :essid, :visibility, :key, :encryption,
       :radius_auth_server, :radius_auth_server_port,
-      :radius_acct_server, :radius_acct_server_port
+      :radius_acct_server, :radius_acct_server_port,
+      :output_band_percent, :bridge_template_id
   ], :notify_on_destroy => :radio_template
 
   NAME_PREFIX = "vap"
@@ -27,7 +28,7 @@ class VapTemplate < ActiveRecord::Base
       'psk2'        => 'WPA2 psk',
       'wpa'         => 'WPA 802.1x',
       'wpa2'        => 'WPA2 802.1x',
-      'pskmixed' => 'WPA/WPA2 psk',
+      'pskmixed'    => 'WPA/WPA2 psk',
       'wpamixed'    => 'WPA/WPA2 802.1x'
   }
   ENC_TYPES_WKEY = %w(wep psk psk2 wpa wpa2 pskmixed wpamixed)

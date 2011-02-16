@@ -1,6 +1,10 @@
 class Ethernet < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  acts_as_markable_on_change :watch_for => [
+      :output_band, :vlans
+  ]
+
   validates_presence_of :name,
     :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
   validates_uniqueness_of :name, :scope => [ :machine_id, :machine_type ],
