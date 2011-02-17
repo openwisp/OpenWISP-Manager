@@ -41,9 +41,9 @@ module MarkableOnChange
       begin
         klass.const_get('CRITICAL_ATTRIBUTES_ON_SAVE').any? do |attr|
           if many.include?(attr.to_sym)
-            send("#{attr}").any?{|instance| instance.has_changed_from?(from_date) or instance.changing? }
+            send("#{attr}").any?{|instance| (instance.has_changed_from?(from_date) or instance.changing?) if instance }
           elsif one.include?(attr.to_sym)
-            send("#{attr}").has_changed_from?(from_date) or send("#{attr}").changing?
+            (send("#{attr}").has_changed_from?(from_date) or send("#{attr}").changing?) if try(attr)
           else
             send("#{attr}_changed?")
           end
