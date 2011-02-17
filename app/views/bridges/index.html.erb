@@ -4,17 +4,16 @@
   <table id="bridges-table">
     <thead>
     <tr>
-      <th scope="col" class="head-left"><%= t(:Operations) %></th>
-      <th scope="col" class="head"><%= t(:Name) %></th>
+      <th scope="col" class="head-left"><%= t(:Name) %></th>
       <th scope="col" class="head"><%= t(:Bridgeables) %></th>
-      <th scope="col" class="head"><%= t(:Addressing_mode) %></th>
+      <th scope="col" class="head"><%= t(:Addressing) %></th>
       <th scope="col" class="head-right"><%= t(:Notes) %></th>
     </tr>
     </thead>
     <tfoot>
     <tr>
       <td colspan="1" class="foot-left">&nbsp;</td>
-      <td colspan="3" class="foot">&nbsp;</td>
+      <td colspan="2" class="foot">&nbsp;</td>
       <td colspan="1" class="foot-right">&nbsp;</td>
     </tr>
     </tfoot>
@@ -22,18 +21,7 @@
     <% @bridges.each do |bridge| %>
         <tr>
           <% if bridge.bridgeables.length == 0 %>
-              <td style="width:32px;">
-                <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
-                    <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
-                                       :method => :get,
-                                       :url => edit_wisp_access_point_bridge_path(@wisp, @access_point, bridge),
-                                       :title => t(:Edit_info),
-                                       :update => { :success => "list_bridges_div", :failure => "list_bridges_div" }
-
-                    %>
-                <% end %>
-              </td>
-              <td><%=h bridge.name %></td>
+              <td style="width:62px;"><%=h bridge.name %></td>
               <td>&nbsp;</td>
               <td><%=h t(bridge.addressing_mode) %></td>
               <td>
@@ -46,22 +34,21 @@
                 <% end %>
               </td>
           <% else %>
-              <td rowspan="<%= bridge.bridgeables.length %>" style="width:32px;">
-                <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
-                    <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
-                                       :method => :get,
-                                       :url => edit_wisp_access_point_bridge_path(@wisp, @access_point, bridge),
-                                       :title => t(:Edit_info),
-                                       :update => { :success => "list_bridges_div", :failure => "list_bridges_div" }
-
-                    %>
-                <% end %>
-              </td>
-              <td rowspan="<%= bridge.bridgeables.length %>"><%=h bridge.name %></td>
+              <td rowspan="<%= bridge.bridgeables.length %>" style="width:62px;"><%=h bridge.name %></td>
               <td>
                 <%=h bridge.bridgeables[0].friendly_name %>
               </td>
-              <td rowspan="<%= bridge.bridgeables.length %>"><%=h t(bridge.addressing_mode) %></td>
+              <td rowspan="<%= bridge.bridgeables.length %>">
+                <ul style="list-style-type:none;margin-left:-29px">
+                  <li><b><%=h t(bridge.addressing_mode).capitalize %></b></li>
+                  <% if bridge.addressing_mode == 'static' or bridge.addressing_mode == 'dynamic' %>
+                      <li><b><%=t :Ip_address %>:</b> <%=h bridge.ip %></li>
+                      <li><b><%=t :Netmask %>:</b> <%=h bridge.netmask %></li>
+                      <li><b><%=t :Gateway %>:</b> <%=h bridge.gateway %></li>
+                      <li><b><%=t :Dns %>:</b> <%=h bridge.dns %></li>
+                  <% end %>
+                </ul>
+              </td>
               <td rowspan="<%= bridge.bridgeables.length %>">
                 <% if (bridge.notes.nil? or bridge.notes.length == 0) %>
                     &nbsp;

@@ -74,6 +74,10 @@
           <td><strong><%=t :City %></strong></td>
           <td><%=h @access_point.city %></td>
         </tr>
+        <tr>
+          <td><strong><%=t :Last_configuration_retrieve_ip %></strong></td>
+          <td><%=h (@access_point.last_configuration_retrieve_ip ? @access_point.last_configuration_retrieve_ip : '-') %></td>
+        </tr>
         <% if @access_point.notes.length > 0 %>
             <tr>
               <td colspan="2">&nbsp;</td>

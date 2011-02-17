@@ -30,6 +30,7 @@ en:
   Add_access_point_template: "Add access point template"
   Add_l2vpn_template: "Add layer 2 vpn template"
   Address: "Address"
+  Addressing: "Addressing"
   Addressing_mode: "Addressing mode"
   Adjust_position: "Adjust position"
   All: "All"
