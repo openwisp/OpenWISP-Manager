@@ -10,6 +10,22 @@ module MarkableOnChange
 
       const_set('CRITICAL_ATTRIBUTES_ON_SAVE', [params[:watch_for]].flatten) if params[:watch_for]
       const_set('CRITICAL_ATTRIBUTES_ON_DESTROY', [params[:notify_on_destroy]].flatten) if params[:notify_on_destroy]
+      const_set('CLEAR_MARKS_ON_METHOD', params[:clear_marks_on]) if params[:clear_marks_on]
+
+      # By passing a method name via :clear_marks_on, it will be defined an hook that,
+      # whenever that method is called, also the Mark model will be emptied (basically
+      # resetting changes).
+      # This way can be used to "commit" changes definitively.
+      def method_added(method)
+        if !method_defined?(:clear_marks_trigger) && const_defined?('CLEAR_MARKS_ON_METHOD') && (const_get('CLEAR_MARKS_ON_METHOD') == method)
+          alias_method :clear_marks_trigger, const_get('CLEAR_MARKS_ON_METHOD')
+
+          define_method(const_get('CLEAR_MARKS_ON_METHOD')) do
+            clear_marks_trigger
+            Mark.clear!
+          end
+        end
+      end
 
       after_save do |instance|
         instance.mark! if const_defined?('CRITICAL_ATTRIBUTES_ON_SAVE')
@@ -24,7 +40,6 @@ module MarkableOnChange
 
 
   module InstanceMethods
-
     # Look for :watch_for specified attributes. Find with reflect_on_all_associations
     # if we need to look recursively inside other associations. Otherwise, we simply
     # call _changed? method on a specified attribute.

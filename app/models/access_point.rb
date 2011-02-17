@@ -11,7 +11,7 @@ class AccessPoint < ActiveRecord::Base
       :name, :mac_address, :access_point_template,
       :custom_scripts, :radios,
       :ethernets, :taps
-  ], :clear_marks_on => :generate_configuration
+  ], :clear_marks_on => :generate_configuration_md5
 
   validates_presence_of :name, :mac_address, :address, :city, :zip
   validates_presence_of :lat, :lon, :message => :not_valid_f

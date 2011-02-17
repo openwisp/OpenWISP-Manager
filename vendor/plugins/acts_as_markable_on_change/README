@@ -40,7 +40,13 @@ end
 Pizza < ActiveRecord::Base
     belongs_to :pizza_template
 
-    acts_as_markable_on_change :watch_for => :name, :notify_on_destroy => :pizza_template
+    acts_as_markable_on_change :watch_for => :name,
+        :notify_on_destroy => :pizza_template,
+        :clear_marks_on => :bake
+
+    def bake
+        #....
+    end
 end
 
 Whenever the attributes specified with :watch_for change, a timestamp is updated
@@ -50,6 +56,9 @@ of an association, the plugin looks recursively inside other associations (which
 need to define acts_as_markable_on_change at least for 1 attribute).
 :notify_on_destroy instead lets you mark as changed a belongs_to association whenever
 the model for which the notify was defined is destroyed.
+You can use :clear_marks_on to specify a method that, when called, also calls .delete_all
+(or .clear!) on the Mark model. By doing so, you "forget all changes" and consider
+the model on which the method is being called as committed (without any pending changes).
 
 Once configured, you have the following methods:
 
