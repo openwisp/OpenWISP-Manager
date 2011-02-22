@@ -23,7 +23,7 @@ class Vap < ActiveRecord::Base
       'psk2'        => 'WPA2 psk',
       'wpa'         => 'WPA 802.1x',
       'wpa2'        => 'WPA2 802.1x',
-      'pskmixed' => 'WPA/WPA2 psk',
+      'pskmixed'    => 'WPA/WPA2 psk',
       'wpamixed'    => 'WPA/WPA2 802.1x'
   }
   ENC_TYPES_WKEY = %w(wep psk psk2 wpa wpa2 pskmixed wpamixed)

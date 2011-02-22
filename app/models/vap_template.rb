@@ -45,7 +45,7 @@ class VapTemplate < ActiveRecord::Base
   }
 
   validates_presence_of :essid
-  validates_format_of :essid, :with => /\A[\s\w\d\._]+\Z/i
+  validates_format_of :essid, :with => /\A[\s\w\d\._\-]+\Z/i
   validates_length_of :essid, :maximum=>32
 
   validates_inclusion_of :visibility, :in => VapTemplate::VISIBILITIES
