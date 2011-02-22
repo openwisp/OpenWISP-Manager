@@ -118,5 +118,5 @@
 <%=
     observe_fields ['#access_point_city', '#access_point_address', '#access_point_zip'],
                    :frequency => 1,
-                   :function => "gmaps.geocode({city:'#access_point_city', address:'#access_point_address', zip:'#access_point_zip'})"
+                   :function => "gmaps.geocode({city:'#access_point_city', street:'#access_point_address', zip:'#access_point_zip'})"
 %>

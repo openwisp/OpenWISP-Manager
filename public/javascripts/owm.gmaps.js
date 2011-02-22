@@ -48,6 +48,7 @@ var gmaps = {
                     drag_event: ['dragend', function(marker){
                         $('#access_point_lat').val(marker.getPosition().lat());
                         $('#access_point_lon').val(marker.getPosition().lng());
+                        gmaps.find_and_update_zip('#access_point_zip');
                     }]
                 };
             },
@@ -111,7 +112,7 @@ var gmaps = {
     },
 
     geocode: function(_location) {
-        var _geocode_address = $(_location.address).val()+","+$(_location.zip).val()+","+$(_location.city).val();
+        var _geocode_address = $(_location.street).val()+","+$(_location.zip).val()+","+$(_location.city).val();
 
         if (!gmaps._geocoder) {
             gmaps._geocoder = new google.maps.Geocoder();
@@ -125,6 +126,26 @@ var gmaps = {
                 gmaps._main_marker.setPosition(_location);
 
                 gmaps._map.fitBounds(results[0].geometry.bounds);
+            } else {
+                console.log("Geocoding failed: " + status);
+            }
+        });
+    },
+
+    find_and_update_zip: function(_zip_selector) {
+        if (!gmaps._geocoder) {
+            gmaps._geocoder = new google.maps.Geocoder();
+        }
+
+        gmaps._geocoder.geocode({latLng: gmaps._main_marker.getPosition()}, function(results, status){
+
+            if (status == google.maps.GeocoderStatus.OK) {
+                $.each(results[0].address_components, function() {
+                    if (this.types[0] == "postal_code") {
+                        $(_zip_selector).val(this.short_name);
+                        return false;
+                    }
+                });
             } else {
                 console.log("Geocoding failed: " + status);
             }
