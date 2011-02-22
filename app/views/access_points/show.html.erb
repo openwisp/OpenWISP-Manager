@@ -1,3 +1,7 @@
+<% content_for :after_defaults do %>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <%= javascript_include_tag 'owm.gmaps' %>
+<% end  %>
 <div class="grid_16">
   <div class="box">
     <h4><a><%= t(:Access_point) %> - <%= @access_point.name %> - <%=h @wisp.name %></a></h4>
@@ -33,7 +37,10 @@
     </ul>
 
     <div class="block" id="access_point_map_block">
-      <%= @map ? @map.div(:width => '100%', :height => 240) : '' %>
+      <span class="lat"><%= @access_point.lat %></span>
+      <span class="lon"><%= @access_point.lon %></span>
+
+      <div id="access_point_map"></div>
     </div>
 
     <div class="block" id="access_point_info_block">

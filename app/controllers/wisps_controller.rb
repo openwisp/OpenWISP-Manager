@@ -38,44 +38,7 @@ class WispsController < ApplicationController
   def show
     @access_points = @wisp.access_points.find(:all)
 
-    @map_variable = "map_new"
-    @marker_suffix_variable = "marker_suffix_"
-    @div_variable = "div_new"
-
-    if @access_points.length > 0
-      llz = get_center(@wisp.access_points)
-      @latlon = llz[0,2]
-    else
-      @wisp_address_locality =  Ca.find_by_wisp_id(@wisp.id).l + " " + Ca.find_by_wisp_id(@wisp.id).st
-      @latlon = get_wisp_geocode(@wisp_address_locality)
-
-      @zoom = 10
-    end
-
-    @map = GMap.new(@div_variable, @map_variable)
-    @map.control_init(:small_map => true, :map_type => true)
-    @map.set_map_type_init(GMapType::G_HYBRID_MAP)
-    @map.center_zoom_init(@latlon, @zoom)
-
-    if @access_points.length > 0
-
-      sorted_latitudes = @access_points.collect(&:lat).compact.sort
-      sorted_longitudes = @access_points.collect(&:lon).compact.sort
-
-      @map.center_zoom_on_bounds_init([
-                                          [sorted_latitudes.first, sorted_longitudes.first],
-                                          [sorted_latitudes.last, sorted_longitudes.last]])
-
-      @access_points.each do |ap|
-        info = render_to_string(:partial => "access_points/info_window", :layout => false, :locals => { :access_point => ap })
-        marker = GMarker.new([ap.lat, ap.lon], :title => ap.name, :draggable => false, :info_window => info)
-        @map.overlay_global_init(marker, @marker_suffix_variable + "#{ap.name.gsub(/\-/,'_')}")
-      end
-    else
-      info = render_to_string(:partial => "info_window", :layout => false)
-      marker = GMarker.new(@latlon, :title => @wisp.name, :draggable => false, :info_window => info)
-      @map.overlay_global_init(marker, "wispAddressInfo")
-    end
+    @latlon = @access_points.length > 0 ? get_center_zoom(@wisp.access_points) : @wisp.geocode
 
     respond_to do |format|
       format.html # show.html.erb

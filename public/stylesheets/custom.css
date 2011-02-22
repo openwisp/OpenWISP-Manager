@@ -109,3 +109,21 @@ h1#branding {
     padding-top:5px;
 }
 
+#wisp_map {
+    width:100%;
+    height:300px;
+}
+
+#access_point_map {
+    width:100%;
+    height:240px;
+}
+
+#access_point_new_map, #access_point_edit_map {
+    width:100%;
+    height:320px;
+}
+
+.lat, .lon {
+    display:none;
+}

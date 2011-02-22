@@ -1,0 +1,16 @@
+[<%=
+    json_access_points = []
+    @wisp.access_points.each do |ap|
+        if params[:except].blank? or params[:except].to_i != ap.id
+            json_access_points << { :access_point => {
+                :id => ap.id,
+                :name => ap.name,
+                :lat => ap.lat,
+                :lon => ap.lon,
+                :info_window => render(:partial => 'info_window.html', :locals => { :access_point => ap })
+            }}.to_json
+        end
+    end
+    json_access_points.join(',')
+%>]
+

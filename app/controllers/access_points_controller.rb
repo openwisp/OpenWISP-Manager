@@ -6,7 +6,6 @@ class AccessPointsController < ApplicationController
                 :except => [
                     :index,
                     :new, :create,
-                    :ajax_update_gmap,
                     :get_configuration, :get_configuration_md5,
                     :outdated, :update_outdated
                 ]
@@ -19,12 +18,12 @@ class AccessPointsController < ApplicationController
       allow :access_points_viewer, :of => :wisp
     end
 
-    actions :new, :create, :ajax_update_gmap do
+    actions :new, :create do
       allow :wisps_creator
       allow :access_points_creator, :of => :wisp
     end
 
-    actions :edit, :update, :update_outdated, :ajax_update_gmap do
+    actions :edit, :update, :update_outdated do
       allow :wisps_manager
       allow :access_points_manager, :of => :wisp
     end
@@ -88,24 +87,12 @@ class AccessPointsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
+      format.json
     end
   end
 
   # GET /wisps/:wisp_id/access_points/1
   def show
-    @map_variable = "map_new"
-    @marker_variable = "marker_new"
-    @div_variable = "div_new"
-    @latlon =  [@access_point.lat, @access_point.lon]
-    @zoom = 16
-
-    @map = GMap.new(@div_variable, @map_variable)
-    @map.control_init(:small_map => true, :map_type => true)
-    @map.set_map_type_init(GMapType::G_NORMAL_MAP)
-    @map.center_zoom_init(@latlon, @zoom)
-    @marker = GMarker.new(@latlon, :title => @access_point.name)
-    @map.overlay_global_init(@marker, @marker_variable)
-
     respond_to do |format|
       format.html # show.html.erb
     end
@@ -113,27 +100,14 @@ class AccessPointsController < ApplicationController
 
   # GET /wisps/:wisp_id/access_points/new
   def new
-    @access_point = AccessPoint.new()
+    @access_point = AccessPoint.new
 
     @access_point_groups = @wisp.access_point_groups
     @selected_access_point_groups = []
     @access_point_templates = @wisp.access_point_templates
     @selected_access_point_template = nil
 
-    @map_variable = "map_new"
-    @marker_variable = "marker_new"
-    @div_variable = "div_new"
-    llz = get_center_zoom(@wisp.access_points)
-    @latlon = llz[0,2]
-    @zoom = llz[2]
-
-    @map = GMap.new(@div_variable, @map_variable)
-    @map.control_init(:small_map => true,:map_type => true)
-    @map.set_map_type_init(GMapType::G_NORMAL_MAP)
-    @map.center_zoom_init(@latlon, @zoom)
-    @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true, :icon => draggable_marker_icon )
-    @map.overlay_global_init(@marker,@marker_variable)
-    @map.record_init @marker.on_dragend("gmap_update_position")
+    @latlon = @wisp.geocode
 
     respond_to do |format|
       format.html # new.html.erb
@@ -146,28 +120,6 @@ class AccessPointsController < ApplicationController
     @selected_access_point_groups = @access_point.access_point_groups.map { |g| g.id.to_s }
     @access_point_templates = @wisp.access_point_templates
     @selected_access_point_template = !@access_point.access_point_template.nil? ? @access_point.access_point_template.id.to_s : nil
-
-    @map_variable = "map_new"
-    @marker_variable = "marker_new"
-    @div_variable = "div_new"
-    @latlon = [@access_point[:lat], @access_point[:lon]]
-    @zoom = 14
-
-    @map = GMap.new(@div_variable, @map_variable)
-    @map.control_init(:small_map => true,:map_type => true)
-    @map.set_map_type_init(GMapType::G_NORMAL_MAP)
-    @map.center_zoom_init(@latlon, @zoom)
-    @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true, :icon => draggable_marker_icon )
-
-    @near_aps = AccessPoint.find(:all, :origin => @latlon, :within => 1)
-    @near_aps.delete @access_point
-    @near_aps.each do |ap|
-      info = render_to_string(:partial => "info_window", :layout => false, :locals => { :access_point => ap })
-      @map.overlay_init(GMarker.new([ap.lat, ap.lon], :title => ap.name, :info_window => info))
-    end
-
-    @map.overlay_global_init(@marker, @marker_variable)
-    @map.record_init @marker.on_dragend("gmap_update_position")
   end
 
   # POST /wisps/:wisp_id/access_points
@@ -225,19 +177,7 @@ class AccessPointsController < ApplicationController
         format.html { redirect_to(wisp_access_point_url(@wisp, @access_point)) }
       end
     else
-      @map_variable = "map_new"
-      @marker_variable = "marker_new"
-      @div_variable = "div_new"
       @latlon = [params[:access_point][:lat], params[:access_point][:lon]]
-      @zoom = 14
-
-      @map = GMap.new(@div_variable, @map_variable)
-      @map.control_init(:small_map => true,:map_type => true)
-      @map.set_map_type_init(GMapType::G_NORMAL_MAP)
-      @map.center_zoom_init(@latlon, @zoom)
-      @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true, :icon => draggable_marker_icon )
-      @map.overlay_global_init(@marker,@marker_variable)
-      @map.record_init @marker.on_dragend("gmap_update_position")
 
       if save_success
         @access_point.destroy()
@@ -273,29 +213,6 @@ class AccessPointsController < ApplicationController
     else
       @hselected_access_point_template = @access_point.access_point_template.id.to_s
 
-      @map_variable = "map_new"
-      @marker_variable = "marker_new"
-      @div_variable = "div_new"
-      @latlon = [params[:access_point][:lat], params[:access_point][:lon]]
-      @zoom = 14
-
-      @map = GMap.new(@div_variable, @map_variable)
-      @map.control_init(:small_map => true,:map_type => true)
-      @map.set_map_type_init(GMapType::G_NORMAL_MAP)
-      @map.center_zoom_init(@latlon, @zoom)
-      @marker = GMarker.new(@latlon, :title => t(:Select_location), :draggable => true, :icon => draggable_marker_icon )
-      @map.overlay_global_init(@marker,@marker_variable)
-
-      @near_aps = AccessPoint.find(:all, :origin => @latlon, :within => 1)
-      @near_aps.delete @access_point
-      @near_aps.each do |ap|
-        info = render_to_string(:partial => "info_window", :layout => false, :locals => { :access_point => ap })
-        @map.overlay_init(GMarker.new([ap.lat, ap.lon], :title => ap.name, :info_window => info))
-      end
-
-      @map.overlay_global_init(@marker, @marker_variable)
-      @map.record_init @marker.on_dragend("gmap_update_position")
-
       respond_to do |format|
         format.html { render :action => "edit" }
       end
@@ -330,49 +247,9 @@ class AccessPointsController < ApplicationController
     redirect_to wisp_access_points_url(@wisp)
   end
 
-  # Ajax Methods
-  def ajax_update_gmap
-    @map = GMap.new(@div_variable, @map_variable)
-    @map_variable = "map_new"
-    @marker_variable = "marker_new"
-    @div_variable = "div_new"
-
-    city    = params[:access_point][:city]     or ''
-    address = params[:access_point][:address]  or ''
-    zip     = params[:access_point][:zip]      or ''
-
-    location = [address, zip, city].join(' ')
-
-    req_location = Geokit::Geocoders::GoogleGeocoder.geocode(location)
-    if req_location.success
-      latlon_arr = [req_location.lat, req_location.lng]
-      @latlon = GLatLng.new(latlon_arr)
-
-      @near_aps = AccessPoint.find(:all, :origin => latlon_arr, :within => 1)
-      @near_aps.map! do |ap|
-        info = render_to_string(:partial => "info_window", :layout => false, :locals => { :access_point => ap })
-        GMarker.new([ap.lat, ap.lon], :title => ap.name)
-      end
-
-      @map = Variable.new(@map_variable)
-      @marker = GMarker.new(latlon_arr, :title => t(:Select_location), :draggable => true, :icon => draggable_marker_icon)
-      @map.overlay_init([@near_aps, @marker].flatten, @marker_variable)
-      @zoom = (req_location.accuracy * 2.3).floor
-    end
-  end
-
   private
 
   def load_access_point
     @access_point = @wisp.access_points.find(params[:id])
-  end
-
-  def draggable_marker_icon
-    GIcon.new(
-        :image => 'http://maps.gstatic.com/intl/en_en/mapfiles/ms/micons/grn-pushpin.png',
-        :icon_size => GSize.new(32,32),
-        :icon_anchor => GPoint.new(12,38),
-        :shadow => 'http://maps.gstatic.com/intl/en_en/mapfiles/ms/micons/pushpin_shadow.png'
-    )
   end
 end

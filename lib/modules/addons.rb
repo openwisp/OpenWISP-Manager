@@ -1,5 +1,7 @@
 module Addons
   module Mappable
+    include Geokit::Geocoders
+
     def get_center_zoom(mappables)
       max_lat = max_lon = 0.0
       min_lat = min_lon = 360.0
@@ -57,13 +59,12 @@ module Addons
 
     def get_wisp_geocode(wisp_address)
       env = ENV['RAILS_ENV'] || RAILS_ENV
-      geocode = Geocoding::get(wisp_address, :key => YAML.load_file(RAILS_ROOT + '/config/gmaps_api_key.yml')[env])
-      if geocode.status == Geocoding::GEO_SUCCESS
-        [geocode[0].latitude, geocode[0].longitude]
+      geocode = GoogleGeocoder::geocode(wisp_address)
+      if geocode.success?
+        geocode.to_a
       else
         [0,0]
       end
-
     end
   end
 end

@@ -19,15 +19,7 @@
   <%= stylesheet_link_tag 'custom' %>
 
   <%= javascript_include_tag :defaults, 'fluid960'  %>
-
-
-  <% if controller.class == AccessPointsController || controller.class == WispsController %>
-      <% if @map %>
-          <%= GMap.header :with_vml => false, :host => request.host %>
-          <%= @map.to_html %>
-      <% end %>
-  <% end %>
-
+  <%= yield :after_defaults %>
 </head>
 <body>
 <div class="container_16">

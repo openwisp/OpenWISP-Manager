@@ -1,11 +1,7 @@
-<%=
-    javascript_tag("
-        function gmap_update_position() {
-            $('#access_point_lat').val(#{@marker_variable}.getPoint().lat());
-            $('#access_point_lon').val(#{@marker_variable}.getPoint().lng());
-        }
-    ")
-%>
+<% content_for :after_defaults do %>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <%= javascript_include_tag 'owm.gmaps' %>
+<% end  %>
 
 <div class="grid_16">
   <div class="box">
@@ -103,8 +99,10 @@
             <p>
               <%=t :Adjust_position %>
               <br>
-              <%= @map ? @map.div(:width => '100%', :height => 320) : '' %>
             </p>
+            <span class="lat"><%= @latlon[0] %></span>
+            <span class="lon"><%= @latlon[1] %></span>
+            <div id="access_point_new_map"></div>
             <p>
               <%= f.submit t(:Create) %>
             </p>
@@ -120,5 +118,5 @@
 <%=
     observe_fields ['#access_point_city', '#access_point_address', '#access_point_zip'],
                    :frequency => 1,
-                   :url => { :action => :ajax_update_gmap, :wisp_id => @wisp }
+                   :function => "gmaps.geocode({city:'#access_point_city', address:'#access_point_address', zip:'#access_point_zip'})"
 %>

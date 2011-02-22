@@ -1,3 +1,7 @@
+<% content_for :after_defaults do %>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <%= javascript_include_tag 'owm.gmaps' %>
+<% end  %>
 <div class="grid_16">
   <div class="box">
     <h4><a><%=h @wisp.name %></a></h4>
@@ -51,7 +55,9 @@
   <div class="box">
     <h2><a href="#"><%= t(:Wisp_access_points) %></a></h2>
     <div class="block" id="wisps-block">
-      <%= @map ? @map.div(:width => '100%', :height => 320) : '' %>
+      <span class="lat"><%= @latlon[0] %></span>
+      <span class="lon"><%= @latlon[1] %></span>
+      <div id="wisp_map"></div>
     </div>
   </div>
 </div>

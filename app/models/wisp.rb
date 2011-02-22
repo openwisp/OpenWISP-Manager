@@ -1,4 +1,6 @@
 class Wisp < ActiveRecord::Base
+  include Addons::Mappable
+
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   validates_uniqueness_of :name
@@ -14,6 +16,9 @@ class Wisp < ActiveRecord::Base
   has_many :access_point_templates, :dependent => :destroy
   has_many :l2vpn_servers, :dependent => :destroy
   
-  accepts_nested_attributes_for :ca 
+  accepts_nested_attributes_for :ca
 
+  def geocode
+    get_wisp_geocode "#{ca.l} #{ca.st}"
+  end
 end
