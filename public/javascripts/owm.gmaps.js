@@ -14,6 +14,12 @@ var gmaps = {
             div: '#wisp_map',
             mapTypeId: 'hybrid',
             zoom: 4,
+            hide_html_marker_if_json_not_empty: true,
+            html_marker: function() {
+                return {
+                    position: gmaps.getCoords($('.lat').html(), $('.lon').html())
+                };
+            },
             json_url: window.location.href+"/access_points.json",
             json_marker: function(data) {
                 return {
@@ -102,12 +108,28 @@ var gmaps = {
                 zoom: gmaps._map_conf.zoom
             });
 
-            if (_has_to_load_resource) {
-                gmaps.fetchAndDrawMarkers();
-            }
-
-            if (gmaps._map_conf.html_marker) {
+            if (_has_to_load_resource && gmaps._map_conf.html_marker) {
+                gmaps.fetchMarkers(function(_fetched){
+                    if (gmaps._map_conf.hide_html_marker_if_json_not_empty) {
+                        if (_fetched > 0) {
+                            gmaps.fitMarkers();
+                        } else {
+                            gmaps._main_marker = gmaps.drawMarker(gmaps._map_conf.html_marker());
+                        }
+                    } else {
+                        gmaps._main_marker = gmaps.drawMarker(gmaps._map_conf.html_marker());
+                        gmaps.fitMarkers();
+                    }
+                });
+            } else if (_has_to_load_resource && !gmaps._map_conf.html_marker) {
+                gmaps.fetchMarkers(function(){
+                    gmaps.fitMarkers();
+                });
+            } else if (!_has_to_load_resource && gmaps._map_conf.html_marker) {
                 gmaps._main_marker = gmaps.drawMarker(gmaps._map_conf.html_marker());
+                if (!gmaps._map_conf.zoom) {
+                    gmaps.fitMarkers();
+                }
             }
         }
     },
@@ -161,12 +183,14 @@ var gmaps = {
         return to_return;
     },
 
-    fetchAndDrawMarkers: function() {
+    fetchMarkers: function(_oncomplete) {
         $.getJSON(gmaps._map_conf.json_url, function(_data) {
+            var _counter = 0;
             $.each(_data, function(){
                 gmaps.drawMarker(gmaps._map_conf.json_marker(this));
+                _counter++;
             });
-            gmaps.fitMarkers();
+            _oncomplete(_counter);
         });
     },
 
