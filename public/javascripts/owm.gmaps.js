@@ -37,6 +37,7 @@ var gmaps = {
             html_marker: function() {
                 return {
                     position: gmaps.getCoords($('.lat').html(), $('.lon').html()),
+                    zindex: 9999,
                     icon: "http://maps.gstatic.com/intl/en_en/mapfiles/ms/micons/grn-pushpin.png",
                     shadow: new google.maps.MarkerImage(
                             "http://maps.google.com/mapfiles/ms/micons/pushpin_shadow.png",
