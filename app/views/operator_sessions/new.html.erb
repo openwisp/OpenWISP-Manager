@@ -1,22 +1,24 @@
-<div class="grid_8 prefix_4 suffix_4">
+<div class="grid_6 prefix_5 suffix_5">
   <div class="box">
     <h2><a href="#" id="toggle-login-forms"><%= t(:Please_login) %></a></h2>
     <div class="block" id="login-forms">
-      <fieldset>
+      <fieldset class="login">
         <legend><%=t :Login %></legend>
         <% form_for @operator_session, :url => operator_session_path  do |f| %>
-          <p>
-            <%= f.label t(:Operator_name) %><br />
-            <%= f.text_field :login %>
-          </p>
-          <p>
-            <%= f.label t(:Password) %><br />
-            <%= f.password_field :password %>
-          </p>
-          <p>
-            <%= f.check_box :remember_me %><%= f.label t(:Remember_me) %>
-          </p>
-          <%= f.submit t(:Login), :class =>"login button" %>
+            <p class="notice"></p>
+            <p>
+              <%= f.label t(:Operator_name) %>
+              <%= f.text_field :login %>
+            </p>
+            <p>
+              <%= f.label t(:Password) %>
+              <%= f.password_field :password %>
+            </p>
+            <p>
+              <%= f.label t(:Remember_me) %> <%= f.check_box :remember_me %>
+            </p>
+
+            <%= f.submit t(:Login), :class =>"login button" %>
         <% end %>
       </fieldset>
     </div>
