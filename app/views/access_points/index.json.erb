@@ -7,7 +7,9 @@
                 :name => ap.name,
                 :lat => ap.lat,
                 :lon => ap.lon,
-                :info_window => render(:partial => 'info_window.html', :locals => { :access_point => ap })
+                :address => ap.address,
+                :city => ap.city,
+                :url => wisp_access_point_path(@wisp, ap)
             }}.to_json
         end
     end

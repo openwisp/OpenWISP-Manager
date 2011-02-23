@@ -3,6 +3,10 @@
     <%= javascript_include_tag 'owm.gmaps' %>
 <% end  %>
 
+<% content_for :js_templates do %>
+    <%= render 'info_window' %>
+<% end  %>
+
 <div class="grid_16">
   <div class="box">
     <h4><a><%= t(:Editing_access_point) %> -  <%=h @access_point.name %> - <%=h @wisp.name %></a></h4>

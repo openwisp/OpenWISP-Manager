@@ -1,18 +1,19 @@
-<% @access_point = access_point if defined?(access_point) %>
-<table>
-  <tr>
-    <td><strong><%=t :Name %></strong></td>
-    <td><%= @access_point.name %></td>
-  </tr>
-  <tr>
-    <td><strong><%=t :Address %></strong></td>
-    <td><%= @access_point.address %></td>
-  </tr>
-  <tr>
-    <td><strong><%=t :City %></strong></td>
-    <td><%= @access_point.city %></td>
-  </tr>
-  <tr>
-    <td colspan="2" class="center"><strong><%= link_to t(:Detailed_info), wisp_access_point_path(@wisp, @access_point) %></strong></td>
-  </tr>
-</table>
+<script id="ap_infowindow_templ" type="text/html">
+  <table>
+    <tr>
+      <td><strong><%=t :Name %></strong></td>
+      <td>__name__</td>
+    </tr>
+    <tr>
+      <td><strong><%=t :Address %></strong></td>
+      <td>__address__</td>
+    </tr>
+    <tr>
+      <td><strong><%=t :City %></strong></td>
+      <td>__city__</td>
+    </tr>
+    <tr>
+      <td colspan="2" class="center"><strong><a href="__link__"><%=t :Detailed_info %></a></strong></td>
+    </tr>
+  </table>
+</script>

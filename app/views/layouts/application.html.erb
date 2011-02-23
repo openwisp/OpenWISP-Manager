@@ -19,7 +19,10 @@
   <%= stylesheet_link_tag 'custom' %>
 
   <%= javascript_include_tag :defaults, 'fluid960'  %>
+
   <%= yield :after_defaults %>
+
+  <%= yield :js_templates %>
 </head>
 <body>
 <div class="container_16">

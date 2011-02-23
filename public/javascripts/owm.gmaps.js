@@ -20,7 +20,7 @@ var gmaps = {
                 return {
                     position: gmaps.getCoords(data.access_point.lat, data.access_point.lon),
                     title: data.access_point.name,
-                    info_window: data.access_point.info_window
+                    info_window: gmaps.build_info_window(data.access_point, '#ap_infowindow_templ')
                 }
             }
         },
@@ -65,7 +65,7 @@ var gmaps = {
                 return {
                     position: gmaps.getCoords(json.access_point.lat, json.access_point.lon),
                     title: json.access_point.name,
-                    info_window: json.access_point.info_window
+                    info_window: gmaps.build_info_window(json.access_point, '#ap_infowindow_templ')
                 };
             }
         }
@@ -117,6 +117,15 @@ var gmaps = {
                 }
             });
         }
+    },
+
+    build_info_window: function(_access_point, _template_selector) {
+        var new_ap = $(_template_selector).clone().html();
+        new_ap = new_ap.replace(/__name__/, _access_point.name);
+        new_ap = new_ap.replace(/__address__/, _access_point.address);
+        new_ap = new_ap.replace(/__city__/, _access_point.city);
+        new_ap = new_ap.replace(/__link__/, _access_point.url);
+        return new_ap;
     },
 
     geocode: function(_location) {
