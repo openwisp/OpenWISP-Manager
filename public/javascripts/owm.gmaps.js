@@ -13,13 +13,8 @@ var gmaps = {
         {
             div: '#wisp_map',
             mapTypeId: 'hybrid',
-            zoom: 4,
-            hide_html_marker_if_json_not_empty: true,
-            html_marker: function() {
-                return {
-                    position: gmaps.getCoords($('.lat').html(), $('.lon').html())
-                };
-            },
+            fit_markers: true,
+            force_center: true,
             json_url: window.location.href+"/access_points.json",
             json_marker: function(data) {
                 return {
@@ -32,6 +27,8 @@ var gmaps = {
         {
             div: '#access_point_map',
             zoom: 16,
+            force_zoom: true,
+            force_center: true,
             html_marker: function() {
                 return {
                     position: gmaps.getCoords($('.lat').html(), $('.lon').html())
@@ -40,6 +37,9 @@ var gmaps = {
         },
         {
             div: '#access_point_new_map, #access_point_edit_map',
+            zoom: 16,
+            force_zoom: true,
+            force_center: true,
             html_marker: function() {
                 return {
                     position: gmaps.getCoords($('.lat').html(), $('.lon').html()),
@@ -76,12 +76,6 @@ var gmaps = {
     lat: '.lat',
     lon: '.lon',
 
-    // Google maps default opts
-    map_defaults: {
-        zoom: 9,
-        mapTypeId: 'roadmap'
-    },
-
 /***********************************/
     //Private variables
     _map: undefined,
@@ -100,37 +94,28 @@ var gmaps = {
             var _lat = $(gmaps.lat).html();
             var _lon = $(gmaps.lon).html();
             var _coords = gmaps.getCoords(_lat, _lon);
-            var _has_to_load_resource = gmaps._map_conf.json_url ? true : false;
+            var _zoom = gmaps._map_conf.zoom ? gmaps._map_conf.zoom : 9;
+            var _type = gmaps._map_conf.mapTypeId ? gmaps._map_conf.mapTypeId : 'roadmap';
 
             gmaps.initMap(_map_div, {
                 center: _coords,
-                mapTypeId: gmaps._map_conf.mapTypeId,
-                zoom: gmaps._map_conf.zoom
+                mapTypeId: _type,
+                zoom: _zoom
             });
 
-            if (_has_to_load_resource && gmaps._map_conf.html_marker) {
-                gmaps.fetchMarkers(function(_fetched){
-                    if (gmaps._map_conf.hide_html_marker_if_json_not_empty) {
-                        if (_fetched > 0) {
-                            gmaps.fitMarkers();
-                        } else {
-                            gmaps._main_marker = gmaps.drawMarker(gmaps._map_conf.html_marker());
-                        }
-                    } else {
-                        gmaps._main_marker = gmaps.drawMarker(gmaps._map_conf.html_marker());
+            gmaps.fetchMarkers({
+                complete: function() {
+                    if (gmaps._map_conf.fit_markers) {
                         gmaps.fitMarkers();
                     }
-                });
-            } else if (_has_to_load_resource && !gmaps._map_conf.html_marker) {
-                gmaps.fetchMarkers(function(){
-                    gmaps.fitMarkers();
-                });
-            } else if (!_has_to_load_resource && gmaps._map_conf.html_marker) {
-                gmaps._main_marker = gmaps.drawMarker(gmaps._map_conf.html_marker());
-                if (!gmaps._map_conf.zoom) {
-                    gmaps.fitMarkers();
+                    if (gmaps._map_conf.force_center) {
+                        gmaps._map.setCenter(_coords);
+                    }
+                    if (gmaps._map_conf.force_zoom) {
+                        gmaps._map.setZoom(gmaps._map_conf.zoom);
+                    }
                 }
-            }
+            });
         }
     },
 
@@ -144,7 +129,7 @@ var gmaps = {
         gmaps._geocoder.geocode({address: _geocode_address}, function(results, status){
             if (status == google.maps.GeocoderStatus.OK) {
                 var _position = results[0].geometry.location;
-                gmaps._map.setCenter(_position, 20);
+                gmaps._map.setCenter(_position);
                 gmaps._main_marker.setPosition(_position);
                 gmaps._map.fitBounds(results[0].geometry.bounds);
 
@@ -183,15 +168,30 @@ var gmaps = {
         return to_return;
     },
 
-    fetchMarkers: function(_oncomplete) {
-        $.getJSON(gmaps._map_conf.json_url, function(_data) {
-            var _counter = 0;
-            $.each(_data, function(){
-                gmaps.drawMarker(gmaps._map_conf.json_marker(this));
-                _counter++;
+    fetchMarkers: function(_opts) {
+        if (gmaps._map_conf.json_url) {
+            $.getJSON(gmaps._map_conf.json_url, function(_data) {
+                $.each(_data, function(){
+                    gmaps.drawMarker(gmaps._map_conf.json_marker(this));
+                });
+
+                if (gmaps._map_conf.html_marker) {
+                    gmaps._main_marker = gmaps.drawMarker(gmaps._map_conf.html_marker());
+                }
+
+                if (_opts.complete) {
+                    _opts.complete();
+                }
             });
-            _oncomplete(_counter);
-        });
+        } else {
+            if (gmaps._map_conf.html_marker) {
+                gmaps._main_marker = gmaps.drawMarker(gmaps._map_conf.html_marker());
+            }
+
+            if (_opts.complete) {
+                _opts.complete();
+            }
+        }
     },
 
     mapDivs: function() {
@@ -201,7 +201,7 @@ var gmaps = {
     },
 
     initMap: function(_map_div, _custom_opts) {
-        gmaps._map = new google.maps.Map(document.getElementById($(_map_div).attr('id')), $.extend(gmaps.map_defaults, _custom_opts));
+        gmaps._map = new google.maps.Map(document.getElementById($(_map_div).attr('id')), _custom_opts);
         gmaps._bounds = new google.maps.LatLngBounds();
     },
 
