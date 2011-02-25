@@ -54,7 +54,7 @@ class L2vpnServer < ActiveRecord::Base
   validates_presence_of :server_id
   validates_presence_of :wisp_id
   validates_presence_of :ip # may be an hostname
-  validates_format_of :ip, :with => /\A[\w\d\.]+\Z/i
+  validates_format_of :ip, :with => /\A[\w\d\.\-]+\Z/i
   validates_length_of :name, :maximum => 128
 
   has_one :tap, :as => :l2vpn, :dependent => :destroy
