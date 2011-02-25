@@ -14,20 +14,6 @@ Rails::Initializer.run do |config|
   # Add additional load paths for your own custom dirs
   config.load_paths += [Rails.root.join('lib', 'modules')]
 
-  # Specify gems that this application depends on and have them installed with rake gems:install
-  # config.gem "bj"
-  # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
-  # config.gem "sqlite3-ruby", :lib => "sqlite3"
-  # config.gem "aws-s3", :lib => "aws/s3"
-  config.gem "geokit", :version => ">= 1.5.0"
-  config.gem "authlogic", :version => ">= 2.1.3"
-  config.gem "acl9", :version => ">= 0.12.0"
-  config.gem "libarchive", :lib => "libarchive_ruby", :version => ">= 0.1.2"
-  config.gem "system_timer", :version => ">= 1.0"
-  config.gem "chronic", :version => ">= 0.2.3"
-  config.gem "packet", :version => ">= 0.1.15"
-  config.gem "i18n", :version => "~> 0.4.1"
-
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
