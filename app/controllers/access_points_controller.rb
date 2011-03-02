@@ -68,6 +68,9 @@ class AccessPointsController < ApplicationController
       access_point = AccessPoint.find_by_mac_address(mac_address)
 
       if !access_point.nil?
+        if access_point.last_configuration_retrieve_ip != request.remote_ip
+          access_point.update_attributes(:last_configuration_retrieve_ip => request.remote_ip)
+        end
         if !access_point.configuration_md5.nil?
           #Sending md5 digest of configuration files
           send_data access_point.configuration_md5
