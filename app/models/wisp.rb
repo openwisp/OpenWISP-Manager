@@ -19,6 +19,6 @@ class Wisp < ActiveRecord::Base
   accepts_nested_attributes_for :ca
 
   def geocode
-    get_wisp_geocode "#{ca.l} #{ca.st}"
+    get_wisp_geocode "#{ca.l}, #{ca.st}, #{ca.c}"
   end
 end
