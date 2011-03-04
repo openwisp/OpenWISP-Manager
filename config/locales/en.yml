@@ -105,6 +105,7 @@ en:
   Destroy_vlan_template: "Delete vlan template"
   Destroy_wisp: "Delete WISP"
   Detailed_info: "Detailed info"
+  Detailed_l2vpn_server_infos: "Detailed layer 2 vpn server infos"
   Device_name: "Device name"
   Dn_prefix: "Distinguish name prefix"
   Dns: "DNS"
