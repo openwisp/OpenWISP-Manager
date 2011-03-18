@@ -1,6 +1,6 @@
 source :gemcutter
 
-gem 'rails', '2.3.5'
+gem 'rails', '2.3.11'
 gem 'mysql'
 
 gem 'geokit', '>= 1.5.0'
@@ -19,3 +19,7 @@ gem 'packet', '>= 0.1.15'
 
 gem 'i18n', '~> 0.4.1'
 
+group :development do
+  gem 'sqlite3'
+  gem 'ruby-debug'
+end
