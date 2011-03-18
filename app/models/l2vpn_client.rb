@@ -2,13 +2,18 @@ class L2vpnClient < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   has_one :tap, :as => :l2vpn, :dependent => :destroy
-  has_one :x509_certificate, :as => :certificable, :dependent => :destroy
+  has_one :x509_certificate, :as => :certifiable, :dependent => :destroy
   belongs_to :access_point
 
   belongs_to :l2vpn_template
   belongs_to :template, :class_name => 'L2vpnTemplate', :foreign_key => :l2vpn_template_id
 
   belongs_to :l2vpn_server
+
+  before_save do |record|
+    # If we modify this instance, we must mark the related AP configuration as outdated.
+    record.access_point.configuration_outdated! if !record.new_record?
+  end
 
   after_create do |record|
     record.access_point.wisp.ca.create_openvpn_client_certificate(record)
@@ -24,7 +29,7 @@ class L2vpnClient < ActiveRecord::Base
     end
   end
 
-  # Certificable interface
+  # Certifiable interface
   def identifier
     "l2vpn_client_#{self.access_point.wisp.id}_#{self.access_point.id}_#{self.id}"
   end

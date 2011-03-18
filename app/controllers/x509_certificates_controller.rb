@@ -9,9 +9,9 @@ class X509CertificatesController < ApplicationController
       allow :wisp_viewer, :of => :wisp
     end
 
-    actions :destroy do
-      allow :wisps_destroyer
-      allow :wisp_viewer, :of => :wisp
+    actions :revoke, :renew, :reissue do
+      allow :wisps_manager
+      allow :wisp_manager, :of => :wisp
     end
   end
 
@@ -25,14 +25,34 @@ class X509CertificatesController < ApplicationController
     end
   end
 
-  # DELETE /wisps/:wisp_id/ca/x509_certificates/1
-  def destroy
-    @ca = @wisp.ca
-    @x509_certificate = @ca.x509_certificates.find(params[:id])
-    @x509_certificate.revoke
+  def revoke
+    ca = @wisp.ca
+    x509_certificate = ca.x509_certificates.find(params[:id])
+    ca.revoke_certificate!(x509_certificate)
     
     respond_to do |format|
       format.html { redirect_to(wisp_ca_url(@wisp)) }
     end
   end
+
+  def renew
+    ca = @wisp.ca
+    x509_certificate = ca.x509_certificates.find(params[:id])
+    ca.renew_certificate!(x509_certificate)
+
+    respond_to do |format|
+      format.html { redirect_to(wisp_ca_url(@wisp)) }
+    end
+  end
+
+  def reissue
+    ca = @wisp.ca
+    x509_certificate = ca.x509_certificates.find(params[:id])
+    ca.reissue_certificate!(x509_certificate)
+
+    respond_to do |format|
+      format.html { redirect_to(wisp_ca_url(@wisp)) }
+    end
+  end
+
 end

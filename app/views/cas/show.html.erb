@@ -40,29 +40,36 @@
           <th scope="col" class="head-left"><%=t :Operations %></th>
           <th scope="col" class="head"><%=t :Cn %></th>
           <th scope="col" class="head"><%=t :Owner %></th>
+          <th scope="col" class="head"><%=t :Expiry_date %></th>
           <th scope="col" class="head-right"><%=t :Status %></th>
         </tr>
         </thead>
         <tfoot>
         <tr>
           <td colspan="1" class="foot-left">&nbsp;</td>
-          <td colspan="2" class="foot">&nbsp;</td>
+          <td colspan="3" class="foot">&nbsp;</td>
           <td colspan="1" class="foot-right">&nbsp;</td>
         </tr>
         </tfoot>
         <tbody>
         <% @ca.x509_certificates.each do |cert| %>
             <tr>
-              <td style="width:32px;">
+              <td style="width:52px;">
                 <% if auth?(:wisps_manager) || auth?(:wisp_manager, @wisp) %>
-                    <%= link_to image_tag("renew.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_ca_x509_certificate_path(@wisp, cert),
-                                :title => t(:Renew_certificate)
+                    <%= link_to image_tag("renew.png", :border=>0, :size => "16x16", :alt => t(:Renew_certificate)), renew_certificate_path(@wisp, cert),
+                                :title => t(:Renew_certificate),
+                                :confirm => t(:Are_you_sure_certificate_renew)
                     %>
                     <% unless cert == @ca.x509_certificate %>
-                        <%= link_to image_tag("revoke.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_ca_x509_certificate_path(@wisp, cert),
+                        <%= link_to image_tag("reissue.png", :border=>0, :size => "16x16", :alt => t(:Reissue_certificate)), reissue_certificate_path(@wisp, cert),
+                                    :title => t(:Reissue_certificate),
+                                    :confirm => t(:Are_you_sure_certificate_reissue)
+                        %>
+                    <% end %>
+                    <% unless cert == @ca.x509_certificate %>
+                        <%= link_to image_tag("revoke.png", :border=>0, :size => "16x16", :alt => t(:Revoke_certificate)), revoke_certificate_path(@wisp, cert),
                                     :title => t(:Revoke_certificate),
-                                    :confirm => t(:Are_you_sure_certificate_revoke),
-                                    :method => :delete
+                                    :confirm => t(:Are_you_sure_certificate_revoke)
                         %>
                     <% end %>
                 <% end %>
@@ -71,17 +78,17 @@
                 <%= link_to h(cert.dn), wisp_ca_x509_certificate_path(@wisp, cert) %>
               </td>
               <td>
-                <% if !cert.certificable.nil? %>
-                    <% if cert.certificable.class == L2vpnClient %>
-                        access point '<%= link_to h(cert.certificable.access_point.name),
-                                                  wisp_access_point_url(@wisp, cert.certificable.access_point),
-                                                  :title => h(cert.certificable.access_point.notes)
+                <% if !cert.certifiable.nil? %>
+                    <% if cert.certifiable.class == L2vpnClient %>
+                        access point '<%= link_to h(cert.certifiable.access_point.name),
+                                                  wisp_access_point_url(@wisp, cert.certifiable.access_point),
+                                                  :title => h(cert.certifiable.access_point.notes)
               %>' -
-                        <%=h cert.certificable.tap.friendly_name %>
-                    <% elsif cert.certificable.class == L2vpnServer %>
-                        server '<%=h cert.certificable.server.name %>' - layer 2 vpn server '<%=h cert.certificable.name %>'
-                    <% elsif cert.certificable.class == Ca %>
-                        <%=h cert.certificable.cn %> CA
+                        <%=h cert.certifiable.tap.friendly_name %>
+                    <% elsif cert.certifiable.class == L2vpnServer %>
+                        server '<%=h cert.certifiable.server.name %>' - layer 2 vpn server '<%=h cert.certifiable.name %>'
+                    <% elsif cert.certifiable.class == Ca %>
+                        <%=h cert.certifiable.cn %> CA
                     <% else %>
                         &nbsp;
                     <% end %>
@@ -89,6 +96,9 @@
                     <strong><em><%=h t(:Deleted) %></em></strong>
                 <% end %>
               </td>
+              <td>
+	          	<%=l cert.expiry_date %>
+			  </td>
               <td>
                 <% if cert.revoked? %>
                     <strong style="color:#ee5500"><%=t :Revoked %></strong>

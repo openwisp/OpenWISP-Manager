@@ -5,7 +5,11 @@ class L2tc < ActiveRecord::Base
   belongs_to :access_point
   
   belongs_to :l2tc_template
-
+  
+  before_save do |record|
+    record.access_point.configuration_outdated! if !record.new_record?
+  end
+  
   def validate
     sum = 0
     self.shapeable.subinterfaces.each do |s|

@@ -55,7 +55,7 @@ class L2vpnServer < ActiveRecord::Base
   validates_length_of :name, :maximum => 128
 
   has_one :tap, :as => :l2vpn, :dependent => :destroy
-  has_one :x509_certificate, :as => :certificable, :dependent => :destroy
+  has_one :x509_certificate, :as => :certifiable, :dependent => :destroy
 
   has_many :l2vpn_templates, :dependent => :destroy
   has_many :l2vpn_clients, :dependent => :destroy
@@ -70,7 +70,7 @@ class L2vpnServer < ActiveRecord::Base
   end
 
   after_create do |record|
-    record.wisp.ca.create_openvpn_server_certificate(record)
+    record.wisp.ca.create_openvpn_server_certificate(record, { :validity_time => 2.years })
   end
 
   def generate_configuration
@@ -143,7 +143,7 @@ class L2vpnServer < ActiveRecord::Base
     self.cipher = DEFAULT_CIPHER unless self.cipher
   end
 
-  # Certificable interface
+  # Certifiable interface
   def identifier
     "l2vpn_server_#{self.server.id}_#{self.id}"
   end

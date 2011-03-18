@@ -28,8 +28,12 @@ class Bridge < ActiveRecord::Base
   belongs_to :bridge_template
   belongs_to :template, :class_name => 'BridgeTemplate', :foreign_key => :bridge_template_id
 
+  before_save do |record|
+    record.machine.configuration_outdated! if !record.new_record? and record.belongs_to_access_point?
+  end
+
   def belongs_to_access_point?
-    machine_type == 'AccessPoint'
+    self.machine.class == AccessPoint
   end
 
   def before_create()

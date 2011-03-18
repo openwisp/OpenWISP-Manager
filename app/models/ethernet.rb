@@ -21,7 +21,13 @@ class Ethernet < ActiveRecord::Base
   # Instance template
   belongs_to :ethernet_template
   belongs_to :template, :class_name => 'EthernetTemplate', :foreign_key => :ethernet_template_id
-
+  
+  before_save do |record|
+    # If we modify this instance, we must mark the related AP configuration as outdated.
+    # This is only applicable for ethernet 'attached' to access points
+    record.machine.configuration_outdated! if !record.new_record? and record.machine.class == AccessPoint
+  end
+  
   def belongs_to_access_point?
     self.machine.class == AccessPoint
   end

@@ -14,8 +14,17 @@ class Tap < ActiveRecord::Base
   belongs_to :tap_template
   belongs_to :template, :class_name => 'TapTemplate', :foreign_key => :tap_template_id
 
+  before_save do |record|
+    # If we modify this instance, we must mark the related AP configuration as outdated.
+    # This is only applicable for ethernet 'attached' to access points
+    record.l2vpn.access_point.configuration_outdated! if !record.new_record? and record.belongs_to_access_point?
+  end
+
   def belongs_to_access_point?
-    self.machine.class == AccessPoint
+    # Since ATM taps are only defined for l2vpn (client) this is always true.
+    # We have to define this method in order to implement the "interface" interface.
+    # See also Vlan, Ethernet and Bridge classes
+    true
   end
 
   def link_to_template(t)

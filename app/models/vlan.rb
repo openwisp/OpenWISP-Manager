@@ -16,8 +16,14 @@ class Vlan < ActiveRecord::Base
   belongs_to :vlan_template
   belongs_to :template, :class_name => 'VlanTemplate', :foreign_key => :vlan_template_id
 
+  before_save do |record|
+    # If we modify this instance, we must mark the related AP configuration as outdated.
+    # This is only applicable for vlan 'attached' to access points
+    record.interface.access_point.configuration_outdated! if !record.new_record? and record.belongs_to_access_point?
+  end
+
   def belongs_to_access_point?
-    self.machine.class == AccessPoint
+    self.interface.class == AccessPoint
   end
 
   def link_to_template(t)

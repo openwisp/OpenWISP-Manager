@@ -25,7 +25,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :logout, :controller => "operator_sessions", :method => "delete"
   map.resource :operator_session
   map.root :controller => "operator_sessions", :action => "new"
-  
+
   map.resources :servers do |server|
     server.resources :l2vpn_servers
     server.resources :ethernets, :controller => :server_ethernets
@@ -36,11 +36,23 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :wisps do |wisp|
 
     wisp.resources :operators
-  
+
     wisp.resource :ca do |ca|
       ca.resources :x509_certificates
+
+      map.revoke_certificate 'wisps/:wisp_id/ca/x509_certificates/:id/revoke',
+                             :controller => 'x509_certificates',
+                             :action => 'revoke'
+
+      map.renew_certificate 'wisps/:wisp_id/ca/x509_certificates/:id/renew',
+                            :controller => 'x509_certificates',
+                            :action => 'renew'
+
+      map.reissue_certificate 'wisps/:wisp_id/ca/x509_certificates/:id/reissue',
+                              :controller => 'x509_certificates',
+                              :action => 'reissue'
     end
-  
+
     wisp.resources :access_point_groups
     wisp.resources :template_groups
 
