@@ -1,11 +1,6 @@
 class CustomScriptTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => [
-      :name, :body, :cron_minute, :cron_hour,
-      :cron_day, :cron_month, :cron_dayweek
-  ], :notify_on_destroy => :access_point_template
-  
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :access_point_template_id
   validates_format_of :name, :with => /\A[\s\w\d_\.]+\Z/i
@@ -13,7 +8,17 @@ class CustomScriptTemplate < ActiveRecord::Base
 
   validates_presence_of :body
   
-  belongs_to :access_point_template, :touch => true
+  belongs_to :access_point_template
+
+  somehow_has :many => :access_points, :through => :access_point_template
+
+  before_save do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!} if record.new_record? || record.changed?
+  end
+
+  after_destroy do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!}
+  end
   
   def validate
     

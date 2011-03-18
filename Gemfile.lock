@@ -29,6 +29,7 @@ GEM
       activesupport (= 2.3.5)
       rake (>= 0.8.3)
     rake (0.8.7)
+    somehow_has_relation (0.0.1)
     system_timer (1.0)
 
 PLATFORMS
@@ -44,4 +45,5 @@ DEPENDENCIES
   mysql
   packet (>= 0.1.15)
   rails (= 2.3.5)
+  somehow_has_relation
   system_timer (>= 1.0)

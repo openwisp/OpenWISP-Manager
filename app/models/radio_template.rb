@@ -1,10 +1,6 @@
 class RadioTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => [
-      :name, :mode, :channel, :output_band
-  ], :notify_on_destroy => :access_point_template
-
   NAME_PREFIX = 'wifi'
 
   DEFAULT_CHANNEL = 6
@@ -21,7 +17,7 @@ class RadioTemplate < ActiveRecord::Base
   has_many :vap_templates, :dependent => :destroy
   has_many :subinterfaces, :class_name => 'VapTemplate', :foreign_key => :radio_template_id
 
-  belongs_to :access_point_template, :touch => true
+  belongs_to :access_point_template
 
   has_one :l2tc_template, :as => :shapeable_template, :dependent => :destroy
 
@@ -29,9 +25,19 @@ class RadioTemplate < ActiveRecord::Base
   has_many :radios, :dependent => :destroy
   has_many :instances, :class_name => 'Radio', :foreign_key => :radio_template_id
 
+  somehow_has :many => :access_points, :through => :access_point_template
+
   accepts_nested_attributes_for :vap_templates,
                                 :allow_destroy => true,
                                 :reject_if => lambda { |a| a.values.all?(&:blank?) }
+
+  before_save do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!} if record.new_record? || record.changed?
+  end
+
+  after_destroy do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!}
+  end
 
   before_create do |record|
     record.l2tc_template = L2tcTemplate.new( :shapeable_template => record,

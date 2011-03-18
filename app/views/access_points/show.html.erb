@@ -9,7 +9,7 @@
 </div>
 <div class="clear">&nbsp;</div>
 
-<% if @access_point.is_outdated? %>
+<% if @access_point.configuration_outdated? %>
     <div class="grid_16">
       <div class="box">
         <h2><a href="#" id="toggle-warnings"><%= t(:Warning) %></a></h2>

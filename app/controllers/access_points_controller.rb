@@ -237,12 +237,12 @@ class AccessPointsController < ApplicationController
   end
 
   def outdated
-    @access_points = @wisp.access_points.select {|ap| ap.is_outdated? }
+    @access_points = @wisp.access_points.select {|ap| ap.configuration_outdated? }
   end
 
   def update_outdated
     # TODO: some ajax-magic is needed here...
-    access_points = params[:id] ? [load_access_point] : @wisp.access_points.select {|ap| ap.is_outdated? }
+    access_points = params[:id] ? [load_access_point] : @wisp.access_points.select {|ap| ap.configuration_outdated? }
 
     worker = MiddleMan.worker(:configuration_worker)
     worker.async_create_access_points_configuration(:arg => { :access_point_ids => access_points.map{ |ap| ap.id } })

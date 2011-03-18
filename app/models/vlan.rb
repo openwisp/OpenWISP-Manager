@@ -1,8 +1,6 @@
 class Vlan < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => :output_band_percent
-
   validates_uniqueness_of :tag, :scope => :interface_id,
                           :unless => Proc.new { |b| b.belongs_to_access_point? and b.tag.nil? }
   validates_numericality_of :tag,
@@ -10,7 +8,7 @@ class Vlan < ActiveRecord::Base
                             :less_than_or_equal_to => 4094,
                             :unless => Proc.new { |b| b.belongs_to_access_point? and b.tag.nil? }
 
-  belongs_to :interface, :polymorphic => true, :touch => true
+  belongs_to :interface, :polymorphic => true
 
   belongs_to :bridge
 

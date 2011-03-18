@@ -8,6 +8,16 @@ class X509Certificate < ActiveRecord::Base
   belongs_to :ca
   belongs_to :certificable, :polymorphic => true
 
+  somehow_has :many => :access_points, :through => :certificable
+
+  before_save do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!} if record.new_record? || record.changed?
+  end
+
+  after_destroy do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!}
+  end
+
   def revoked?
     self.revoked == true
   end

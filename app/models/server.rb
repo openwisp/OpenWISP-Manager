@@ -10,6 +10,8 @@ class Server < ActiveRecord::Base
 
   has_many :taps, :through => :l2vpn_servers
 
+  somehow_has :many => :access_points, :through => :l2vpn_servers
+
   def vlans
     # TODO: this should return an activerecord array
     (self.ethernets.map { | e | e.vlans } + 

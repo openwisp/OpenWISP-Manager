@@ -26,12 +26,9 @@ class L2vpnServer < ActiveRecord::Base
   PROTOCOLS = %w(udp tcp)
   MTU_DISCOVERIES = ["no", "maybe", "yes", " "]
 
-  acts_as_authorization_object :subject_class_name => 'Operator'
+  attr_readonly :wisp_id
 
-  acts_as_markable_on_change :watch_for => [
-      :name, :port, :cipher, :protocol,
-      :bindall, :mtu, :mtu_disc, :ip
-  ]
+  acts_as_authorization_object :subject_class_name => 'Operator'
 
   validates_presence_of :name, :port, :cipher, :protocol
   # Avoids 2 servers on the same port
@@ -65,6 +62,12 @@ class L2vpnServer < ActiveRecord::Base
 
   belongs_to :wisp
   belongs_to :server
+
+  somehow_has :many => :access_points, :through => :l2vpn_templates
+
+  before_save do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!} if record.new_record? || record.changed?
+  end
 
   after_create do |record|
     record.wisp.ca.create_openvpn_server_certificate(record)

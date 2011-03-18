@@ -1,10 +1,6 @@
 class VlanTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => [
-      :tag, :output_band_percent, :bridge_template_id
-  ], :notify_on_destroy => :interface_template
-
   validates_uniqueness_of :tag, :scope => [ :interface_template_id, :interface_template_type ]
   validates_numericality_of :tag,
                             :greater_than_or_equal_to => 1,
@@ -12,11 +8,21 @@ class VlanTemplate < ActiveRecord::Base
 
   belongs_to :bridge_template
 
-  belongs_to :interface_template, :polymorphic => true, :touch => true
+  belongs_to :interface_template, :polymorphic => true
 
   # Template instances
   has_many :vlans, :dependent => :destroy
   has_many :instances, :class_name => 'Vlan', :foreign_key => :vlan_template_id
+
+  somehow_has :many => :access_points, :through => :interface_template
+
+  before_save do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!} if record.new_record? || record.changed?
+  end
+
+  after_destroy do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!}
+  end
 
   # Update linked template instances
   after_create do |record|

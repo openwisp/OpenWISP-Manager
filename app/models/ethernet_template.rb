@@ -1,11 +1,6 @@
 class EthernetTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => [
-      :name, :output_band,
-      :vlan_templates, :bridge_template_id
-  ], :notify_on_destroy => :access_point_template
-
   NAME_PREFIX = "eth"
 
   validates_presence_of :name
@@ -15,7 +10,7 @@ class EthernetTemplate < ActiveRecord::Base
 
   belongs_to :bridge_template
 
-  belongs_to :access_point_template, :touch => true
+  belongs_to :access_point_template
 
   has_one :l2tc_template, :as => :shapeable_template, :dependent => :destroy
 
@@ -26,6 +21,16 @@ class EthernetTemplate < ActiveRecord::Base
   # Template instances
   has_many :ethernets, :dependent => :destroy
   has_many :instances, :class_name => 'Ethernet', :foreign_key => :ethernet_template_id
+
+  somehow_has :many => :access_points, :through => :access_point_template
+
+  before_save do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!} if record.new_record? || record.changed?
+  end
+
+  after_destroy do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!}
+  end
 
   before_create do |record|
     record.l2tc_template = L2tcTemplate.new( :shapeable_template => record,

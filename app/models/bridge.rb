@@ -22,7 +22,7 @@ class Bridge < ActiveRecord::Base
   has_many :vaps, :dependent => :nullify
   has_many :vlans, :dependent => :nullify
 
-  belongs_to :machine, :polymorphic => true, :touch => true
+  belongs_to :machine, :polymorphic => true
 
   # Instance template
   belongs_to :bridge_template
@@ -124,16 +124,8 @@ class Bridge < ActiveRecord::Base
 
   end
 
-  def personalized?(attribute_name)
-    return true if template.nil?
-
-    !read_attribute(attribute_name).nil?
-  end
-
   def personalized?
-    return true if template.nil?
-
-    [:name, :netmask, :gateway, :dns, :addressing_mode].any?{|attr| personalized?(attr) }
+    template.nil? ? true : [:name, :netmask, :gateway, :dns, :addressing_mode].any?{|attr| !read_attribute(attr).blank? }
   end
 
   # Accessor methods (read)

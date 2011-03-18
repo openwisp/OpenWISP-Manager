@@ -3,7 +3,7 @@ class L2vpnClient < ActiveRecord::Base
 
   has_one :tap, :as => :l2vpn, :dependent => :destroy
   has_one :x509_certificate, :as => :certificable, :dependent => :destroy
-  belongs_to :access_point, :touch => true
+  belongs_to :access_point
 
   belongs_to :l2vpn_template
   belongs_to :template, :class_name => 'L2vpnTemplate', :foreign_key => :l2vpn_template_id

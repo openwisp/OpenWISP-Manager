@@ -1,13 +1,6 @@
 class AccessPointTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => [
-      :radio_templates, :bridge_templates,
-      :vap_templates, :ethernet_templates,
-      :l2vpn_templates, :l2tc_templates,
-      :tap_templates, :custom_script_templates
-  ]
-
   validates_presence_of :name
   validates_format_of :name, :with => /\A[\w\d_\s\.\-]+\Z/i
   validates_length_of :name, :maximum => 32

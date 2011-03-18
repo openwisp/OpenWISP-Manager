@@ -7,12 +7,6 @@ class AccessPoint < ActiveRecord::Base
                    :lat_column_name => :lat,
                    :lng_column_name => :lon
 
-  acts_as_markable_on_change :watch_for => [
-      :name, :mac_address, :access_point_template,
-      :custom_scripts, :radios,
-      :ethernets, :taps
-  ], :clear_marks_on => :generate_configuration_md5
-
   validates_presence_of :name, :mac_address, :address, :city, :zip
   validates_presence_of :lat, :lon, :message => :not_valid_f
 
@@ -50,8 +44,6 @@ class AccessPoint < ActiveRecord::Base
   # Instance template
   belongs_to :access_point_template
   belongs_to :template, :class_name => 'AccessPointTemplate', :foreign_key => :access_point_template_id
-
-  alias :is_outdated? :changing?
 
   def generate_configuration
 
@@ -291,5 +283,13 @@ class AccessPoint < ActiveRecord::Base
   def vlans
     # TODO: this should return an activerecord array
     (self.ethernets.map { | e | e.vlans } + self.taps.map { |t| t.vlans }).flatten
+  end
+
+  def configuration_outdated!
+    update_attribute :configuration_outdated, true
+  end
+
+  def configuration_updated!
+    update_attribute :configuration_outdated, false
   end
 end

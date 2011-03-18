@@ -1,10 +1,6 @@
 class Radio < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => [
-      :channel, :output_band, :vaps
-  ]
-
   DEFAULT_CHANNEL = 6
   DEFAULT_MODE = "11bg"
   MODES = %w( 11bg 11g 11b 11a 11n )
@@ -18,7 +14,7 @@ class Radio < ActiveRecord::Base
   has_many :vaps, :dependent => :destroy
   has_many :subinterfaces, :class_name => 'Vap', :foreign_key => :radio_id
 
-  belongs_to :access_point, :touch => true
+  belongs_to :access_point
 
   has_one :l2tc, :as => :shapeable
 
@@ -26,7 +22,10 @@ class Radio < ActiveRecord::Base
   belongs_to :radio_template
   belongs_to :template, :class_name => 'RadioTemplate', :foreign_key => :radio_template_id
 
-  
+  before_save do |record|
+    record.access_point.configuration_outdated! if record.new_record? || record.changed?
+  end
+
   def link_to_template(template)
     self.template = template
     

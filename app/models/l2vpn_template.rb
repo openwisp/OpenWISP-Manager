@@ -1,17 +1,25 @@
 class L2vpnTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => :l2vpn_server, :notify_on_destroy => :access_point_template
-
   validates_uniqueness_of :l2vpn_server_id, :scope => :access_point_template_id
   validates_presence_of :l2vpn_server_id
 
   has_one :tap_template, :dependent => :destroy
-  belongs_to :access_point_template, :touch => true
+  belongs_to :access_point_template
   belongs_to :l2vpn_server
 
   # Template instances
   has_many :l2vpn_clients, :dependent => :destroy
+
+  somehow_has :many => :access_points, :through => :access_point_template
+
+  before_save do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!} if record.new_record? || record.changed?
+  end
+
+  after_destroy do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!}
+  end
 
   # Update l2vpn instances
   after_create do |record|

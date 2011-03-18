@@ -1,11 +1,6 @@
 class CustomScript < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => [
-      :name, :body, :cron_minute, :cron_hour,
-      :cron_day, :cron_month, :cron_dayweek
-  ], :notify_on_destroy => :access_point
-  
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :access_point_id
   validates_format_of :name, :with => /\A[\s\w\d_\.]+\Z/i
@@ -13,8 +8,16 @@ class CustomScript < ActiveRecord::Base
 
   validates_presence_of :body
   
-  belongs_to :access_point, :touch => true
-  
+  belongs_to :access_point
+
+  before_save do |record|
+    record.access_point.configuration_outdated! if record.new_record? || record.changed?
+  end
+
+  after_destroy do |record|
+    record.access_point.configuration_outdated!
+  end
+
   def validate
     
     # 0-59 Numerical Range :: Examples:*, */1, */23 OR d1-d2 OR d1,d2,d3

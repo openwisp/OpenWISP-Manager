@@ -7,7 +7,7 @@
       <p><%= f.error_messages %></p>
       <p>
         <%= f.label t(:Wisp) %><br />
-        <%= f.select( :wisp_id, @wisps.map{ |w| [w.name, w.id] } ) %>
+        <%= f.select( :wisp_id, @wisps.map{ |w| [w.name, w.id] }, {}, :disabled => true ) %>
       </p>
       <p>
         <%= f.label t(:L2vpn_server_name) %><br />

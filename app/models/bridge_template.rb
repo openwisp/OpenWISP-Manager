@@ -3,11 +3,6 @@ require "ipaddr"
 class BridgeTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => [
-      :name, :ip_range_begin, :ip_range_end,
-      :netmask, :gateway, :dns, :addressing_mode
-  ], :notify_on_destroy => :access_point_template
-  
   ADDRESSING_MODES = %w( static dynamic none )
   
   validates_inclusion_of :addressing_mode, :in => BridgeTemplate::ADDRESSING_MODES
@@ -23,11 +18,21 @@ class BridgeTemplate < ActiveRecord::Base
   has_many :vap_templates, :dependent => :nullify
   has_many :vlan_templates, :dependent => :nullify
 
-  belongs_to :access_point_template, :touch => true
+  belongs_to :access_point_template
 
   # Template instances
   has_many :bridges, :dependent => :destroy
   has_many :instances, :class_name => 'Bridge', :foreign_key => :bridge_template_id
+
+  somehow_has :many => :access_points, :through => :access_point_template
+
+  before_save do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!} if record.new_record? || record.changed?
+  end
+
+  after_destroy do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!}
+  end
   
   # Update linked template instances
   after_save { |record|

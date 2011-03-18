@@ -1,14 +1,8 @@
 class TapTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => [
-      :output_band,
-      :vlan_templates, :l2vpn_template,
-      :bridge_template_id
-  ], :notify_on_destroy => :l2vpn_template
-
   belongs_to :bridge_template
-  belongs_to :l2vpn_template, :touch => true
+  belongs_to :l2vpn_template
 
   has_one :l2tc_template, :as => :shapeable_template, :dependent => :destroy
 
@@ -19,6 +13,16 @@ class TapTemplate < ActiveRecord::Base
   # Template instances
   has_many :taps, :dependent => :destroy
   has_many :instances, :class_name => 'Tap', :foreign_key => :tap_template_id
+
+  somehow_has :many => :access_points, :through => :l2vpn_template
+
+  before_save do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!} if record.new_record? || record.changed?
+  end
+
+  after_destroy do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!}
+  end
 
   before_create do |record|
     record.l2tc_template = L2tcTemplate.new( :shapeable_template => record,

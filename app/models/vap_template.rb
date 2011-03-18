@@ -1,13 +1,6 @@
 class VapTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  acts_as_markable_on_change :watch_for => [
-      :essid, :visibility, :key, :encryption,
-      :radius_auth_server, :radius_auth_server_port,
-      :radius_acct_server, :radius_acct_server_port,
-      :output_band_percent, :bridge_template_id
-  ], :notify_on_destroy => :radio_template
-
   NAME_PREFIX = "vap"
 
   ENC_TYPES = %w(none wep psk psk2 wpa wpa2 pskmixed wpamixed)
@@ -81,18 +74,20 @@ class VapTemplate < ActiveRecord::Base
                             :allow_nil => true, :allow_blank => true
 
   belongs_to :bridge_template
-  belongs_to :radio_template, :touch => true
+  belongs_to :radio_template
 
   # Template instances
   has_many :vaps, :dependent => :destroy
   has_many :instances, :class_name => 'Vap', :foreign_key => :vap_template_id
 
-  def key_needed?
-    VapTemplate::ENC_TYPES_WKEY.include?(encryption)
+  somehow_has :many => :access_points, :through => :radio_template
+
+  before_save do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!} if record.new_record? || record.changed?
   end
 
-  def radius_needed?
-    VapTemplate::ENC_TYPES_WRADIUS.include?(encryption)
+  after_destroy do |record|
+    record.related_access_points.each{|ap| ap.configuration_outdated!}
   end
 
   # Update linked template instances
@@ -122,6 +117,14 @@ class VapTemplate < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def key_needed?
+    VapTemplate::ENC_TYPES_WKEY.include?(encryption)
+  end
+
+  def radius_needed?
+    VapTemplate::ENC_TYPES_WRADIUS.include?(encryption)
   end
 
   def do_bridge!(b)
