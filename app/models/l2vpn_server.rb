@@ -65,7 +65,7 @@ class L2vpnServer < ActiveRecord::Base
 
   somehow_has :many => :access_points, :through => :l2vpn_templates
 
-  after_save :outdate_configuration_if_required
+  before_save :outdate_configuration_if_required
 
   after_create do |record|
     record.wisp.ca.create_openvpn_server_certificate(record, { :validity_time => 2.years })
@@ -153,6 +153,6 @@ class L2vpnServer < ActiveRecord::Base
   private
 
   def outdate_configuration_if_required
-    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
+    related_access_points.each{|ap| ap.outdate_configuration!} if !new_record? && (changed? || destroyed?)
   end
 end

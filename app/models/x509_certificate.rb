@@ -11,7 +11,7 @@ class X509Certificate < ActiveRecord::Base
   somehow_has :one => :access_point, :through => :certifiable, :if => Proc.new {|instance| instance.is_a? AccessPoint }
   somehow_has :many => :access_points, :through => :certifiable, :if => Proc.new {|instance| instance.is_a? AccessPoint }
 
-  after_save :outdate_configuration_if_required
+  before_save :outdate_configuration_if_required
   after_destroy :outdate_configuration_if_required
 
   def x509_valid?
@@ -46,8 +46,8 @@ class X509Certificate < ActiveRecord::Base
     # If we modify this instance, we must mark the related AP configuration as outdated.
     # This is only applicable for ethernet 'attached' to access points
     #TODO: Find a solution and fix the Array bug!
-    if new_record? || changed? || destroyed?
-      related_access_point.outdate_configuration! if related_access_point && !related_access_point.is_a?(Array)
+    if !new_record? && (changed? || destroyed?)
+      related_access_point.outdate_configuration! if related_access_point
       related_access_points.each{|ap| ap.outdate_configuration!}
     end
   end
