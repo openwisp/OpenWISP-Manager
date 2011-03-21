@@ -82,13 +82,7 @@ class VapTemplate < ActiveRecord::Base
 
   somehow_has :many => :access_points, :through => :radio_template
 
-  before_save do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!} if record.new_record? || record.changed?
-  end
-
-  after_destroy do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!}
-  end
+  after_save :outdate_configuration_if_required
 
   # Update linked template instances
   after_create do |record|
@@ -146,4 +140,9 @@ class VapTemplate < ActiveRecord::Base
     "essid '#{self.essid}' - radio '#{self.radio_template.name}'"
   end
 
+  private
+
+  def outdate_configuration_if_required
+    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
+  end
 end

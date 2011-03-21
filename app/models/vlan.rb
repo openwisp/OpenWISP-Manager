@@ -2,11 +2,11 @@ class Vlan < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   validates_uniqueness_of :tag, :scope => :interface_id,
-                          :unless => Proc.new { |b| b.interface.machine.is_a?(AccessPoint) and b.tag.nil? }
+                          :unless => Proc.new { |b| b.interface.is_a?(AccessPoint) and b.tag.nil? }
   validates_numericality_of :tag,
                             :greater_than_or_equal_to => 1,
                             :less_than_or_equal_to => 4094,
-                            :unless => Proc.new { |b| b.interface.machine.is_a?(AccessPoint) and b.tag.nil? }
+                            :unless => Proc.new { |b| b.interface.is_a?(AccessPoint) and b.tag.nil? }
 
   belongs_to :interface, :polymorphic => true
 
@@ -18,17 +18,7 @@ class Vlan < ActiveRecord::Base
 
   somehow_has :one => :machine, :through => :interface, :as => :related_access_point, :if => Proc.new{|instance| instance.is_a? AccessPoint }
 
-  before_save do |record|
-    # If we modify this instance, we must mark the related AP configuration as outdated.
-    # This is only applicable for vlan 'attached' to access points
-    if record.related_access_point && (record.new_record? || record.changed?)
-      record.related_access_point.outdate_configuration!
-    end
-  end
-
-  def belongs_to_access_point?
-    self.interface.class == AccessPoint
-  end
+  after_save :outdate_configuration_if_required
 
   def link_to_template(t)
     self.template = t
@@ -87,4 +77,9 @@ class Vlan < ActiveRecord::Base
     '802.1q'
   end
 
+  private
+
+  def outdate_configuration_if_required
+    related_access_point.outdate_configuration! if related_access_point && (new_record? || changed? || destroyed?)
+  end
 end

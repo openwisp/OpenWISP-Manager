@@ -46,12 +46,8 @@ class Vap < ActiveRecord::Base
 
   somehow_has :one => :access_point, :through => :radio
 
-  before_save do |record|
-    # If we modify this instance, we must mark the related AP configuration as outdated.
-    if record.related_access_point && (record.new_record? || record.changed?)
-      record.related_access_point.outdate_configuration!
-    end
-  end
+  after_save :outdate_configuration_if_required
+  after_destroy :outdate_configuration_if_required
 
   def key_needed?
     VapTemplate::ENC_TYPES_WKEY.include?(encryption)
@@ -173,4 +169,9 @@ class Vap < ActiveRecord::Base
     'ip'
   end
 
+  private
+
+  def outdate_configuration_if_required
+    related_access_point.outdate_configuration! if related_access_point && (new_record? || changed? || destroyed?)
+  end
 end

@@ -22,9 +22,7 @@ class Radio < ActiveRecord::Base
   belongs_to :radio_template
   belongs_to :template, :class_name => 'RadioTemplate', :foreign_key => :radio_template_id
 
-  before_save do |record|
-    record.access_point.outdate_configuration if record.new_record? || record.changed?
-  end
+  after_save :outdate_configuration_if_required
 
   def link_to_template(template)
     self.template = template
@@ -87,4 +85,9 @@ class Radio < ActiveRecord::Base
     read_attribute(:output_band)
   end
 
+  private
+
+  def outdate_configuration_if_required
+    access_point.outdate_configuration! if access_point && (new_record? || changed? || destroyed?)
+  end
 end

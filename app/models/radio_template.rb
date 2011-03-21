@@ -31,13 +31,8 @@ class RadioTemplate < ActiveRecord::Base
                                 :allow_destroy => true,
                                 :reject_if => lambda { |a| a.values.all?(&:blank?) }
 
-  before_save do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!} if record.new_record? || record.changed?
-  end
-
-  after_destroy do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!}
-  end
+  after_save :outdate_configuration_if_required
+  after_destroy :outdate_configuration_if_required
 
   before_create do |record|
     record.l2tc_template = L2tcTemplate.new( :shapeable_template => record,
@@ -46,7 +41,7 @@ class RadioTemplate < ActiveRecord::Base
 
   # Update linked template instances
   after_create do |record|
-  # We have a new radio_template
+    # We have a new radio_template
     record.access_point_template.access_points.each do |h|
       # For each linked template instance, create a new radio and associate it with
       # the corresponding access_point
@@ -67,4 +62,9 @@ class RadioTemplate < ActiveRecord::Base
     self.name
   end
 
+  private
+
+  def outdate_configuration_if_required
+    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
+  end
 end

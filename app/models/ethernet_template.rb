@@ -24,13 +24,8 @@ class EthernetTemplate < ActiveRecord::Base
 
   somehow_has :many => :access_points, :through => :access_point_template
 
-  before_save do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!} if record.new_record? || record.changed?
-  end
-
-  after_destroy do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!}
-  end
+  after_save :outdate_configuration_if_required
+  after_destroy :outdate_configuration_if_required
 
   before_create do |record|
     record.l2tc_template = L2tcTemplate.new( :shapeable_template => record,
@@ -79,5 +74,11 @@ class EthernetTemplate < ActiveRecord::Base
   # Accessor methods (read)
   def friendly_name
     self.name
+  end
+
+  private
+
+  def outdate_configuration_if_required
+    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
   end
 end

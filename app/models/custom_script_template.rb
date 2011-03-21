@@ -12,14 +12,9 @@ class CustomScriptTemplate < ActiveRecord::Base
 
   somehow_has :many => :access_points, :through => :access_point_template
 
-  before_save do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!} if record.new_record? || record.changed?
-  end
+  after_save :outdate_configuration_if_required
+  after_destroy :outdate_configuration_if_required
 
-  after_destroy do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!}
-  end
-  
   def validate
     
     # 0-59 Numerical Range :: Examples:*, */1, */23 OR d1-d2 OR d1,d2,d3
@@ -46,5 +41,11 @@ class CustomScriptTemplate < ActiveRecord::Base
       errors.add(:cron_dayweek, :cron_dayweek_wrong_format)
     end
     
+  end
+
+  private
+
+  def outdate_configuration_if_required
+    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
   end
 end

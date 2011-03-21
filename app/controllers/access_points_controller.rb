@@ -44,9 +44,8 @@ class AccessPointsController < ApplicationController
 
       #Updating configuration files if old
       if !access_point.nil?
-        if access_point.last_configuration_retrieve_ip != request.remote_ip
-          access_point.update_attributes(:last_configuration_retrieve_ip => request.remote_ip)
-        end
+        access_point.last_seen_on request.remote_ip
+
         #Sending configuration files for the access point
         send_file ACCESS_POINTS_CONFIGURATION_PATH.join(
                       "ap-#{access_point.wisp.id}-#{access_point.id}.tar.gz"

@@ -16,13 +16,7 @@ class Tap < ActiveRecord::Base
 
   somehow_has :one => :access_point, :through => :l2vpn, :if => Proc.new{|instance| instance.is_a? AccessPoint }
 
-  before_save do |record|
-    # If we modify this instance, we must mark the related AP configuration as outdated.
-    # This is only applicable for ethernet 'attached' to access points
-    if record.related_access_point && (record.new_record? || record.changed?)
-      record.related_access_point.outdate_configuration
-    end
-  end
+  after_save :outdate_configuration_if_required
 
   def link_to_template(t)
     self.template = t
@@ -79,4 +73,10 @@ class Tap < ActiveRecord::Base
     self.l2vpn.machine
   end
 
+  private
+
+  def outdate_configuration_if_required
+    #TODO: Find a solution and fix the Array bug!
+    related_access_point.outdate_configuration! if related_access_point && !related_access_point.is_a?(Array) && (new_record? || changed? || destroyed?)
+  end
 end

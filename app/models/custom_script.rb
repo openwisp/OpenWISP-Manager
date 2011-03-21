@@ -10,13 +10,8 @@ class CustomScript < ActiveRecord::Base
   
   belongs_to :access_point
 
-  before_save do |record|
-    record.access_point.outdate_configuration if record.new_record? || record.changed?
-  end
-
-  after_destroy do |record|
-    record.access_point.outdate_configuration!
-  end
+  after_save :outdate_configuration_if_required
+  after_destroy :outdate_configuration_if_required
 
   def validate
     
@@ -44,5 +39,11 @@ class CustomScript < ActiveRecord::Base
       errors.add(:cron_dayweek, :cron_dayweek_wrong_format)
     end
     
+  end
+
+  private
+
+  def outdate_configuration_if_required
+    access_point.outdate_configuration! if access_point && (new_record? || changed? || destroyed?)
   end
 end

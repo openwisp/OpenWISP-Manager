@@ -4,7 +4,7 @@ class BridgeTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   ADDRESSING_MODES = %w( static dynamic none )
-  
+
   validates_inclusion_of :addressing_mode, :in => BridgeTemplate::ADDRESSING_MODES
 
   validates_presence_of :ip_range_begin, :ip_range_end, :netmask, :if => :static_addressing?
@@ -26,14 +26,9 @@ class BridgeTemplate < ActiveRecord::Base
 
   somehow_has :many => :access_points, :through => :access_point_template
 
-  before_save do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!} if record.new_record? || record.changed?
-  end
+  after_save :outdate_configuration_if_required
+  after_destroy :outdate_configuration_if_required
 
-  after_destroy do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!}
-  end
-  
   # Update linked template instances
   after_save { |record|
     if record.bridges.length == 0
@@ -51,11 +46,11 @@ class BridgeTemplate < ActiveRecord::Base
   def static_addressing?
     addressing_mode == 'static'
   end
-  
+
   def validate
     unless self.bridges.nil? or self.bridges.length == 0
-      if self.addressing_mode_changed? or self.ip_range_begin_changed? or 
-         self.ip_range_end_changed? or self.netmask_changed?
+      if self.addressing_mode_changed? or self.ip_range_begin_changed? or
+          self.ip_range_end_changed? or self.netmask_changed?
         errors.add_to_base(:cannot_update_addressing_on_linked_template)
       end
     end
@@ -121,7 +116,7 @@ class BridgeTemplate < ActiveRecord::Base
         errors.add(:ip_range_begin, :needed_for_static_addressent)
         errors.add(:ip_range_end, :needed_for_static_addressent)
       end
-  
+
       if (!ip_gateway.nil? and !ip_r_begin_netmask.nil?)
         unless (ip_gateway.nil? or ip_r_begin_netmask.include?(ip_gateway))
           errors.add(:gateway, :must_be_in_network)
@@ -134,4 +129,9 @@ class BridgeTemplate < ActiveRecord::Base
     (ethernet_templates + tap_templates  + vap_templates + vlan_templates).flatten
   end
 
+  private
+
+  def outdate_configuration_if_required
+    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
+  end
 end

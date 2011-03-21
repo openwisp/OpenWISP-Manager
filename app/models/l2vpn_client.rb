@@ -10,10 +10,7 @@ class L2vpnClient < ActiveRecord::Base
 
   belongs_to :l2vpn_server
 
-  before_save do |record|
-    # If we modify this instance, we must mark the related AP configuration as outdated.
-    record.access_point.outdate_configuration if record.new_record? || record.changed?
-  end
+  after_save :outdate_configuration_if_required
 
   after_create do |record|
     record.access_point.wisp.ca.create_openvpn_client_certificate(record)
@@ -51,4 +48,9 @@ class L2vpnClient < ActiveRecord::Base
     l2vpn_server.name
   end
 
+  private
+
+  def outdate_configuration_if_required
+    access_point.outdate_configuration! if access_point && (new_record? || changed? || destroyed?)
+  end
 end

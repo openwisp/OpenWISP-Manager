@@ -3,13 +3,11 @@ class L2tc < ActiveRecord::Base
 
   belongs_to :shapeable, :polymorphic => true
   belongs_to :access_point
-  
+
   belongs_to :l2tc_template
-  
-  before_save do |record|
-    record.access_point.outdate_configuration if record.new_record? || record.changed?
-  end
-  
+
+  after_save :outdate_configuration_if_required
+
   def validate
     sum = 0
     self.shapeable.subinterfaces.each do |s|
@@ -31,7 +29,7 @@ class L2tc < ActiveRecord::Base
   def link_to_template(template)
     self.l2tc_template = template
   end
-  
+
   def unknown_output_band
     if self.shapeable.output_band.nil?
       nil
@@ -53,7 +51,7 @@ class L2tc < ActiveRecord::Base
       max = self.shapeable.output_band
       min = max
       self.shapeable.subinterfaces.each { |s|
-        unless s.output_band.nil? 
+        unless s.output_band.nil?
           min = s.output_band if min > s.output_band
         end
       }
@@ -70,4 +68,9 @@ class L2tc < ActiveRecord::Base
     end
   end
 
+  private
+
+  def outdate_configuration_if_required
+    access_point.outdate_configuration! if access_point && (new_record? || changed? || destroyed?)
+  end
 end

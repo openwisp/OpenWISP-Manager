@@ -10,7 +10,7 @@ class AccessPoint < ActiveRecord::Base
   validates_presence_of :name, :mac_address, :address, :city, :zip
   validates_presence_of :lat, :lon, :message => :not_valid_f
 
-  validates_uniqueness_of :name, :mac_address
+  validates_uniqueness_of :name, :mac_address, :case_sensitive => false
 
   validates_numericality_of :lat, :allow_nil => true
   validates_numericality_of :lon, :allow_nil => true
@@ -299,5 +299,20 @@ class AccessPoint < ActiveRecord::Base
 
   def update_configuration!
     update_attribute :configuration_outdated, false
+  end
+
+  def last_seen_on(ip_addr)
+    if last_configuration_retrieve_ip != ip_addr
+      AccessPoint.reset_last_configuration_retrieve_ip_for ip_addr
+      update_attribute(:last_configuration_retrieve_ip, ip_addr)
+    end
+  end
+
+  private
+
+  def self.reset_last_configuration_retrieve_ip_for(ip_addr)
+    find(:all, :conditions => {:last_configuration_retrieve_ip => ip_addr}).each do |ap|
+      ap.last_seen_on nil
+    end
   end
 end

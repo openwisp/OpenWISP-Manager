@@ -42,7 +42,7 @@ class L2vpnServersController < ApplicationController
 
   def create
     @l2vpn_server = @server.l2vpn_servers.build(params[:l2vpn_server])
-    @l2vpn_server.tap = Tap.new()
+    @l2vpn_server.tap = Tap.new
 
     if @l2vpn_server.save
       @l2vpn_server.tap.save!

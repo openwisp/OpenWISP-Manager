@@ -16,13 +16,8 @@ class VlanTemplate < ActiveRecord::Base
 
   somehow_has :many => :access_points, :through => :interface_template
 
-  before_save do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!} if record.new_record? || record.changed?
-  end
-
-  after_destroy do |record|
-    record.related_access_points.each{|ap| ap.outdate_configuration!}
-  end
+  after_save :outdate_configuration_if_required
+  after_destroy :outdate_configuration_if_required
 
   # Update linked template instances
   after_create do |record|
@@ -74,4 +69,9 @@ class VlanTemplate < ActiveRecord::Base
     "vlan #{self.tag} - #{self.interface_template.friendly_name}"
   end
 
+  private
+
+  def outdate_configuration_if_required
+    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
+  end
 end

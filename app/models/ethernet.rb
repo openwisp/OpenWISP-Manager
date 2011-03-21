@@ -24,13 +24,7 @@ class Ethernet < ActiveRecord::Base
 
   somehow_has :one => :machine, :as => :related_access_point, :if => Proc.new{|instance| instance.is_a? AccessPoint}
   
-  before_save do |record|
-    # If we modify this instance, we must mark the related AP configuration as outdated.
-    # This is only applicable for ethernet 'attached' to access points
-    if !related_access_point.nil? && (record.new_record? || record.changed?)
-      record.related_access_point.outdate_configuration
-    end
-  end
+  after_save :outdate_configuration_if_required
 
   def link_to_template(t)
     self.template = t
@@ -82,5 +76,10 @@ class Ethernet < ActiveRecord::Base
 
     read_attribute(:output_band)
   end
-  
+
+  private
+
+  def outdate_configuration_if_required
+    related_access_point.outdate_configuration! if related_access_point && (new_record? || changed? || destroyed?)
+  end
 end
