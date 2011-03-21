@@ -46,8 +46,8 @@
 
   <% unless vap_template_form.object.new_record? %>
     <div>
-      <%= vap_template_form.label :_delete, t(:Remove_Vap) %>
-      <%= vap_template_form.check_box :_delete %>
+      <%= vap_template_form.label :_destroy, t(:Remove_Vap) %>
+      <%= vap_template_form.check_box :_destroy %>
     </div>
   <% end %>
 </fieldset>
