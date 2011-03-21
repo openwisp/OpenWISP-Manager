@@ -12,7 +12,7 @@ gem 'libarchive', '>= 0.1.2', :require => 'libarchive_ruby'
 
 gem 'system_timer', '>= 1.0'
 
-gem 'somehow_has_relation'
+gem 'somehow_has_relation', '>= 0.0.3'
 
 gem 'chronic', '>= 0.2.3'
 gem 'packet', '>= 0.1.15'

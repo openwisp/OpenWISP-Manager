@@ -83,11 +83,11 @@ class VapTemplate < ActiveRecord::Base
   somehow_has :many => :access_points, :through => :radio_template
 
   before_save do |record|
-    record.related_access_points.each{|ap| ap.configuration_outdated!} if record.new_record? || record.changed?
+    record.related_access_points.each{|ap| ap.outdate_configuration!} if record.new_record? || record.changed?
   end
 
   after_destroy do |record|
-    record.related_access_points.each{|ap| ap.configuration_outdated!}
+    record.related_access_points.each{|ap| ap.outdate_configuration!}
   end
 
   # Update linked template instances

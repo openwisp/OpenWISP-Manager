@@ -8,21 +8,21 @@ class X509Certificate < ActiveRecord::Base
   belongs_to :ca
   belongs_to :certifiable, :polymorphic => true
 
-  somehow_has :many => :access_points, :through => :certifiable, :if => Proc.new { self.certifiable.class != L2vpnClient }
+  somehow_has :one => :access_point, :through => :certifiable, :if => Proc.new {|instance| instance.is_a? AccessPoint }
+  somehow_has :many => :access_points, :through => :certifiable, :if => Proc.new {|instance| instance.is_a? AccessPoint }
 
   before_save do |record|
-    # If we modify this instance, we must mark the related APs configuration as outdated.
-    if record.certifiable.class == L2vpnClient
-      # If this certificate belongs to a l2 vpn client, we have to mark a single AP
-      record.certifiable.access_point.configuration_outdated! if !record.new_record?
-    else
-      record.related_access_points.each{|ap| ap.configuration_outdated!}
+    # If we modify this instance, we must mark the related AP configuration as outdated.
+    # This is only applicable for ethernet 'attached' to access points
+    if record.new_record? || record.changed?
+      record.related_access_point.outdate_configuration! if record.related_access_point
+      record.related_access_points.each{|ap| ap.outdate_configuration!}
     end
   end
 
   after_destroy do |record|
     # If we modify this instance, we must mark the related APs configuration as outdated.
-    record.related_access_points.each{|ap| ap.configuration_outdated!}
+    record.related_access_points.each{|ap| ap.outdate_configuration!}
   end
 
   def x509_valid?

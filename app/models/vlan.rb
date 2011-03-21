@@ -2,11 +2,11 @@ class Vlan < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   validates_uniqueness_of :tag, :scope => :interface_id,
-                          :unless => Proc.new { |b| b.belongs_to_access_point? and b.tag.nil? }
+                          :unless => Proc.new { |b| b.interface.machine.is_a?(AccessPoint) and b.tag.nil? }
   validates_numericality_of :tag,
                             :greater_than_or_equal_to => 1,
                             :less_than_or_equal_to => 4094,
-                            :unless => Proc.new { |b| b.belongs_to_access_point? and b.tag.nil? }
+                            :unless => Proc.new { |b| b.interface.machine.is_a?(AccessPoint) and b.tag.nil? }
 
   belongs_to :interface, :polymorphic => true
 
@@ -16,10 +16,14 @@ class Vlan < ActiveRecord::Base
   belongs_to :vlan_template
   belongs_to :template, :class_name => 'VlanTemplate', :foreign_key => :vlan_template_id
 
+  somehow_has :one => :machine, :through => :interface, :as => :related_access_point, :if => Proc.new{|instance| instance.is_a? AccessPoint }
+
   before_save do |record|
     # If we modify this instance, we must mark the related AP configuration as outdated.
     # This is only applicable for vlan 'attached' to access points
-    record.interface.access_point.configuration_outdated! if !record.new_record? and record.belongs_to_access_point?
+    if record.related_access_point && (record.new_record? || record.changed?)
+      record.related_access_point.outdate_configuration!
+    end
   end
 
   def belongs_to_access_point?

@@ -7,7 +7,7 @@ class L2tc < ActiveRecord::Base
   belongs_to :l2tc_template
   
   before_save do |record|
-    record.access_point.configuration_outdated! if !record.new_record?
+    record.access_point.outdate_configuration if record.new_record? || record.changed?
   end
   
   def validate

@@ -12,7 +12,7 @@ class L2vpnClient < ActiveRecord::Base
 
   before_save do |record|
     # If we modify this instance, we must mark the related AP configuration as outdated.
-    record.access_point.configuration_outdated! if !record.new_record?
+    record.access_point.outdate_configuration if record.new_record? || record.changed?
   end
 
   after_create do |record|

@@ -2,13 +2,13 @@ class Ethernet < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   validates_presence_of :name,
-    :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
+    :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
   validates_uniqueness_of :name, :scope => [ :machine_id, :machine_type ],
-    :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
+    :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
   validates_format_of :name, :with => /\A[a-z][\w\d_\.]*\Z/i,
-    :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
+    :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
   validates_length_of :name, :maximum => 8,
-    :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
+    :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
 
   belongs_to :bridge
   belongs_to :machine, :polymorphic => true
@@ -21,17 +21,17 @@ class Ethernet < ActiveRecord::Base
   # Instance template
   belongs_to :ethernet_template
   belongs_to :template, :class_name => 'EthernetTemplate', :foreign_key => :ethernet_template_id
+
+  somehow_has :one => :machine, :as => :related_access_point, :if => Proc.new{|instance| instance.is_a? AccessPoint}
   
   before_save do |record|
     # If we modify this instance, we must mark the related AP configuration as outdated.
     # This is only applicable for ethernet 'attached' to access points
-    record.machine.configuration_outdated! if !record.new_record? and record.machine.class == AccessPoint
+    if !related_access_point.nil? && (record.new_record? || record.changed?)
+      record.related_access_point.outdate_configuration
+    end
   end
-  
-  def belongs_to_access_point?
-    self.machine.class == AccessPoint
-  end
-  
+
   def link_to_template(t)
     self.template = t
 

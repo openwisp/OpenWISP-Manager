@@ -23,7 +23,7 @@ class Radio < ActiveRecord::Base
   belongs_to :template, :class_name => 'RadioTemplate', :foreign_key => :radio_template_id
 
   before_save do |record|
-    record.access_point.configuration_outdated! if !record.new_record?
+    record.access_point.outdate_configuration if record.new_record? || record.changed?
   end
 
   def link_to_template(template)

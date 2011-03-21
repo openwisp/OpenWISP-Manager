@@ -285,11 +285,19 @@ class AccessPoint < ActiveRecord::Base
     (self.ethernets.map { | e | e.vlans } + self.taps.map { |t| t.vlans }).flatten
   end
 
-  def configuration_outdated!
+  def outdate_configuration
+    self.configuration_outdated = true
+  end
+
+  def update_configuration
+    self.configuration_outdated = false
+  end
+
+  def outdate_configuration!
     update_attribute :configuration_outdated, true
   end
 
-  def configuration_updated!
+  def update_configuration!
     update_attribute :configuration_outdated, false
   end
 end

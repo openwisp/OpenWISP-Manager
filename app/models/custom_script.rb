@@ -11,11 +11,11 @@ class CustomScript < ActiveRecord::Base
   belongs_to :access_point
 
   before_save do |record|
-    record.access_point.configuration_outdated! if record.new_record? || record.changed?
+    record.access_point.outdate_configuration if record.new_record? || record.changed?
   end
 
   after_destroy do |record|
-    record.access_point.configuration_outdated!
+    record.access_point.outdate_configuration!
   end
 
   def validate

@@ -44,9 +44,13 @@ class Vap < ActiveRecord::Base
   belongs_to :vap_template
   belongs_to :template, :class_name => 'VapTemplate', :foreign_key => :vap_template_id
 
+  somehow_has :one => :access_point, :through => :radio
+
   before_save do |record|
     # If we modify this instance, we must mark the related AP configuration as outdated.
-    record.radio.access_point.configuration_outdated! if !record.new_record?
+    if record.related_access_point && (record.new_record? || record.changed?)
+      record.related_access_point.outdate_configuration!
+    end
   end
 
   def key_needed?

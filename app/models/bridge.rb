@@ -6,16 +6,16 @@ class Bridge < ActiveRecord::Base
   ADDRESSING_MODES = %w( static dynamic none )
 
   validates_inclusion_of :addressing_mode, :in => BridgeTemplate::ADDRESSING_MODES,
-                         :unless => Proc.new { |b| b.belongs_to_access_point? and b.addressing_mode.nil? }
+                         :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.addressing_mode.nil? }
   validates_uniqueness_of :ip, :scope => [ :machine_id, :machine_type ],
                           :allow_nil => :true,
                           :if => Proc.new { |b| b.addressing_mode == 'static' }
   validates_uniqueness_of :name, :scope => [ :machine_id, :machine_type ],
-                          :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
+                          :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
   validates_format_of :name, :with => /\A[a-z][a-z0-9]*\Z/i,
-                      :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
+                      :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
   validates_length_of :name, :maximum => 8,
-                      :unless => Proc.new { |b| b.belongs_to_access_point? and b.name.nil? }
+                      :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
 
   has_many :ethernets, :dependent => :nullify
   has_many :taps, :dependent => :nullify
@@ -28,15 +28,17 @@ class Bridge < ActiveRecord::Base
   belongs_to :bridge_template
   belongs_to :template, :class_name => 'BridgeTemplate', :foreign_key => :bridge_template_id
 
+  somehow_has :one => :machine, :as => :related_access_point, :if => Proc.new{|instance| instance.is_a? AccessPoint }
+
   before_save do |record|
-    record.machine.configuration_outdated! if !record.new_record? and record.belongs_to_access_point?
+    # If we modify this instance, we must mark the related AP configuration as outdated.
+    # This is only applicable for ethernet 'attached' to access points
+    if !related_access_point.nil? && (record.new_record? || record.changed?)
+      record.related_access_point.outdate_configuration
+    end
   end
 
-  def belongs_to_access_point?
-    self.machine.class == AccessPoint
-  end
-
-  def before_create()
+  def before_create
     unless self.bridge_template.nil?
       # Auto-generate ip address if needed
       if (self.bridge_template.addressing_mode == 'static')
