@@ -16,7 +16,7 @@ class EthernetTemplate < ActiveRecord::Base
 
   has_many :vlan_templates, :as => :interface_template, :dependent => :destroy
   has_many :subinterfaces, :as => :interface_template, :class_name => 'VlanTemplate',
-           :foreign_key => :interface_template_id, :conditions => { :interface_template_type => 'EthernetTemplate' }
+           :foreign_key => :interface_template_id, :conditions => {:interface_template_type => 'EthernetTemplate'}
 
   # Template instances
   has_many :ethernets, :dependent => :destroy
@@ -28,8 +28,8 @@ class EthernetTemplate < ActiveRecord::Base
   after_destroy :outdate_configuration_if_required
 
   before_create do |record|
-    record.l2tc_template = L2tcTemplate.new( :shapeable_template => record,
-                                             :access_point_template => record.access_point_template)
+    record.l2tc_template = L2tcTemplate.new(:shapeable_template => record,
+                                            :access_point_template => record.access_point_template)
   end
 
   # Update linked template instances 
@@ -38,8 +38,8 @@ class EthernetTemplate < ActiveRecord::Base
     record.access_point_template.access_points.each do |h|
       # For each linked template instance, create a new ethernet and associate it with
       # the corresponding access_point
-      ne = h.ethernets.build( :machine => h )
-      ne.link_to_template( record )
+      ne = h.ethernets.build(:machine => h)
+      ne.link_to_template(record)
       unless ne.save
         errors.add_to_base(:cannot_update_linked_instances)
       end
@@ -78,7 +78,14 @@ class EthernetTemplate < ActiveRecord::Base
 
   private
 
+  OUTDATING_ATTRIBUTES = [:name, :bridge_template_id, :output_band, :id]
+
   def outdate_configuration_if_required
-    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      if related_access_points
+        related_access_points.each { |access_point| access_point.outdate_configuration! }
+      end
+    end
   end
+
 end

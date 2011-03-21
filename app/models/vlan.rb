@@ -16,7 +16,7 @@ class Vlan < ActiveRecord::Base
   belongs_to :vlan_template
   belongs_to :template, :class_name => 'VlanTemplate', :foreign_key => :vlan_template_id
 
-  somehow_has :one => :machine, :through => :interface, :as => :related_access_point, :if => Proc.new{|instance| instance.is_a? AccessPoint }
+  somehow_has :one => :machine, :through => :interface, :as => :related_access_point, :if => Proc.new { |instance| instance.is_a? AccessPoint }
 
   after_save :outdate_configuration_if_required
 
@@ -37,7 +37,7 @@ class Vlan < ActiveRecord::Base
   # Accessor methods (read)
 
   def tag
-    if (read_attribute(:tag).blank? or read_attribute(:tag).nil?) and !template.nil?
+    if read_attribute(:tag).blank? and !template.nil?
       return template.tag
     end
 
@@ -53,8 +53,7 @@ class Vlan < ActiveRecord::Base
   end
 
   def output_band_percent
-    if (read_attribute(:output_band_percent).blank? or
-        read_attribute(:output_band_percent).nil?) and !template.nil?
+    if read_attribute(:output_band_percent).blank? and !template.nil?
       return template.output_band_percent
     end
 
@@ -66,7 +65,7 @@ class Vlan < ActiveRecord::Base
   end
 
   def output_band
-    if self.interface.output_band.nil? or self.output_band_percent.nil?
+    if self.interface.output_band.blank? or self.output_band_percent.blank?
       nil
     else
       self.interface.output_band * self.output_band_percent / 100
@@ -79,7 +78,12 @@ class Vlan < ActiveRecord::Base
 
   private
 
+  OUTDATING_ATTRIBUTES = [:tag, :output_band_percent, :bridge_id]
+
   def outdate_configuration_if_required
-    related_access_point.outdate_configuration! if related_access_point && (new_record? || changed? || destroyed?)
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      related_access_point.outdate_configuration! if related_access_point
+    end
   end
+
 end

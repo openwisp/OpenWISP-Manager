@@ -5,35 +5,35 @@ class Vap < ActiveRecord::Base
 
   ENC_TYPES = %w(none wep psk psk2 wpa wpa2 pskmixed wpamixed)
   ENC_TYPES_SELECT = {
-      'none'            => 'none',
-      'WEP'             => 'wep',
-      'WPA psk'         => 'psk',
-      'WPA2 psk'        => 'psk2',
-      'WPA 802.1x'      => 'wpa',
-      'WPA2 802.1x'     => 'wpa2',
-      'WPA/WPA2 psk'    => 'pskmixed',
+      'none' => 'none',
+      'WEP' => 'wep',
+      'WPA psk' => 'psk',
+      'WPA2 psk' => 'psk2',
+      'WPA 802.1x' => 'wpa',
+      'WPA2 802.1x' => 'wpa2',
+      'WPA/WPA2 psk' => 'pskmixed',
       'WPA/WPA2 802.1x' => 'wpamixed'
   }
   ENC_TYPES_FSELECT = {
-      'none'        => 'none',
-      'wep'         => 'WEP',
-      'psk'         => 'WPA psk',
-      'psk2'        => 'WPA2 psk',
-      'wpa'         => 'WPA 802.1x',
-      'wpa2'        => 'WPA2 802.1x',
-      'pskmixed'    => 'WPA/WPA2 psk',
-      'wpamixed'    => 'WPA/WPA2 802.1x'
+      'none' => 'none',
+      'wep' => 'WEP',
+      'psk' => 'WPA psk',
+      'psk2' => 'WPA2 psk',
+      'wpa' => 'WPA 802.1x',
+      'wpa2' => 'WPA2 802.1x',
+      'pskmixed' => 'WPA/WPA2 psk',
+      'wpamixed' => 'WPA/WPA2 802.1x'
   }
   ENC_TYPES_WKEY = %w(wep psk psk2 wpa wpa2 pskmixed wpamixed)
   ENC_TYPES_WRADIUS = %w(wpa wpa2 wpamixed)
 
   VISIBILITIES = %w(hidden broadcasted)
   VISIBILITIES_SELECT = {
-      'Hidden'      => 'hidden',
+      'Hidden' => 'hidden',
       'Broadcasted' => 'broadcasted'
   }
   VISIBILITIES_FSELECT = {
-      'hidden'      => 'Hidden',
+      'hidden' => 'Hidden',
       'broadcasted' => 'Broadcasted'
   }
 
@@ -85,7 +85,7 @@ class Vap < ActiveRecord::Base
   end
 
   def essid
-    if (read_attribute(:essid).blank? or read_attribute(:essid).nil?) and !template.nil?
+    if read_attribute(:essid).blank? and !template.nil?
       return template.essid
     end
 
@@ -93,7 +93,7 @@ class Vap < ActiveRecord::Base
   end
 
   def visibility
-    if (read_attribute(:visibility).blank? or read_attribute(:visibility).nil?) and !template.nil?
+    if read_attribute(:visibility).blank? and !template.nil?
       return template.visibility
     end
 
@@ -101,7 +101,7 @@ class Vap < ActiveRecord::Base
   end
 
   def encryption
-    if (read_attribute(:encryption).blank? or read_attribute(:encryption).nil?) and !template.nil?
+    if read_attribute(:encryption).blank? and !template.nil?
       return template.encryption
     end
 
@@ -109,7 +109,7 @@ class Vap < ActiveRecord::Base
   end
 
   def key
-    if (read_attribute(:key).blank? or read_attribute(:key).nil?) and !template.nil?
+    if read_attribute(:key).blank? and !template.nil?
       return template.key
     end
 
@@ -117,8 +117,7 @@ class Vap < ActiveRecord::Base
   end
 
   def radius_auth_server
-    if (read_attribute(:radius_auth_server).blank? or
-        read_attribute(:radius_auth_server).nil?) and !template.nil?
+    if read_attribute(:radius_auth_server).blank? and !template.nil?
       return template.radius_auth_server
     end
 
@@ -126,7 +125,7 @@ class Vap < ActiveRecord::Base
   end
 
   def radius_auth_server_port
-    if (read_attribute(:radius_auth_server_port).blank? or read_attribute(:radius_auth_server_port).nil?) and !template.nil?
+    if read_attribute(:radius_auth_server_port).blank? and !template.nil?
       return template.radius_auth_server_port
     end
 
@@ -134,7 +133,7 @@ class Vap < ActiveRecord::Base
   end
 
   def radius_acct_server
-    if (read_attribute(:radius_acct_server).blank? or read_attribute(:radius_acct_server).nil?) and !template.nil?
+    if read_attribute(:radius_acct_server).blank? and !template.nil?
       return template.radius_acct_server
     end
 
@@ -142,7 +141,7 @@ class Vap < ActiveRecord::Base
   end
 
   def radius_acct_server_port
-    if (read_attribute(:radius_acct_server_port).blank? or read_attribute(:radius_acct_server_port).nil?) and !template.nil?
+    if read_attribute(:radius_acct_server_port).blank? and !template.nil?
       return template.radius_acct_server_port
     end
 
@@ -150,7 +149,7 @@ class Vap < ActiveRecord::Base
   end
 
   def output_band_percent
-    if (read_attribute(:output_band_percent).blank? or read_attribute(:output_band_percent).nil?) and !template.nil?
+    if read_attribute(:output_band_percent).blank? and !template.nil?
       return template.output_band_percent
     end
 
@@ -158,7 +157,7 @@ class Vap < ActiveRecord::Base
   end
 
   def output_band
-    if self.radio.output_band.nil? or self.output_band_percent.nil?
+    if self.radio.output_band.blank? or self.output_band_percent.blank?
       nil
     else
       self.radio.output_band * self.output_band_percent / 100
@@ -171,7 +170,15 @@ class Vap < ActiveRecord::Base
 
   private
 
+  OUTDATING_ATTRIBUTES = [
+      :essid, :visibility, :encryption, :key, :radius_auth_server, :radius_acct_server,
+      :output_band_percent, :bridge_id
+  ]
+
   def outdate_configuration_if_required
-    related_access_point.outdate_configuration! if related_access_point && (new_record? || changed? || destroyed?)
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      related_access_point.outdate_configuration! if related_access_point
+    end
   end
+
 end

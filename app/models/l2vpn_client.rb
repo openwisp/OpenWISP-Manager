@@ -11,6 +11,7 @@ class L2vpnClient < ActiveRecord::Base
   belongs_to :l2vpn_server
 
   after_save :outdate_configuration_if_required
+  after_destroy :outdate_configuration_if_required
 
   after_create do |record|
     record.access_point.wisp.ca.create_openvpn_client_certificate(record)
@@ -20,8 +21,8 @@ class L2vpnClient < ActiveRecord::Base
     self.l2vpn_template = template
 
     unless self.l2vpn_template.tap_template.nil?
-      self.tap = Tap.new( :l2vpn => self )
-      self.tap.link_to_template( self.l2vpn_template.tap_template )
+      self.tap = Tap.new(:l2vpn => self)
+      self.tap.link_to_template(self.l2vpn_template.tap_template)
       self.tap.save
     end
   end
@@ -50,7 +51,12 @@ class L2vpnClient < ActiveRecord::Base
 
   private
 
+  OUTDATING_ATTRIBUTES = [:l2vpn_server_id]
+
   def outdate_configuration_if_required
-    access_point.outdate_configuration! if access_point && (new_record? || changed? || destroyed?)
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      access_point.outdate_configuration! if access_point
+    end
   end
+
 end

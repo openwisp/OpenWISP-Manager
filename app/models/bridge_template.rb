@@ -36,8 +36,8 @@ class BridgeTemplate < ActiveRecord::Base
       record.access_point_template.access_points.each do |h|
         # For each linked template instance, create a new bridge and associate it with
         # the corresponding access_point
-        nb = h.bridges.build( :machine => h )
-        nb.link_to_template( record )
+        nb = h.bridges.build(:machine => h)
+        nb.link_to_template(record)
         nb.save
       end
     end
@@ -62,18 +62,21 @@ class BridgeTemplate < ActiveRecord::Base
         end
       end
 
+      ip_r_begin = nil
       begin
         ip_r_begin = IPAddr.new(self.ip_range_begin) unless (self.ip_range_begin.nil? or self.ip_range_begin.blank?)
       rescue ArgumentError
         errors.add(:ip_range_begin, :invalid_ip_address)
       end
 
+      ip_r_end = nil
       begin
         ip_r_end = IPAddr.new(self.ip_range_end) unless (self.ip_range_end.nil? or self.ip_range_end.blank?)
       rescue ArgumentError
         errors.add(:ip_range_end, :invalid_ip_address)
       end
 
+      ip_r_begin_netmask = nil
       begin
         unless (self.netmask.nil? or self.netmask.blank?)
           ip_netmask = IPAddr.new(self.netmask) unless (self.netmask.nil? or self.netmask.blank?)
@@ -84,6 +87,7 @@ class BridgeTemplate < ActiveRecord::Base
         errors.add(:netmask, :invalid_ip_address)
       end
 
+      ip_gateway = nil
       begin
         unless (self.gateway.nil? or self.gateway.blank?)
           ip_gateway = IPAddr.new(self.gateway) unless (self.gateway.nil? or self.gateway.blank?)
@@ -126,12 +130,19 @@ class BridgeTemplate < ActiveRecord::Base
   end
 
   def bridgeable_templates
-    (ethernet_templates + tap_templates  + vap_templates + vlan_templates).flatten
+    (ethernet_templates + tap_templates + vap_templates + vlan_templates).flatten
   end
 
   private
 
+  OUTDATING_ATTRIBUTES = [:addressing_mode, :ip_range_begin, :ip_range_end, :name, :id]
+
   def outdate_configuration_if_required
-    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      if related_access_points
+        related_access_points.each { |access_point| access_point.outdate_configuration! }
+      end
+    end
   end
+
 end

@@ -21,7 +21,7 @@
           <div class="box">
             <h2><a href="#" id="toggle-warnings"><%= t(:Warning) %></a></h2>
             <div class="block warn" id="warnings_block">
-              <p><%=t :Update_access_point_warning %></p>
+              <p><%=t :Update_access_point_warning, :count => @access_points.count %></p>
               <% form_tag outdated_access_points_update_path(@wisp) do %>
                   <%= submit_tag t(:Update) %>
               <% end %>
@@ -55,7 +55,7 @@
 
             <% @access_points.each do |access_point| %>
                 <tr>
-                  <td><%=h access_point.name %></td>
+                  <td><%= link_to h(access_point.name), wisp_access_point_path(@wisp, access_point) %></td>
                   <td>
                     <% unless access_point.access_point_template.nil? %>
                         <%=h access_point.access_point_template.name %>

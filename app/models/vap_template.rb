@@ -5,35 +5,35 @@ class VapTemplate < ActiveRecord::Base
 
   ENC_TYPES = %w(none wep psk psk2 wpa wpa2 pskmixed wpamixed)
   ENC_TYPES_SELECT = {
-      'none'            => 'none',
-      'WEP'             => 'wep',
-      'WPA psk'         => 'psk',
-      'WPA2 psk'        => 'psk2',
-      'WPA 802.1x'      => 'wpa',
-      'WPA2 802.1x'     => 'wpa2',
-      'WPA/WPA2 psk'    => 'pskmixed',
+      'none' => 'none',
+      'WEP' => 'wep',
+      'WPA psk' => 'psk',
+      'WPA2 psk' => 'psk2',
+      'WPA 802.1x' => 'wpa',
+      'WPA2 802.1x' => 'wpa2',
+      'WPA/WPA2 psk' => 'pskmixed',
       'WPA/WPA2 802.1x' => 'wpamixed'
   }
   ENC_TYPES_FSELECT = {
-      'none'        => 'none',
-      'wep'         => 'WEP',
-      'psk'         => 'WPA psk',
-      'psk2'        => 'WPA2 psk',
-      'wpa'         => 'WPA 802.1x',
-      'wpa2'        => 'WPA2 802.1x',
-      'pskmixed'    => 'WPA/WPA2 psk',
-      'wpamixed'    => 'WPA/WPA2 802.1x'
+      'none' => 'none',
+      'wep' => 'WEP',
+      'psk' => 'WPA psk',
+      'psk2' => 'WPA2 psk',
+      'wpa' => 'WPA 802.1x',
+      'wpa2' => 'WPA2 802.1x',
+      'pskmixed' => 'WPA/WPA2 psk',
+      'wpamixed' => 'WPA/WPA2 802.1x'
   }
   ENC_TYPES_WKEY = %w(wep psk psk2 wpa wpa2 pskmixed wpamixed)
   ENC_TYPES_WRADIUS = %w(wpa wpa2 wpamixed)
 
   VISIBILITIES = %w(hidden broadcasted)
   VISIBILITIES_SELECT = {
-      'Hidden'      => 'hidden',
+      'Hidden' => 'hidden',
       'Broadcasted' => 'broadcasted'
   }
   VISIBILITIES_FSELECT = {
-      'hidden'      => 'Hidden',
+      'hidden' => 'Hidden',
       'broadcasted' => 'Broadcasted'
   }
 
@@ -90,8 +90,8 @@ class VapTemplate < ActiveRecord::Base
     record.radio_template.radios.each do |r|
       # For each linked template instance, create a new vap and associate it with
       # the corresponding access_point
-      nv = r.vaps.build( :radio => r )
-      nv.link_to_template( record )
+      nv = r.vaps.build(:radio => r)
+      nv.link_to_template(record)
       nv.save!
     end
   end
@@ -142,7 +142,17 @@ class VapTemplate < ActiveRecord::Base
 
   private
 
+  OUTDATING_ATTRIBUTES = [
+      :essid, :visibility, :encryption, :key, :radius_auth_server, :radius_acct_server,
+      :output_band_percent, :bridge_template_id, :id
+  ]
+
   def outdate_configuration_if_required
-    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      if related_access_points
+        related_access_points.each { |access_point| access_point.outdate_configuration! }
+      end
+    end
   end
+
 end

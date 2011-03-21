@@ -6,7 +6,7 @@ class Wisp < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_format_of :name, :with => /\A[a-z][\s\w\d\._']*\Z/i
   validates_length_of :name, :maximum => 32
-  
+
   has_one :ca, :dependent => :destroy
 
   has_many :operators, :dependent => :destroy
@@ -15,7 +15,7 @@ class Wisp < ActiveRecord::Base
   has_many :access_points, :dependent => :destroy
   has_many :access_point_templates, :dependent => :destroy
   has_many :l2vpn_servers, :dependent => :destroy
-  
+
   accepts_nested_attributes_for :ca
 
   def geocode

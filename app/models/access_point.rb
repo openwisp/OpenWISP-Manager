@@ -47,26 +47,26 @@ class AccessPoint < ActiveRecord::Base
 
   def generate_configuration
 
-    @uci_system       = ActionView::Base.new(Rails::Configuration.new.view_path).render(
-        :partial => "access_points/uci_system", :locals => { :access_point => self}
+    @uci_system = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/uci_system", :locals => {:access_point => self}
     )
-    @uci_network      = ActionView::Base.new(Rails::Configuration.new.view_path).render(
-        :partial => "access_points/uci_network", :locals => { :access_point => self }
+    @uci_network = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/uci_network", :locals => {:access_point => self}
     )
-    @uci_wireless     = ActionView::Base.new(Rails::Configuration.new.view_path).render(
-        :partial => "access_points/uci_wireless", :locals => { :access_point => self }
+    @uci_wireless = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/uci_wireless", :locals => {:access_point => self}
     )
-    @uci_openvpn      = ActionView::Base.new(Rails::Configuration.new.view_path).render(
-        :partial => "access_points/uci_openvpn", :locals => { :access_point => self }
+    @uci_openvpn = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/uci_openvpn", :locals => {:access_point => self}
     )
-    @l2tc_script      = ActionView::Base.new(Rails::Configuration.new.view_path).render(
-        :partial => "access_points/l2tc_script", :locals => { :access_point => self }
+    @l2tc_script = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/l2tc_script", :locals => {:access_point => self}
     )
-    @install_script   = ActionView::Base.new(Rails::Configuration.new.view_path).render(
-        :partial => "access_points/install_script", :locals => { :access_point => self }
+    @install_script = ActionView::Base.new(Rails::Configuration.new.view_path).render(
+        :partial => "access_points/install_script", :locals => {:access_point => self}
     )
     @uninstall_script = ActionView::Base.new(Rails::Configuration.new.view_path).render(
-        :partial => "access_points/uninstall_script", :locals => { :access_point => self }
+        :partial => "access_points/uninstall_script", :locals => {:access_point => self}
     )
     @vpn_scripts = {}
 
@@ -144,7 +144,7 @@ class AccessPoint < ActiveRecord::Base
           end
         end
 
-        @vpn_scripts["vpn_#{l2vpn_client.identifier}_script.sh"] = ActionView::Base.new(Rails::Configuration.new.view_path).render( :partial => "access_points/vpn_script", :locals => { :l2vpn_bridges => l2vpn_bridges, :l2vpn_vaps => l2vpn_vaps } )
+        @vpn_scripts["vpn_#{l2vpn_client.identifier}_script.sh"] = ActionView::Base.new(Rails::Configuration.new.view_path).render(:partial => "access_points/vpn_script", :locals => {:l2vpn_bridges => l2vpn_bridges, :l2vpn_vaps => l2vpn_vaps})
 
         tar.new_entry do |entry|
           entry.pathname = "openvpn/vpn_#{l2vpn_client.identifier}_script.sh"
@@ -224,8 +224,8 @@ class AccessPoint < ActiveRecord::Base
 
       template.radio_templates.each do |rt|
         # This will also create (and link to appropriate templates) vaps
-        nr = self.radios.build( { :access_point => self } )
-        nr.link_to_template( rt )
+        nr = self.radios.build({:access_point => self})
+        nr.link_to_template(rt)
         unless nr.save!
           raise ActiveRecord::Rollback
         end
@@ -233,8 +233,8 @@ class AccessPoint < ActiveRecord::Base
 
       template.l2vpn_templates.each do |vt|
         # This will also create (and link to appropriate templates) taps and theirs vlans
-        nv = self.l2vpn_clients.build( { :access_point => self } )
-        nv.link_to_template( vt )
+        nv = self.l2vpn_clients.build({:access_point => self})
+        nv.link_to_template(vt)
         unless nv.save!
           raise ActiveRecord::Rollback
         end
@@ -242,16 +242,16 @@ class AccessPoint < ActiveRecord::Base
 
       template.ethernet_templates.each do |et|
         # This will also create (and link to appropriate templates) vlans
-        ne = self.ethernets.build( { :machine => self } )
-        ne.link_to_template( et )
+        ne = self.ethernets.build({:machine => self})
+        ne.link_to_template(et)
         unless ne.save!
           raise ActiveRecord::Rollback
         end
       end
 
       template.bridge_templates.each do |bt|
-        nb = self.bridges.build( { :machine => self } )
-        nb.link_to_template( bt )
+        nb = self.bridges.build({:machine => self})
+        nb.link_to_template(bt)
         unless nb.save!
           raise ActiveRecord::Rollback
         end
@@ -282,7 +282,7 @@ class AccessPoint < ActiveRecord::Base
 
   def vlans
     # TODO: this should return an activerecord array
-    (self.ethernets.map { | e | e.vlans } + self.taps.map { |t| t.vlans }).flatten
+    (self.ethernets.map { |e| e.vlans } + self.taps.map { |t| t.vlans }).flatten
   end
 
   def outdate_configuration

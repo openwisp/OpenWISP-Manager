@@ -2,36 +2,37 @@ class Tap < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   belongs_to :l2vpn, :polymorphic => true
-  
+
   belongs_to :bridge
-  
+
   has_many :vlans, :as => :interface, :dependent => :destroy
   has_many :subinterfaces, :as => :interface, :class_name => 'Vlan',
-    :foreign_key => :interface_id, :conditions => { :interface_type => 'Tap' }
+           :foreign_key => :interface_id, :conditions => {:interface_type => 'Tap'}
   has_one :l2tc, :as => :shapeable, :dependent => :destroy
 
   # Instance template
   belongs_to :tap_template
   belongs_to :template, :class_name => 'TapTemplate', :foreign_key => :tap_template_id
 
-  somehow_has :one => :access_point, :through => :l2vpn, :if => Proc.new{|instance| instance.is_a? AccessPoint }
+  somehow_has :one => :access_point, :through => :l2vpn, :if => Proc.new { |instance| instance.is_a? AccessPoint }
 
   after_save :outdate_configuration_if_required
+  after_destroy :outdate_configuration_if_required
 
   def link_to_template(t)
     self.template = t
-    
+
     # Create (and link to appropriate templates) subinterfaces (i.e.: vlans)
     t.vlan_templates.each do |vt|
-      nv = self.vlans.build( :interface => self )
-      nv.link_to_template( vt )
+      nv = self.vlans.build(:interface => self)
+      nv.link_to_template(vt)
       unless nv.save!
         raise ActiveRecord::Rollback
       end
     end
-    
+
     # Create a new l2tc profile for this interface
-    nl = self.l2tc = L2tc.new( :access_point => self.machine, :shapeable => self )
+    nl = self.l2tc = L2tc.new(:access_point => self.machine, :shapeable => self)
     nl.link_to_template(template.l2tc_template)
     unless nl.save!
       raise ActiveRecord::Rollback
@@ -62,7 +63,7 @@ class Tap < ActiveRecord::Base
   end
 
   def output_band
-    if (read_attribute(:output_band).blank? or read_attribute(:output_band).nil?) and !template.nil?
+    if read_attribute(:output_band).blank? and !template.nil?
       return template.output_band
     end
 
@@ -75,8 +76,12 @@ class Tap < ActiveRecord::Base
 
   private
 
+  OUTDATING_ATTRIBUTES = [:bridge_id, :output_band]
+
   def outdate_configuration_if_required
-    #TODO: Find a solution and fix the Array bug!
-    related_access_point.outdate_configuration! if related_access_point && !related_access_point.is_a?(Array) && (new_record? || changed? || destroyed?)
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      related_access_point.outdate_configuration! if related_access_point
+    end
   end
+
 end

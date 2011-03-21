@@ -6,16 +6,16 @@ class Bridge < ActiveRecord::Base
   ADDRESSING_MODES = %w( static dynamic none )
 
   validates_inclusion_of :addressing_mode, :in => BridgeTemplate::ADDRESSING_MODES,
-                         :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.addressing_mode.nil? }
-  validates_uniqueness_of :ip, :scope => [ :machine_id, :machine_type ],
+                         :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.addressing_mode.blank? }
+  validates_uniqueness_of :ip, :scope => [:machine_id, :machine_type],
                           :allow_nil => :true,
                           :if => Proc.new { |b| b.addressing_mode == 'static' }
-  validates_uniqueness_of :name, :scope => [ :machine_id, :machine_type ],
-                          :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
+  validates_uniqueness_of :name, :scope => [:machine_id, :machine_type],
+                          :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.blank? }
   validates_format_of :name, :with => /\A[a-z][a-z0-9]*\Z/i,
-                      :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
+                      :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.blank? }
   validates_length_of :name, :maximum => 8,
-                      :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
+                      :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.blank? }
 
   has_many :ethernets, :dependent => :nullify
   has_many :taps, :dependent => :nullify
@@ -28,9 +28,10 @@ class Bridge < ActiveRecord::Base
   belongs_to :bridge_template
   belongs_to :template, :class_name => 'BridgeTemplate', :foreign_key => :bridge_template_id
 
-  somehow_has :one => :machine, :as => :related_access_point, :if => Proc.new{|instance| instance.is_a? AccessPoint }
+  somehow_has :one => :machine, :as => :related_access_point, :if => Proc.new { |instance| instance.is_a? AccessPoint }
 
   after_save :outdate_configuration_if_required
+  after_destroy :outdate_configuration_if_required
 
   def before_create
     unless self.bridge_template.nil?
@@ -125,12 +126,12 @@ class Bridge < ActiveRecord::Base
   end
 
   def personalized?
-    template.nil? ? true : [:name, :netmask, :gateway, :dns, :addressing_mode].any?{|attr| !read_attribute(attr).blank? }
+    template.nil? ? true : [:name, :netmask, :gateway, :dns, :addressing_mode].any? { |attr| !read_attribute(attr).blank? }
   end
 
   # Accessor methods (read)
   def name
-    if (read_attribute(:name).blank? or read_attribute(:name).nil?) and !template.nil?
+    if read_attribute(:name).blank? and !template.nil?
       return template.name
     end
 
@@ -138,7 +139,7 @@ class Bridge < ActiveRecord::Base
   end
 
   def netmask
-    if (read_attribute(:netmask).blank? or read_attribute(:netmask).nil?) and !template.nil?
+    if read_attribute(:netmask).blank? and !template.nil?
       return template.netmask
     end
 
@@ -146,7 +147,7 @@ class Bridge < ActiveRecord::Base
   end
 
   def gateway
-    if (read_attribute(:gateway).blank? or read_attribute(:gateway).nil?) and !template.nil?
+    if read_attribute(:gateway).blank? and !template.nil?
       return template.gateway
     end
 
@@ -154,7 +155,7 @@ class Bridge < ActiveRecord::Base
   end
 
   def dns
-    if (read_attribute(:dns).blank? or read_attribute(:dns).nil?) and !template.nil?
+    if read_attribute(:dns).blank? and !template.nil?
       return template.dns
     end
 
@@ -162,7 +163,7 @@ class Bridge < ActiveRecord::Base
   end
 
   def addressing_mode
-    if (read_attribute(:addressing_mode).blank? or read_attribute(:addressing_mode).nil?) and !template.nil?
+    if read_attribute(:addressing_mode).blank? and !template.nil?
       return template.addressing_mode
     end
 
@@ -170,12 +171,17 @@ class Bridge < ActiveRecord::Base
   end
 
   def bridgeables
-    (ethernets + taps  + vaps + vlans).flatten
+    (ethernets + taps + vaps + vlans).flatten
   end
 
   private
 
+  OUTDATING_ATTRIBUTES = [:addressing_mode, :ip, :name]
+
   def outdate_configuration_if_required
-    related_access_point.outdate_configuration! if related_access_point && (new_record? || changed? || destroyed?)
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      related_access_point.outdate_configuration! if related_access_point
+    end
   end
+
 end

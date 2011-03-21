@@ -32,7 +32,7 @@ class L2vpnServer < ActiveRecord::Base
 
   validates_presence_of :name, :port, :cipher, :protocol
   # Avoids 2 servers on the same port
-  validates_uniqueness_of :port, :scope => [ :protocol, :server_id ]
+  validates_uniqueness_of :port, :scope => [:protocol, :server_id]
   validates_uniqueness_of :name, :scope => :wisp_id
   validates_format_of :name, :with => /\A[a-z][\s\w\d_\.\-]*\Z/i
   validates_length_of :name, :maximum => 32
@@ -66,15 +66,16 @@ class L2vpnServer < ActiveRecord::Base
   somehow_has :many => :access_points, :through => :l2vpn_templates
 
   before_save :outdate_configuration_if_required
+  before_destroy :outdate_configuration_if_required
 
   after_create do |record|
-    record.wisp.ca.create_openvpn_server_certificate(record, { :validity_time => 2.years })
+    record.wisp.ca.create_openvpn_server_certificate(record, {:validity_time => 2.years})
   end
 
   def generate_configuration
     @ca_name = Ca.find(self.x509_certificate.ca_id).cn.gsub(" ", "_")
     @openvpn_conf = ActionView::Base.new(Rails::Configuration.new.view_path).render(
-        :partial => "l2vpn_servers/openvpn_conf", :locals => { :l2vpn_server => self, :ca_name => @ca_name }
+        :partial => "l2vpn_servers/openvpn_conf", :locals => {:l2vpn_server => self, :ca_name => @ca_name}
     )
     @tarname = "server-openvpn-#{self.server.id}-#{self.id}.tar.gz"
     entries_date = Time.now
@@ -152,7 +153,14 @@ class L2vpnServer < ActiveRecord::Base
 
   private
 
+  OUTDATING_ATTRIBUTES = [:ip, :port, :protocol, :cipher, :mtu, :mtu_disc, :server_id, :wisp_id]
+
   def outdate_configuration_if_required
-    related_access_points.each{|ap| ap.outdate_configuration!} if !new_record? && (changed? || destroyed?)
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      if related_access_points
+        related_access_points.each { |access_point| access_point.outdate_configuration! }
+      end
+    end
   end
+
 end

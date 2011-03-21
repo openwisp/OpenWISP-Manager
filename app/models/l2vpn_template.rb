@@ -20,8 +20,8 @@ class L2vpnTemplate < ActiveRecord::Base
   after_create do |record|
     if record.l2vpn_clients.length == 0
       record.access_point_template.access_points.each do |h|
-        nv = h.l2vpn_clients.build( :access_point => h )
-        nv.link_to_template( record )
+        nv = h.l2vpn_clients.build(:access_point => h)
+        nv.link_to_template(record)
         nv.save
       end
     end
@@ -29,7 +29,14 @@ class L2vpnTemplate < ActiveRecord::Base
 
   private
 
+  OUTDATING_ATTRIBUTES = [:l2vpn_server_id, :id]
+
   def outdate_configuration_if_required
-    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      if related_access_points
+        related_access_points.each { |access_point| access_point.outdate_configuration! }
+      end
+    end
   end
+
 end

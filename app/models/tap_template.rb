@@ -8,7 +8,7 @@ class TapTemplate < ActiveRecord::Base
 
   has_many :vlan_templates, :as => :interface_template, :dependent => :destroy
   has_many :subinterfaces, :as => :interface_template, :class_name => 'VlanTemplate',
-           :foreign_key => :interface_template_id, :conditions => { :interface_template_type => 'TapTemplate' }
+           :foreign_key => :interface_template_id, :conditions => {:interface_template_type => 'TapTemplate'}
 
   # Template instances
   has_many :taps, :dependent => :destroy
@@ -20,8 +20,8 @@ class TapTemplate < ActiveRecord::Base
   after_destroy :outdate_configuration_if_required
 
   before_create do |record|
-    record.l2tc_template = L2tcTemplate.new( :shapeable_template => record,
-                                             :access_point_template => record.l2vpn_template.access_point_template)
+    record.l2tc_template = L2tcTemplate.new(:shapeable_template => record,
+                                            :access_point_template => record.l2vpn_template.access_point_template)
   end
 
   # Update linked template instances 
@@ -30,8 +30,8 @@ class TapTemplate < ActiveRecord::Base
     record.l2vpn_template.l2vpn_clients.each do |v|
       # For each linked template instance, create a new tap and associate it with
       # the corresponding access_point
-      nt = v.tap.build( :l2vpn_client => v )
-      nt.link_to_template( record )
+      nt = v.tap.build(:l2vpn_client => v)
+      nt.link_to_template(record)
       unless nt.save
         errors.add_to_base(:cannot_update_linked_instances)
       end
@@ -74,7 +74,14 @@ class TapTemplate < ActiveRecord::Base
 
   private
 
+  OUTDATING_ATTRIBUTES = [:bridge_template_id, :output_band, :id]
+
   def outdate_configuration_if_required
-    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      if related_access_points
+        related_access_points.each { |access_point| access_point.outdate_configuration! }
+      end
+    end
   end
+
 end

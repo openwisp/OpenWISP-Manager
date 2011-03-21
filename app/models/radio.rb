@@ -23,15 +23,16 @@ class Radio < ActiveRecord::Base
   belongs_to :template, :class_name => 'RadioTemplate', :foreign_key => :radio_template_id
 
   after_save :outdate_configuration_if_required
+  after_destroy :outdate_configuration_if_required
 
   def link_to_template(template)
     self.template = template
-    
+
     # Create an instance for each vap_templates defined on this radio and link
     # it with the appropriate template
     self.template.vap_templates.each do |vt|
-      nv = self.vaps.build( )
-      nv.link_to_template( vt )
+      nv = self.vaps.build()
+      nv.link_to_template(vt)
 
       unless nv.save!
         raise ActiveRecord::Rollback
@@ -39,7 +40,7 @@ class Radio < ActiveRecord::Base
     end
 
     # Create a new l2tc profile for this interface
-    nl = self.l2tc = L2tc.new( :access_point => self.access_point, :shapeable => self )
+    nl = self.l2tc = L2tc.new(:access_point => self.access_point, :shapeable => self)
     nl.link_to_template(template.l2tc_template)
     unless nl.save!
       raise ActiveRecord::Rollback
@@ -48,9 +49,9 @@ class Radio < ActiveRecord::Base
 
 
   # Accessor methods (read)
-  
+
   def name
-    if (read_attribute(:name).blank? or read_attribute(:name).nil?) and !template.nil?
+    if read_attribute(:name).blank? and !template.nil?
       return template.name
     end
 
@@ -62,15 +63,15 @@ class Radio < ActiveRecord::Base
   end
 
   def mode
-    if (read_attribute(:mode).blank? or read_attribute(:mode).nil?) and !template.nil?
+    if read_attribute(:mode).blank? and !template.nil?
       return template.mode
     end
 
     read_attribute(:mode)
   end
-  
+
   def channel
-    if (read_attribute(:channel).blank? or read_attribute(:channel).nil?) and !template.nil?
+    if read_attribute(:channel).blank? and !template.nil?
       return template.channel
     end
 
@@ -78,7 +79,7 @@ class Radio < ActiveRecord::Base
   end
 
   def output_band
-    if (read_attribute(:output_band).blank? or read_attribute(:output_band).nil?) and !template.nil?
+    if read_attribute(:output_band).blank? and !template.nil?
       return template.output_band
     end
 
@@ -87,7 +88,12 @@ class Radio < ActiveRecord::Base
 
   private
 
+  OUTDATING_ATTRIBUTES = [:name, :mode, :channel, :output_band]
+
   def outdate_configuration_if_required
-    access_point.outdate_configuration! if access_point && (new_record? || changed? || destroyed?)
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      access_point.outdate_configuration! if access_point
+    end
   end
+
 end

@@ -34,7 +34,7 @@ class Operator < ActiveRecord::Base
       self.has_no_role!(role)
     end
 
-    new_roles.map!{|role| role.to_sym}
+    new_roles.map! { |role| role.to_sym }
     new_roles.each do |role|
       if Operator::ROLES.include? role
         self.wisp ? self.has_role!(role, self.wisp) : self.has_role!(role)

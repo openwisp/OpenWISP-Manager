@@ -289,7 +289,9 @@ en:
   Template_updated: "Update status"
   Update: "Update"
   Update_configuration: "Update configuration"
-  Update_access_point_warning: "Warning, the following APs will be updated"
+  Update_access_point_warning:
+    one: "Warning, the following AP will be updated"
+    other: "Warning, the following {{count}} APs will be updated"
   Update_one_access_point_warning: "Warning, the access point configuration was modified but is yet to be applied."
   Valid: "Valid"
   VapTemplates: "Vap templates"

@@ -9,8 +9,9 @@ class L2tcTemplate < ActiveRecord::Base
 
   somehow_has :many => :access_points, :through => :access_point_template
 
-  after_save :outdate_configuration_if_required
-  after_destroy :outdate_configuration_if_required
+  # No outdating configuration logic here
+  # l2tc has no attribute that could be outdate access points configuration...
+  # (see ethernet, radio, tap, vlan and vap)
 
   def validate
     sum = 0
@@ -30,9 +31,4 @@ class L2tcTemplate < ActiveRecord::Base
     true
   end
 
-  private
-
-  def outdate_configuration_if_required
-    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
-  end
 end

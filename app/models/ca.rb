@@ -5,14 +5,14 @@ class Ca < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
   validates_presence_of :c, :st, :l, :o, :cn
-  validates_format_of :c,  :with => /\A[\s\w\d\._']+\Z/i
-  validates_length_of :c,  :maximum => 32
+  validates_format_of :c, :with => /\A[\s\w\d\._']+\Z/i
+  validates_length_of :c, :maximum => 32
   validates_format_of :st, :with => /\A[\s\w\d\._']+\Z/i
   validates_length_of :st, :maximum => 32
-  validates_format_of :l,  :with => /\A[\s\w\d\._']+\Z/i
-  validates_length_of :l,  :maximum => 32
-  validates_format_of :o,  :with => /\A[\s\w\d\._']+\Z/i
-  validates_length_of :o,  :maximum => 128
+  validates_format_of :l, :with => /\A[\s\w\d\._']+\Z/i
+  validates_length_of :l, :maximum => 32
+  validates_format_of :o, :with => /\A[\s\w\d\._']+\Z/i
+  validates_length_of :o, :maximum => 128
   validates_format_of :cn, :with => /\A[\s\w\d\._']+\Z/i
   validates_length_of :cn, :maximum => 128
 
@@ -77,8 +77,8 @@ class Ca < ActiveRecord::Base
       cert.add_extension(ef.create_ext_from_string(extension))
     end
 
-    cert.add_extension( ef.create_extension("subjectKeyIdentifier", "hash") )
-    cert.add_extension( ef.create_extension("authorityKeyIdentifier", "keyid:always,issuer:always") )
+    cert.add_extension(ef.create_extension("subjectKeyIdentifier", "hash"))
+    cert.add_extension(ef.create_extension("authorityKeyIdentifier", "keyid:always,issuer:always"))
 
     cert.sign(_key, OpenSSL::Digest::SHA1.new)
 
@@ -99,7 +99,7 @@ class Ca < ActiveRecord::Base
 
   # Certifiable interface
   def identifier
-    "ca_#{self.id}_" + self.cn.gsub(/\s/,'_')
+    "ca_#{self.id}_" + self.cn.gsub(/\s/, '_')
   end
 
   def dn
@@ -121,9 +121,9 @@ class Ca < ActiveRecord::Base
     size = 32
     s = ""
     t = ""
-    OpenSSL::Random::random_bytes(byte).each_byte{ |b| s+= "%02x" % b  }
+    OpenSSL::Random::random_bytes(byte).each_byte { |b| s+= "%02x" % b }
     (0..(s.length-1)/size).each do |i|
-      t += s[i*size,size]+"\n"
+      t += s[i*size, size]+"\n"
     end
 
     "-----BEGIN OpenVPN Static key V1-----\n" + t + "-----END OpenVPN Static key V1-----"
@@ -159,8 +159,8 @@ class Ca < ActiveRecord::Base
       cert.add_extension(ef.create_ext_from_string(extension))
     end
 
-    cert.add_extension( ef.create_extension("subjectKeyIdentifier", "hash") )
-    cert.add_extension( ef.create_extension("authorityKeyIdentifier", "keyid:always,issuer:always") )
+    cert.add_extension(ef.create_extension("subjectKeyIdentifier", "hash"))
+    cert.add_extension(ef.create_extension("authorityKeyIdentifier", "keyid:always,issuer:always"))
 
     cert.sign(OpenSSL::PKey::RSA.new(self.x509_certificate.key), OpenSSL::Digest::SHA1.new)
 
@@ -204,8 +204,8 @@ class Ca < ActiveRecord::Base
       cert.add_extension(ef.create_ext_from_string(extension))
     end
 
-    cert.add_extension( ef.create_extension("subjectKeyIdentifier", "hash") )
-    cert.add_extension( ef.create_extension("authorityKeyIdentifier", "keyid:always,issuer:always") )
+    cert.add_extension(ef.create_extension("subjectKeyIdentifier", "hash"))
+    cert.add_extension(ef.create_extension("authorityKeyIdentifier", "keyid:always,issuer:always"))
 
     cert.sign(OpenSSL::PKey::RSA.new(self.x509_certificate.key), OpenSSL::Digest::SHA1.new)
 
@@ -234,7 +234,7 @@ class Ca < ActiveRecord::Base
     if self.crl_list.nil?
       crl_list = OpenSSL::X509::CRL.new()
     else
-      crl_list = OpenSSL::X509::CRL.new( self.crl_list )
+      crl_list = OpenSSL::X509::CRL.new(self.crl_list)
     end
 
     crl_list.issuer = ca_cert.issuer
@@ -259,7 +259,7 @@ class Ca < ActiveRecord::Base
     self.save!
 
     x509_certificate.revoked = true
-    
+
     x509_certificate.save!
 
     x509_certificate
@@ -267,9 +267,9 @@ class Ca < ActiveRecord::Base
 
   def renew_certificate!(x509_certificate, options = {})
     validity_time = options[:validity_time] ||
-      (x509_certificate.id == self.x509_certificate.id ? DEFAULT_CA_CRT_VALIDITY_TIME : DEFAULT_CERTIFICATE_CRT_VALIDITY_TIME)
+        (x509_certificate.id == self.x509_certificate.id ? DEFAULT_CA_CRT_VALIDITY_TIME : DEFAULT_CERTIFICATE_CRT_VALIDITY_TIME)
 
-    cert = OpenSSL::X509::Certificate.new( x509_certificate.certificate )
+    cert = OpenSSL::X509::Certificate.new(x509_certificate.certificate)
     cert.not_before = Time.now
     cert.not_after = cert.not_before + validity_time
 

@@ -13,7 +13,7 @@ class Configuration < ActiveRecord::Base
 
   def self.set(key, value)
     if prev = Configuration.find_by_key(key)
-      prev.set(value) 
+      prev.set(value)
     else
       Configuration.new(:key => key, :value => value).save!
     end
@@ -22,7 +22,7 @@ class Configuration < ActiveRecord::Base
   def set(value = '')
     self.system_key? && raise("BUG: key " + key + "is readonly!")
   end
-  
+
   def system_key?
     self.system_key
   end

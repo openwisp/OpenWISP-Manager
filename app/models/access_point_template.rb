@@ -35,7 +35,7 @@ class AccessPointTemplate < ActiveRecord::Base
 
   def vlan_templates
     # TODO: this should return an activerecord array
-    (self.ethernet_templates.map { | e | e.vlan_templates } +
+    (self.ethernet_templates.map { |e| e.vlan_templates } +
         self.tap_templates.map { |t| t.vlan_templates }).flatten
   end
 

@@ -1,7 +1,7 @@
 class VlanTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  validates_uniqueness_of :tag, :scope => [ :interface_template_id, :interface_template_type ]
+  validates_uniqueness_of :tag, :scope => [:interface_template_id, :interface_template_type]
   validates_numericality_of :tag,
                             :greater_than_or_equal_to => 1,
                             :less_than_or_equal_to => 4094
@@ -21,18 +21,18 @@ class VlanTemplate < ActiveRecord::Base
 
   # Update linked template instances
   after_create do |record|
-  # We have a new vlan_template
+    # We have a new vlan_template
     record.interface_template.instances.each do |i|
       # For each linked template instance, create a new vlan and associate it with
       # the corresponding access_point
-      nv = i.vlans.build( )
-      nv.link_to_template( record )
+      nv = i.vlans.build()
+      nv.link_to_template(record)
       nv.save!
     end
   end
 
   after_save do |record|
-  # Are we saving after a change of bridging status?
+    # Are we saving after a change of bridging status?
     if record.bridge_template_id_changed?
       # Vlan changed bridging status/bridge
       record.instances.each do |v|
@@ -71,7 +71,16 @@ class VlanTemplate < ActiveRecord::Base
 
   private
 
+  OUTDATING_ATTRIBUTES = [
+      :tag, :output_band_percent, :bridge_template_id, :id
+  ]
+
   def outdate_configuration_if_required
-    related_access_points.each{|ap| ap.outdate_configuration!} if new_record? || changed? || destroyed?
+    if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }
+      if related_access_points
+        related_access_points.each { |access_point| access_point.outdate_configuration! }
+      end
+    end
   end
+
 end
