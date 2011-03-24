@@ -312,7 +312,7 @@ class AccessPoint < ActiveRecord::Base
 
   def self.reset_last_configuration_retrieve_ip_for(ip_addr)
     find(:all, :conditions => {:last_configuration_retrieve_ip => ip_addr}).each do |ap|
-      update_attribute(:last_configuration_retrieve_ip, nil)
+      ap.update_attribute(:last_configuration_retrieve_ip, nil)
     end
   end
 end
