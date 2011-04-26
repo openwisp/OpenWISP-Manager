@@ -20,7 +20,9 @@ uci revert openvpn
 
 # Ugly!
 echo "Stopping wifi and removing its configuration"
-wifi down
+<% access_point.radios.each do |radio| %>
+  wifi down <%= radio.name %>
+<% end %>
 uci revert wireless
 
 echo "Reverting network and removing its configuration"
@@ -32,7 +34,9 @@ uci revert network
         ifdown <%=h b.name %>
     <% end %>
 <% end %>
-wifi up
+<% access_point.radios.each do |radio| %>
+  wifi up <%= radio.name %>
+<% end %>
 
 <% if (!access_point.access_point_template.nil? and access_point.access_point_template.custom_script_templates.length > 0) or  access_point.custom_scripts.length > 0 -%>
     echo "Stopping Cron"

@@ -31,10 +31,16 @@ echo "Applying network configuration"
 echo "Applying wifi configuration"
 <% if access_point.radios.length > 0 %>
     echo "Disabling wifi"
-    wifi down
+    <% access_point.radios.each do |radio| %>
+      wifi down <%= radio.name %>
+    <% end %>
+    
     uci -m import wireless -f ./uci/wireless.conf
+    
     echo "Enabling wifi"
-    wifi up
+    <% access_point.radios.each do |radio| %>
+      wifi up <%= radio.name %>
+    <% end %>
 <% end %>
 
 # VPNs
