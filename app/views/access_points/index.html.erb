@@ -7,7 +7,7 @@
 
 <%# TODO: Filtering by templates %>
 
-<% @access_point_templates.each do |access_point_template| %>
+<% @access_points.group_by(&:access_point_template).each do |access_point_template, access_points| %>
 
     <div class="grid_14 prefix_1 suffix_1">
       <div class="box">
@@ -36,7 +36,7 @@
             <% end %>
             <tbody>
 
-            <% access_point_template.access_points.each do |access_point| %>
+            <% access_points.each do |access_point| %>
                 <tr>
                   <td style="width:32px;">
                     <%= link_to image_tag("configure.png", :border=>0, :size => "16x16", :alt => t(:Configure)), wisp_access_point_path(@wisp, access_point),

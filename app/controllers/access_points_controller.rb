@@ -84,11 +84,12 @@ class AccessPointsController < ApplicationController
 
   # GET /wisps/:wisp_id/access_points
   def index
-    @access_point_templates = @wisp.access_point_templates
+    @access_points = @wisp.access_points
 
     respond_to do |format|
       format.html # index.html.erb
       format.json
+      format.xml { render :xml => @access_points.to_xml }
     end
   end
 

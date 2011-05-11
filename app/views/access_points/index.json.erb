@@ -1,6 +1,6 @@
 [<%=
     json_access_points = []
-    @wisp.access_points.each do |ap|
+    @access_points.each do |ap|
         if params[:except].blank? or params[:except].to_i != ap.id
             json_access_points << { :access_point => {
                 :id => ap.id,
