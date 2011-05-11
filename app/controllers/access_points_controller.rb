@@ -84,7 +84,11 @@ class AccessPointsController < ApplicationController
 
   # GET /wisps/:wisp_id/access_points
   def index
-    @access_points = @wisp.access_points
+    if params[:name]
+      @access_points = @wisp.access_points.find(:all, :conditions => {:name => params[:name]})
+    else
+      @access_points = @wisp.access_points
+    end
 
     respond_to do |format|
       format.html # index.html.erb
