@@ -93,7 +93,7 @@ class AccessPointsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json
-      format.xml { render :xml => @access_points.to_xml }
+      format.xml { render :xml => @access_points.to_xml(:include => :l2vpn_clients) }
     end
   end
 

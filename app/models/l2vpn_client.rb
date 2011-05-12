@@ -49,6 +49,10 @@ class L2vpnClient < ActiveRecord::Base
     l2vpn_server.name
   end
 
+  def to_xml(options={})
+    super(options.merge({:only => :id, :methods => :identifier}))
+  end
+
   private
 
   OUTDATING_ATTRIBUTES = [:l2vpn_server_id]
