@@ -1,0 +1,44 @@
+<% form_for wisp do |f| %>
+    <fieldset>
+      <fieldset>
+        <legend><%=t :General_infos %></legend>
+        <p><%= f.error_messages %></p>
+
+        <p>
+          <%= f.label :Name %><br />
+          <%= f.text_field :name, :maxlength => 32 %>
+        </p>
+        <p>
+          <%= f.label :Notes %><br />
+          <%= f.text_area :notes, :rows => 3 %>
+        </p>
+
+      </fieldset>
+
+      <% if wisp.new_record? %>
+          <% f.fields_for :ca do |cf| %>
+              <%= render :partial => 'ca', :locals => { :ca_form => cf }  %>
+          <% end %>
+      <% end %>
+
+      <fieldset>
+        <legend><%=t :Owmw_services %></legend>
+
+        <p>
+          <%= f.label :owmw_url, t(:Owmw_url) %><br />
+          <%= f.text_field :owmw_url %>
+        </p>
+        <p>
+          <%= f.label :owmw_username, t(:Username) %><br />
+          <%= f.text_field :owmw_username %>
+        </p>
+        <p>
+          <%= f.label :owmw_password, t(:Password) %><br />
+          <%= f.text_field :owmw_password %>
+        </p>
+      </fieldset>
+
+
+      <p><%= f.submit t( wisp.new_record? ? :Create : :Update ) %></p>
+    </fieldset>
+<% end %>

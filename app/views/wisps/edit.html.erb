@@ -15,25 +15,7 @@
     </ul>
     <div class="clear">&nbsp;</div>
     <div class="block" id="wisps-block">
-      <fieldset>
-        <legend><%=t :General_infos %></legend>
-        <% form_for(@wisp) do |f| %>
-          <p><%= f.error_messages %></p>
-
-          <p>
-            <%= f.label :Name %><br />
-            <%= f.text_field :name, :maxlength => 32 %>
-          </p>
-          <p>
-            <%= f.label :Notes %><br />
-            <%= f.text_area :notes, :rows => 3 %>
-          </p>
-          
-          <p>
-            <%= f.submit t(:Update) %>
-          </p>
-        <% end %>
-      </fieldset>
+      <%= render 'form', :wisp => @wisp %>
     </div>
   </div>
 </div>
