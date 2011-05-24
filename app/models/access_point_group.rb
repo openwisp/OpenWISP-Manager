@@ -10,4 +10,9 @@ class AccessPointGroup < ActiveRecord::Base
   has_and_belongs_to_many :access_points
 
   belongs_to :wisp
+
+  def to_xml(options = {}, &block)
+    options.merge!(:only => [:name, :site_url])
+    super
+  end
 end

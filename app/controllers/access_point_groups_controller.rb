@@ -28,10 +28,15 @@ class AccessPointGroupsController < ApplicationController
   
   # GET /wisps/:wisp_id/access_point_groups
   def index
-    @access_point_groups = @wisp.access_point_groups
+    if params[:access_point_id]
+      @access_point_groups = @wisp.access_points.find(params[:access_point_id]).access_point_groups
+    else
+      @access_point_groups = @wisp.access_point_groups
+    end
 
     respond_to do |format|
       format.html # index.html.erb
+      format.xml { render :xml => @access_point_groups }
     end
   end
 

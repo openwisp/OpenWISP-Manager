@@ -64,6 +64,7 @@ ActionController::Routing::Routes.draw do |map|
       access_point.resources :l2vpn_clients
       access_point.resources :l2tcs
       access_point.resources :custom_scripts
+      access_point.resources :access_point_groups, :only => :index
     end
 
     wisp.resources :access_point_templates do |access_point_template|
