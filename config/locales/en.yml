@@ -142,6 +142,7 @@ en:
   Gateway: "Gateway"
   General_infos: "General Information"
   Get_crl_list: "Retrieve Crl List"
+  Groups: "Groups"
   Groups_for_access_point: "Access point groups"
   Home: "Home"
   Inherited: "Inherited"

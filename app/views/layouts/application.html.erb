@@ -64,7 +64,7 @@
               <li>
                 <%= link_to t(:Templates), '#', :class => 'nohand' %>
                 <ul>
-<%# TODO: to be restored when a usage for access point template groups will be found 
+<%# TODO: to be restored when a usage for access point template groups will be found
 
                   <li>
                     <%= link_to t(:Template_groups), wisp_template_groups_path(@wisp) % >
@@ -80,11 +80,10 @@
                 <ul>
                   <li><%= link_to t(:All), wisp_access_points_path(@wisp) %></li>
                   <li><%= link_to t(:Outdated), outdated_access_points_path(@wisp) %></li>
-<%# TODO: to be restored when a usage for access point groups will be found
-              <li>
-                <%= link_to t(:Access_point_groups), wisp_access_point_groups_path(@wisp) % >
-              </li>
-%>
+
+                  <% if auth?(:wisps_viewer) || auth?(:access_point_groups_viewer, @wisp) %>
+                      <li><%= link_to t(:Groups), wisp_access_point_groups_path(@wisp) %></li>
+                  <% end %>
                 </ul>
               </li>
           <% end %>

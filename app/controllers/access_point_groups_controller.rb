@@ -4,6 +4,26 @@ class AccessPointGroupsController < ApplicationController
 
   access_control do
     default :deny
+
+    actions :index, :show do
+      allow :wisps_viewer
+      allow :access_point_groups_viewer, :of => :wisp
+    end
+
+    actions :new, :create do
+      allow :wisps_creator
+      allow :access_point_groups_creator, :of => :wisp
+    end
+
+    actions :edit, :update do
+      allow :wisps_manager
+      allow :access_point_groups_manager, :of => :wisp
+    end
+
+    actions :destroy do
+      allow :wisps_destroyer
+      allow :access_points_groups_destroyer, :of => :wisp
+    end
   end
   
   # GET /wisps/:wisp_id/access_point_groups
@@ -36,7 +56,6 @@ class AccessPointGroupsController < ApplicationController
   # GET /wisps/:wisp_id/access_point_groups/1/edit
   def edit
     @selected_access_points = @access_point_group.access_points.collect { |h| h.id }
-    
   end
 
   # POST /wisps/:wisp_id/access_point_groups
@@ -55,8 +74,7 @@ class AccessPointGroupsController < ApplicationController
     respond_to do |format|
       if @access_point_group.save
         flash[:notice] = t(:AccessPointGroup_was_successfully_created)
-#        format.html { redirect_to(wisp_access_point_group_url(@wisp, @access_point_group)) }
-        format.html { redirect_to(wisp_access_point_groups_url(@wisp)) }
+        format.html { redirect_to(wisp_access_point_group_url(@wisp, @access_point_group)) }
       else
         format.html { render :action => "new" }
       end
@@ -77,8 +95,7 @@ class AccessPointGroupsController < ApplicationController
     respond_to do |format|
       if @access_point_group.update_attributes(params[:access_point_group])
         flash[:notice] = t(:AccessPointGroup_was_successfully_updated)
-#        format.html { redirect_to(wisp_access_point_group_url(@wisp, @access_point_group)) }
-        format.html { redirect_to(wisp_access_point_groups_url(@wisp)) }
+        format.html { redirect_to(wisp_access_point_group_url(@wisp, @access_point_group)) }
       else
         format.html { render :action => "edit" }
       end

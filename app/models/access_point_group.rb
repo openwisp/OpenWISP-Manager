@@ -9,5 +9,4 @@ class AccessPointGroup < ActiveRecord::Base
   has_and_belongs_to_many :access_points
 
   belongs_to :wisp
-
 end

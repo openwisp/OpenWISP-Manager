@@ -15,32 +15,11 @@
     </ul>
     <div class="clear">&nbsp;</div>
     <div class="block" id="access_point_group_block">
-      <fieldset>
-        <legend><%=t :General_infos %></legend>
-
-          <% form_for([@wisp, @access_point_group]) do |f| %>
-            <p><%= f.error_messages %></p>
-
-            <p>
-              <%= f.label t(:Name) %><br />
-              <%= f.text_field :name, :maxlength => 32 %>
-            </p>
-            <p>
-              <%= f.label t(:Notes) %><br />
-              <%= f.text_area :notes, :rows => 3 %>
-            </p>
-            <p>
-              <% unless @wisp.access_points.nil? or @wisp.access_points.length == 0  %>
-                <%= render :partial => 'access_points_select', :locals => { :selected_access_points => @selected_access_points, :access_points => @wisp.access_points } %>
-              <% else %>
-                <%= t(:No_access_point) %>
-              <% end %>
-            </p>
-            <p>
-              <%= f.submit t(:Update) %>
-            </p>
-          <% end %>
-      </fieldset>
+      <%= render 'form',
+                 :wisp => @wisp,
+                 :access_point_group => @access_point_group,
+                 :selected_access_points => @selected_access_points
+      %>
     </div>
   </div>
 </div>

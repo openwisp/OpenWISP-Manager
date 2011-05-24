@@ -1,0 +1,32 @@
+<% form_for wisp, access_point_group do |f| %>
+    <fieldset>
+      <fieldset>
+        <legend><%=t :General_infos %></legend>
+        <p><%= f.error_messages %></p>
+
+        <p>
+          <%= f.label t(:Name) %><br />
+          <%= f.text_field :name, :maxlength => 32 %>
+        </p>
+        <p>
+          <%= f.label t(:Notes) %><br />
+          <%= f.text_area :notes, :rows => 3 %>
+        </p>
+      </fieldset>
+
+      <fieldset>
+        <legend><%=t :Access_points_in_group %></legend>
+
+        <p>
+          <% if wisp.access_points.present? %>
+              <%= render 'access_points_select', :selected_access_points => selected_access_points, :access_points => wisp.access_points %>
+          <% else %>
+              <%= t(:No_access_point) %>
+          <% end %>
+        </p>
+      </fieldset>
+
+      <p><%= f.submit t(access_point_group.new_record? ? :Create : :Update) %></p>
+    </fieldset>
+<% end %>
+
