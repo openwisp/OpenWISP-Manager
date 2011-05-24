@@ -28,7 +28,7 @@
           <td><%=h access_point.city %></td>
           <td><%=h access_point.zip %></td>
           <td>
-            <% if (access_point.notes.nil? or access_point.notes.length == 0) %>
+            <% if access_point.notes.blank? %>
               &nbsp;
             <% else %>
               <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
