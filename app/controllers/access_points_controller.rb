@@ -2,13 +2,6 @@ class AccessPointsController < ApplicationController
   include Addons::Mappable
 
   before_filter :load_wisp, :except => [:get_configuration, :get_configuration_md5]
-  before_filter :load_access_point,
-                :except => [
-                    :index,
-                    :new, :create,
-                    :get_configuration, :get_configuration_md5,
-                    :outdated, :update_outdated
-                ]
 
   access_control do
     default :deny
@@ -68,7 +61,7 @@ class AccessPointsController < ApplicationController
 
       if !access_point.nil?
         access_point.last_seen_on request.remote_ip
-        
+
         if !access_point.configuration_md5.nil?
           #Sending md5 digest of configuration files
           send_data access_point.configuration_md5
@@ -84,11 +77,7 @@ class AccessPointsController < ApplicationController
 
   # GET /wisps/:wisp_id/access_points
   def index
-    if params[:name]
-      @access_points = @wisp.access_points.find(:all, :conditions => {:name => params[:name]})
-    else
-      @access_points = @wisp.access_points
-    end
+    @access_points = @wisp.access_points
 
     respond_to do |format|
       format.html # index.html.erb
@@ -100,7 +89,8 @@ class AccessPointsController < ApplicationController
   # GET /wisps/:wisp_id/access_points/1
   def show
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { @access_point = @wisp.access_points.find(params[:id]) }
+      format.xml { render :xml => @wisp.access_points.find_by_name(params[:id]) }
     end
   end
 
@@ -122,6 +112,8 @@ class AccessPointsController < ApplicationController
 
   # GET /wisps/:wisp_id/access_points/1/edit
   def edit
+    @access_point = @wisp.access_points.find(params[:id])
+
     @access_point_groups = @wisp.access_point_groups
     @selected_access_point_groups = @access_point.access_point_groups.map { |g| g.id.to_s }
     @access_point_templates = @wisp.access_point_templates
@@ -198,6 +190,8 @@ class AccessPointsController < ApplicationController
 
   # PUT /wisps/:wisp_id/access_points/1
   def update
+    @access_point = @wisp.access_points.find(params[:id])
+
     @access_point_templates = @wisp.access_point_templates
     @access_point_groups = @wisp.access_point_groups
     if params[:access_point_groups].nil?
@@ -227,6 +221,8 @@ class AccessPointsController < ApplicationController
 
   # DELETE /wisps/:wisp_id/access_points/1
   def destroy
+    @access_point = @wisp.access_points.find(params[:id])
+
     worker = MiddleMan.worker(:configuration_worker)
     worker.async_delete_access_points_configuration(
         :arg => { :access_point_ids => [ @access_point.id ] }
@@ -251,11 +247,5 @@ class AccessPointsController < ApplicationController
     worker.async_create_access_points_configuration(:arg => { :access_point_ids => access_points.map{ |ap| ap.id } })
 
     redirect_to wisp_access_points_url(@wisp)
-  end
-
-  private
-
-  def load_access_point
-    @access_point = @wisp.access_points.find(params[:id])
   end
 end
