@@ -5,11 +5,15 @@
         <p><%= f.error_messages %></p>
 
         <p>
-          <%= f.label t(:Name) %><br />
+          <%= f.label :name, t(:Name) %><br />
           <%= f.text_field :name, :maxlength => 32 %>
         </p>
         <p>
-          <%= f.label t(:Notes) %><br />
+          <%= f.label :site_url, t(:Site_url) %><br />
+          <%= f.text_field :site_url %>
+        </p>
+        <p>
+          <%= f.label :notes, t(:Notes) %><br />
           <%= f.text_area :notes, :rows => 3 %>
         </p>
       </fieldset>
@@ -19,7 +23,7 @@
 
         <p>
           <% if wisp.access_points.present? %>
-              <%= render 'access_points_select', :selected_access_points => selected_access_points, :access_points => wisp.access_points %>
+              <%= render 'access_points_select', :access_points => wisp.access_points, :selected => selected_access_points %>
           <% else %>
               <%= t(:No_access_point) %>
           <% end %>

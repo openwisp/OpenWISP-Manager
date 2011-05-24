@@ -15,7 +15,7 @@
   <tbody>
     <% access_points.each do |access_point| %>
         <tr>
-          <td><%= check_box_tag("access_points[]", access_point.id, selected_access_points.include?(access_point.id)) %></td>
+          <td><%= check_box_tag("access_points[]", access_point.id, selected.present? && selected.include?(access_point.id)) %></td>
           <td><%=h access_point.name %></td>
           <td><%=h access_point.access_point_template.nil? ? '' : access_point.access_point_template.name %></td>
           <td><%=h access_point.mac_address %></td>

@@ -24,6 +24,10 @@
           <td><%=h @access_point_group.name %></td>
         </tr>
         <tr>
+          <td><a><%= t(:Site_url) %></a></td>
+          <td><%= @access_point_group.site_url.blank? ? '-' : truncate(h(@access_point_group.site_url)) %></td>
+        </tr>
+        <tr>
           <td colspan="2">&nbsp;</td>
         </tr>
         <tr>

@@ -274,6 +274,7 @@ it:
   Server_name: "Nome del server"
   Server_updated: "Server aggiornato"
   Servers_list: "Lista dei server"
+  Site_url: "URL del sito"
   State_or_province: "Stato o provincia"
   Stats: "Statistiche"
   Status: "Stato"

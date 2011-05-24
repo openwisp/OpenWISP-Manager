@@ -5,6 +5,7 @@ class AccessPointGroup < ActiveRecord::Base
   validates_format_of :name, :with => /\A[\w\d_\s\.]+\Z/i
   validates_length_of :name, :maximum => 32
   validates_uniqueness_of :name, :scope => :wisp_id
+  validates_format_of :site_url, :with => URI::regexp(%w(http https)), :allow_blank => true
 
   has_and_belongs_to_many :access_points
 
