@@ -49,8 +49,9 @@ class L2vpnClient < ActiveRecord::Base
     l2vpn_server.name
   end
 
-  def to_xml(options={})
-    super(options.merge({:only => :id, :methods => :identifier}))
+  def to_xml(options = {}, &block)
+    options.merge!(:only => :id, :methods => :identifier)
+    super
   end
 
   private

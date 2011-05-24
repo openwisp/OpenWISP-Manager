@@ -45,6 +45,11 @@ class AccessPoint < ActiveRecord::Base
   belongs_to :access_point_template
   belongs_to :template, :class_name => 'AccessPointTemplate', :foreign_key => :access_point_template_id
 
+  def to_xml(options = {}, &block)
+    options.merge!(:include => :l2vpn_clients)
+    super
+  end
+
   def generate_configuration
 
     @uci_system = ActionView::Base.new(Rails::Configuration.new.view_path).render(
