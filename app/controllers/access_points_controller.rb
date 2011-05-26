@@ -82,7 +82,7 @@ class AccessPointsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json
-      format.xml { render :xml => @access_points }
+      format.xml { render :xml => @access_points.to_xml(:include => :l2vpn_clients) }
     end
   end
 
@@ -90,7 +90,7 @@ class AccessPointsController < ApplicationController
   def show
     respond_to do |format|
       format.html { @access_point = @wisp.access_points.find(params[:id]) }
-      format.xml { render :xml => @wisp.access_points.find_by_name(params[:id]) }
+      format.xml { render :xml => @wisp.access_points.find_by_name(params[:id]).to_xml(:include => :l2vpn_clients) }
     end
   end
 

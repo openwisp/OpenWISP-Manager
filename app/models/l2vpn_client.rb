@@ -17,6 +17,22 @@ class L2vpnClient < ActiveRecord::Base
     record.access_point.wisp.ca.create_openvpn_client_certificate(record)
   end
 
+  def self.identifier_prefix
+    table_name.singularize
+  end
+
+  def self.find_by_identifier(query_str)
+    /#{identifier_prefix}_(.+)_(.+)_(.+)/.match(query_str)
+
+    found = self.find($3)
+
+    if found && found.access_point.id.to_s == $2 && found.access_point.wisp.id.to_s == $1
+      found
+    else
+      nil
+    end
+  end
+
   def link_to_template(template)
     self.l2vpn_template = template
 
@@ -29,7 +45,7 @@ class L2vpnClient < ActiveRecord::Base
 
   # Certifiable interface
   def identifier
-    "l2vpn_client_#{self.access_point.wisp.id}_#{self.access_point.id}_#{self.id}"
+    "#{L2vpnClient.identifier_prefix}_#{self.access_point.wisp.id}_#{self.access_point.id}_#{self.id}"
   end
 
   # Accessor methods (read)

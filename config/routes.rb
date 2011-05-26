@@ -55,6 +55,7 @@ ActionController::Routing::Routes.draw do |map|
 
     wisp.resources :access_point_groups
     wisp.resources :template_groups
+    wisp.resources :l2vpn_clients, :only => :show
 
     wisp.resources :access_points do |access_point|
       access_point.resources :ethernets
