@@ -2,7 +2,7 @@ class L2vpnClientsController < ApplicationController
   layout nil
 
   before_filter :load_wisp
-  before_filter :load_access_point, :only => :index
+  before_filter :load_access_point
 
   access_control do
     default :deny
@@ -24,13 +24,10 @@ class L2vpnClientsController < ApplicationController
 
   # GET /wisps/:wisp_id/access_points/:access_point_id/l2vpn_clients/1
   def show
-    respond_to do |format|
-      format.html do
-        @access_point = @wisp.access_points.find(params[:access_point_id])
-        @l2vpn = @access_point.l2vpn_clients.find(params[:id])
-      end
+    @l2vpn = @access_point.l2vpn_clients.find(params[:id])
 
-      format.xml { render :xml => L2vpnClient.find_by_identifier(params[:id]).to_xml(:include => :access_point) }
+    respond_to do |format|
+      format.html # show.html.erb
     end
   end
 end
