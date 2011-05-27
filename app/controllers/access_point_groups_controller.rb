@@ -29,7 +29,7 @@ class AccessPointGroupsController < ApplicationController
   # GET /wisps/:wisp_id/access_point_groups
   def index
     if params[:access_point_id]
-      @access_point_groups = @wisp.access_points.find(params[:access_point_id]).access_point_groups
+      @access_point_groups = [@wisp.access_points.find(params[:access_point_id]).access_point_group]
     else
       @access_point_groups = @wisp.access_point_groups
     end

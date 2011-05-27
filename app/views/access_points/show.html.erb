@@ -96,18 +96,16 @@
               <td colspan="2"><%= h(@access_point.notes).gsub(/\n/, "<br>") %></td>
             </tr>
         <% end %>
-        <% if  @access_point.access_point_groups.count > 0 %>
+        <% if  @access_point.access_point_group.present? %>
             <tr>
               <td colspan="2">&nbsp;</td>
             </tr>
             <tr>
               <td colspan="2"><strong><%=t :Groups_for_access_point %></strong></td>
             </tr>
-            <% @access_point.access_point_groups.each do |g|  %>
-                <tr>
-                  <td colspan="2"><%= link_to h(g.name), wisp_access_point_group_path(@wisp, g) %></td>
-                </tr>
-            <% end %>
+            <tr>
+              <td colspan="2"><%= link_to h(g.name), wisp_access_point_group_path(@wisp, @access_point.access_point_group) %></td>
+            </tr>
         <% end %>
       </table>
     </div>
