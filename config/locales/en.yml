@@ -249,6 +249,7 @@ en:
   Output_band: "Output bandwidth"
   Output_band_for: "Output bandwidth for"
   Owmw_services: "OpenWisp Middleware Services"
+  Owmw_services_for_group: "Group specific OpenWisp Middleware Services"
   Owmw_url: "Services URL"
   Owner: "Owner"
   Password: "Password"

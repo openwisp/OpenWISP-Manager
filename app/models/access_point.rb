@@ -29,7 +29,7 @@ class AccessPoint < ActiveRecord::Base
 
 
   belongs_to :wisp
-  has_and_belongs_to_many :access_point_groups
+  belongs_to :access_point_group
 
   has_many :radios, :dependent => :destroy
   has_many :ethernets, :as => :machine, :dependent => :destroy

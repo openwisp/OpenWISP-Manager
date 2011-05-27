@@ -19,6 +19,24 @@
       </fieldset>
 
       <fieldset>
+        <legend><%=t :Owmw_services_for_group %></legend>
+
+        <p>
+          <%= f.label :owmw_url, t(:Owmw_url) %><br />
+          <%= f.text_field :owmw_url %>
+        </p>
+        <p>
+          <%= f.label :owmw_username, t(:Username) %><br />
+          <%= f.text_field :owmw_username %>
+        </p>
+        <p>
+          <%= f.label :owmw_password, t(:Password) %><br />
+          <%= f.password_field :owmw_password %>
+        </p>
+      </fieldset>
+
+
+      <fieldset>
         <legend><%=t :Access_points_in_group %></legend>
 
         <p>

@@ -6,8 +6,9 @@ class AccessPointGroup < ActiveRecord::Base
   validates_length_of :name, :maximum => 32
   validates_uniqueness_of :name, :scope => :wisp_id
   validates_format_of :site_url, :with => URI::regexp(%w(http https)), :allow_blank => true
+  validates_format_of :owmw_url, :with => URI::regexp(%w(http https)), :allow_blank => true
 
-  has_and_belongs_to_many :access_points
+  has_many :access_points
 
   belongs_to :wisp
 
