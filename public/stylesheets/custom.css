@@ -127,3 +127,7 @@ h1#branding {
 .lat, .lon {
     display:none;
 }
+
+.center {
+    text-align:center;
+}

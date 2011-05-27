@@ -27,13 +27,6 @@
               <th scope="col" class="head-right"><%=t :Notes %></th>
             </tr>
             </thead>
-            <% if auth?(:wisps_creator) || auth?(:access_points_creator, @wisp) %>
-                <tfoot>
-                <tr>
-                  <td colspan="9" class="foot" style="text-align: center;"><%= link_to t(:Create_New), new_wisp_access_point_path(@wisp) %></td>
-                </tr>
-                </tfoot>
-            <% end %>
             <tbody>
 
             <% access_points.each do |access_point| %>
@@ -80,3 +73,12 @@
     </div>
     <div class="clear">&nbsp;</div>
 <% end  %>
+
+<% if auth?(:wisps_creator) || auth?(:access_points_creator, @wisp) %>
+    <div class="grid_14 prefix_1 suffix_1">
+      <div class="box center">
+        <h5><%= link_to t(:Create_New), new_wisp_access_point_path(@wisp) %></h5>
+      </div>
+    </div>
+<% end %>
+
