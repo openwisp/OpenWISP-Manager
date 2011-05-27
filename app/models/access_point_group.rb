@@ -13,7 +13,7 @@ class AccessPointGroup < ActiveRecord::Base
   belongs_to :wisp
 
   def to_xml(options = {}, &block)
-    options.merge!(:only => [:name, :site_url])
+    options.merge!(:only => [:id, :name, :site_url])
     super
   end
 end

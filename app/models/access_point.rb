@@ -46,7 +46,7 @@ class AccessPoint < ActiveRecord::Base
   belongs_to :template, :class_name => 'AccessPointTemplate', :foreign_key => :access_point_template_id
 
   def to_xml(options = {}, &block)
-    options.merge!(:only => [:id, :name, :mac_address])
+    options.merge!(:only => [:id, :name, :mac_address], :include => [:l2vpn_clients, :access_point_group])
     super
   end
 
