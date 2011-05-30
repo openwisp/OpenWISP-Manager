@@ -98,8 +98,6 @@ class AccessPointsController < ApplicationController
   def new
     @access_point = AccessPoint.new
 
-    @access_point_groups = @wisp.access_point_groups
-    @selected_access_point_groups = []
     @access_point_templates = @wisp.access_point_templates
     @selected_access_point_template = nil
 
@@ -114,8 +112,6 @@ class AccessPointsController < ApplicationController
   def edit
     @access_point = @wisp.access_points.find(params[:id])
 
-    @access_point_groups = @wisp.access_point_groups
-    @selected_access_point_groups = @access_point.access_point_groups.map { |g| g.id.to_s }
     @access_point_templates = @wisp.access_point_templates
     @selected_access_point_template = !@access_point.access_point_template.nil? ? @access_point.access_point_template.id.to_s : nil
   end
@@ -127,19 +123,8 @@ class AccessPointsController < ApplicationController
     # MAC Address in lowercase
     @access_point.mac_address.downcase!
 
-    @access_point_groups = @wisp.access_point_groups
-    if params[:access_point_groups].nil?
-      @selected_access_point_groups = []
-    else
-      @selected_access_point_groups = params[:access_point_groups]
-    end
-
     @access_point_templates = @wisp.access_point_templates
     @selected_access_point_template = params[:access_point_template][:id]
-
-    @selected_access_point_groups.each do |gid|
-      @access_point.access_point_groups << @access_point_groups.find(gid)
-    end
 
     unless @selected_access_point_template.blank? or @selected_access_point_template.nil?
       @access_point_template = @access_point_templates.find(@selected_access_point_template)
@@ -193,17 +178,6 @@ class AccessPointsController < ApplicationController
     @access_point = @wisp.access_points.find(params[:id])
 
     @access_point_templates = @wisp.access_point_templates
-    @access_point_groups = @wisp.access_point_groups
-    if params[:access_point_groups].nil?
-      @selected_access_point_groups = []
-    else
-      @selected_access_point_groups = params[:access_point_groups]
-    end
-
-    @access_point.access_point_groups = []
-    @selected_access_point_groups.each do |gid|
-      @access_point.access_point_groups << @access_point_groups.find(gid)
-    end
 
     if @access_point.update_attributes(params[:access_point])
       respond_to do |format|

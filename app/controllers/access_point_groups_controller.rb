@@ -25,14 +25,10 @@ class AccessPointGroupsController < ApplicationController
       allow :access_points_groups_destroyer, :of => :wisp
     end
   end
-  
+
   # GET /wisps/:wisp_id/access_point_groups
   def index
-    if params[:access_point_id]
-      @access_point_groups = [@wisp.access_points.find(params[:access_point_id]).access_point_group]
-    else
-      @access_point_groups = @wisp.access_point_groups
-    end
+    @access_point_groups = @wisp.access_point_groups
 
     respond_to do |format|
       format.html # index.html.erb
@@ -52,7 +48,7 @@ class AccessPointGroupsController < ApplicationController
   def new
     @access_point_group = @wisp.access_point_groups.new
     @selected_access_points = []
-    
+
     respond_to do |format|
       format.html # new.html.erb
     end
@@ -72,10 +68,10 @@ class AccessPointGroupsController < ApplicationController
     @access_point_group.access_points = []
     unless params[:access_points].nil?
       params[:access_points].each { |hid|
-         @access_point_group.access_points << @wisp.access_points.find(hid)
+        @access_point_group.access_points << @wisp.access_points.find(hid)
       }
     end
-    
+
     respond_to do |format|
       if @access_point_group.save
         flash[:notice] = t(:AccessPointGroup_was_successfully_created)
@@ -93,7 +89,7 @@ class AccessPointGroupsController < ApplicationController
     @access_point_group.access_points = []
     unless params[:access_points].nil?
       params[:access_points].each { |hid|
-         @access_point_group.access_points << @wisp.access_points.find(hid)
+        @access_point_group.access_points << @wisp.access_points.find(hid)
       }
     end
 
@@ -117,7 +113,7 @@ class AccessPointGroupsController < ApplicationController
   end
 
   private
-  
+
   def load_access_point_group
     @access_point_group = @wisp.access_point_groups.find(params[:id])
   end

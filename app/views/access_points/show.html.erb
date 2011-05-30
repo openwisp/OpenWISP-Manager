@@ -101,10 +101,8 @@
               <td colspan="2">&nbsp;</td>
             </tr>
             <tr>
-              <td colspan="2"><strong><%=t :Groups_for_access_point %></strong></td>
-            </tr>
-            <tr>
-              <td colspan="2"><%= link_to h(g.name), wisp_access_point_group_path(@wisp, @access_point.access_point_group) %></td>
+              <td><strong><%=t :Access_point_group %></strong></td>
+              <td><%= link_to h(@access_point.access_point_group.name), wisp_access_point_group_path(@wisp, @access_point.access_point_group) %></td>
             </tr>
         <% end %>
       </table>

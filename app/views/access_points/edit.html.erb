@@ -45,19 +45,6 @@
                   )
               %>
             </p>
-<%#
-            <p>
-              <%= f.label t(:AccessPoint_groups)  % >
-              <br>
-              <%=
-                  select_tag( 'access_point_groups[]',
-                              options_for_select(@access_point_groups.collect { |hg| [ hg.name, hg.id.to_s ] },
-                                                 @selected_access_point_groups),
-                              :multiple => true
-                  )
-              % >
-            </p>
-%>
             <p>
               <%= f.label t(:Mac_address)  %>
               <br>
