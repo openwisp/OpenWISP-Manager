@@ -90,7 +90,19 @@ class AccessPointsController < ApplicationController
   def show
     respond_to do |format|
       format.html { @access_point = @wisp.access_points.find(params[:id]) }
-      format.xml { render :xml => @wisp.access_points.find_by_name(params[:id]) }
+
+      format.xml do
+        @access_point = @wisp.access_points.find_by_name(params[:id])
+
+        if @access_point.nil?
+          @access_point = AccessPoint.find_by_common_name(params[:id])
+
+          # Enforce access control on wisp for access point
+          @access_point = nil if @access_point.wisp != @wisp
+        end
+
+        render :xml => @access_point
+      end
     end
   end
 

@@ -45,7 +45,18 @@ class AccessPoint < ActiveRecord::Base
   belongs_to :access_point_template
   belongs_to :template, :class_name => 'AccessPointTemplate', :foreign_key => :access_point_template_id
 
+
   delegate :site_url, :to => :access_point_group, :allow_nil => true
+
+
+  # Class methods
+
+  def self.find_by_common_name(cn)
+    L2vpnClient.find_by_identifier(cn).access_point rescue nil
+  end
+
+
+  # Instance methods
 
   def to_xml(options = {}, &block)
     options.merge!(:only => [:id, :name, :mac_address], :methods => :site_url, :include => :l2vpn_clients)
