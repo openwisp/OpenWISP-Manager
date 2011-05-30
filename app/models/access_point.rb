@@ -247,7 +247,7 @@ class AccessPoint < ActiveRecord::Base
       end
 
       template.l2vpn_templates.each do |vt|
-        # This will also create (and link to appropriate templates) taps and theirs vlans
+        # This will also create (and link to appropriate templates) taps and their vlans
         nv = self.l2vpn_clients.build({:access_point => self})
         nv.link_to_template(vt)
         unless nv.save!
