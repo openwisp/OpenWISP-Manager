@@ -15,14 +15,16 @@ echo "Applying network configuration"
 <% access_point.l2vpn_clients.each do |v| %>
     echo "Creating tap <%=h v.tap.name %>"
     openvpn --mktun --dev <%=h v.tap.name %> --dev-type tap
+    while [ -z "`grep <%=h v.tap.name %> /proc/net/dev`" ]; do
+      sleep 1
+      openvpn --mktun --dev <%=h v.tap.name %> --dev-type tap
+    done
 <% end %>
 <% if access_point.bridges.length > 0 %>
     echo "Creating bridges"
     uci -m import network -f ./uci/network.conf
     <% access_point.bridges.each do |b| %>
         echo "Enabling bridge <%=h b.name %>"
-        ifup <%=h b.name %>
-        # OpenWRT Bug.. :(
         ifup <%=h b.name %>
     <% end %>
 <% end %>
