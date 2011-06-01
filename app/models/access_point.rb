@@ -45,6 +45,10 @@ class AccessPoint < ActiveRecord::Base
   belongs_to :access_point_template
   belongs_to :template, :class_name => 'AccessPointTemplate', :foreign_key => :access_point_template_id
 
+  def before_save
+    # MAC Address in lowercase
+    self.mac_address.downcase!
+  end
 
   # Class methods
 

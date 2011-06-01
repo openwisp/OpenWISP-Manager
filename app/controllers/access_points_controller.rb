@@ -132,9 +132,6 @@ class AccessPointsController < ApplicationController
   def create
     @access_point = @wisp.access_points.build(params[:access_point])
 
-    # MAC Address in lowercase
-    @access_point.mac_address.downcase!
-
     @access_point_templates = @wisp.access_point_templates
     @selected_access_point_template = params[:access_point_template][:id]
 
