@@ -11,15 +11,13 @@
 
     <div class="grid_14 prefix_1 suffix_1">
       <div class="box">
-        <% if access_point_template.nil? %>
-            <h2><a href="#" id="toggle-forms_none"><%= t(:Listing_access_points_for_template, :template => t(:None)) %></a></h2>
-            <div class="block" id="access_points_block_none">
-            <table id="access_points-table_none">
-        <% else %>
-            <h2><a href="#" id="toggle-forms_<%= access_point_template.id %>"><%= t(:Listing_access_points_for_template, :template => h(access_point_template.name)) %></a></h2>
-            <div class="block" id="access_points_block_<%= access_point_template.id %>">
-            <table id="access_points-table_<%= access_point_template.id %>">
-        <% end %>
+        <h2>
+          <a href="#" id="toggle-forms_<%= access_point_template.nil? ? 'none' : access_point_template.id %>">
+            <%= t(:Listing_access_points_for_template, :template => h(access_point_template.nil? ? t(:None) : access_point_template.name)) %>
+          </a>
+        </h2>
+        <div class="block" id="access_points_block_<%= access_point_template.nil? ? 'none' : access_point_template.id %>">
+          <table id="access_points-table_<%= access_point_template.nil? ? 'none' : access_point_template.id %>">
             <thead>
             <tr>
               <th scope="col" class="head-left"><%=t :Operations %></th>
