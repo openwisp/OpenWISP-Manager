@@ -1,45 +1,11 @@
 package 'wireless'
-<% access_point.radios.each do |radio| %>
-   config 'wifi-device' '<%=h radio.name %>'
-    option 'type' 'atheros'
-    option 'agmode' '<%=h radio.mode %>'
-    option 'channel' '<%=h radio.channel %>'
-    option 'diversity' '0'
-    option 'txantenna' '0'
-    option 'rxantenna' '0'
-    option 'txpower' '19'
-    option 'bursting' '1'
-    option 'wmm' '1'
-    option 'turbo' '1'
-    option 'disabled' '0'
-<% radio.vaps.each do |vap| %>
-   config 'wifi-iface' '<%=h vap.name %>'
-    option 'device' '<%=h radio.name %>'
-    option 'ifname' '<%=h vap.name %>'
-<% if vap.bridge %>
-    option 'network' '<%=h vap.bridge.name %>'
-<% end %>
-    option 'mode' 'ap'
-    option 'ssid' '<%=h vap.essid %>'
-    option 'hidden' '<%= vap.visibility == 'broadcasted' ? 0 : 1 %>'
-    option 'isolate' '1'
-    option 'encryption' '<%=h vap.encryption %>'
-<% if vap.encryption != 'none' %>
-    option 'key' '<%=h vap.key %>'
-<% if vap.encryption.match(/^(wpa)|(wpa2)$/) %>
-    option 'server' '<%=h vap.radius_auth_server %>'
-    option 'port' '<%=h vap.radius_auth_server_port %>'
-<% if !vap.radius_acct_server.nil? and  !vap.radius_acct_server.blank? %>
-    option 'acctserver' '<%=h vap.radius_acct_server %>'
-    option 'acctport' '<%=h vap.radius_acct_server_port %>'
-    option 'acctkey' '<%=h vap.key %>'
-<% end %>
-<% end %>
-<% end %>
-    option 'bgscan' '0'
-    option 'wds' '0'
-    option 'macpolicy' 'none'
-    option 'wmm' '0'
 
-<% end %>
-<% end %>
+<% access_point.radios.each do |radio| -%>
+
+<% if radio.driver == 'madwifi-ng' -%>
+<%= render :partial => 'access_points/uci_wireless_madwifi',  :locals => { :radio => radio } %>
+<% elsif radio.driver == 'mac80211' -%>
+<%= render :partial => 'access_points/uci_wireless_mac80211', :locals => { :radio => radio } %>
+<% end -%>
+
+<% end -%>

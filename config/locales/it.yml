@@ -78,7 +78,7 @@ it:
   Cron_hour: "Ore"
   Cron_day: "Giorni"
   Cron_month: "Mesi"
-  Cron_dayweek: "Giorni Settimana"
+  Cron_weekday: "Giorni Settimana"
   Cron_body: "Body Script"
   Current_login_at: "Data dell'accesso corrente"
   Current_login_ip: "Indirizzo dell'accesso corrente"
@@ -112,6 +112,8 @@ it:
   Dn_prefix: "Prefisso per il distinguish name"
   Dns: "DNS"
   Download: "Scarica"
+  Driver: "Driver"
+  Driver_slot: "Slot driver"
   Edit: "Modifica"
   Edit_access_point: "Modifica access point"
   Edit_access_point_group: "Modifica gruppo di access point"
@@ -328,6 +330,7 @@ it:
   internal: "interno"
   none: "nessuno"
   static: "statico"
+  unspecified: "non specificato"
   OWISPManager_servers: "Server per Wireless ISP"
   vWisps_manager: "OWM"
 
@@ -472,6 +475,7 @@ it:
         not_valid_m: "non valido"
         needed_for_static_addressent: "necessario per indirizzamento statico"
         cannot_update_addressing_on_linked_template: "Non puo' essere aggiornato l'indirizzamento per un template in uso"
+        invalid_mode_for_selected_driver: "non è valido per il driver selezionato"
 
     # Translate model names. Used in Model.human_name().
     models:

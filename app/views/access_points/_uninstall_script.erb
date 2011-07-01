@@ -13,36 +13,42 @@ uci changes openvpn | grep "=openvpn" | cut -d'.' -f2 | cut -d'=' -f1 | awk '{pr
 uci changes openvpn | grep "=openvpn" | cut -d'.' -f2 | cut -d'=' -f1 | awk '{"rm /var/run/openvpn-"$1".pid"|getline;print}'
 uci revert openvpn
 
-<% access_point.l2vpn_clients.each do |v| %>
-    echo "Removing tap <%=h v.tap.name %>"
-    openvpn --rmtun --dev <%=h v.tap.name %> --dev-type tap
-<% end %>
+<% access_point.l2vpn_clients.each do |v| -%>
+echo "Removing tap <%=h v.tap.name %>"
+openvpn --rmtun --dev <%=h v.tap.name %> --dev-type tap
+<% end -%>
 
-# Ugly!
-echo "Stopping wifi and removing its configuration"
-<% access_point.radios.each do |radio| %>
-  wifi down <%= radio.name %>
-<% end %>
+echo "Stopping wifi and network and removing their configurations"
+<% access_point.radios.each do |r| -%>
+wifi down <%= r.name %>
+<% end -%>
+
+<% access_point.bridges.each do |b| -%>
+echo "Disabling bridge <%=h b.name %>"
+ifdown <%=h b.name %>
+<% end -%>
+
 uci revert wireless
-
-echo "Reverting network and removing its configuration"
-uci changes network | grep interface | cut -d'=' -f1 | cut -d'.' -f2 | awk '{"ifdown "$1|getline;print}'
 uci revert network
-<% if access_point.bridges.length > 0 %>
-    <% access_point.bridges.each do |b| %>
-        echo "Disabling bridge <%=h b.name %>"
-        ifdown <%=h b.name %>
-    <% end %>
-<% end %>
-<% access_point.radios.each do |radio| %>
-  wifi up <%= radio.name %>
-<% end %>
 
-<% if (!access_point.access_point_template.nil? and access_point.access_point_template.custom_script_templates.length > 0) or  access_point.custom_scripts.length > 0 -%>
-    echo "Stopping Cron"
-    crond
-    echo "Removing Cron Scripts"
-    crontab -r
-<% end %>
+echo "Restoring original wifi and network configurations"
+<% access_point.bridges.each do |b| -%>
+ifup <%=h b.name %>
+<% end -%>
+
+<% access_point.radios.each do |r| -%>
+wifi up <%= r.name %>
+<% end -%>
+
+<% if (!access_point.access_point_template.nil? and
+        access_point.access_point_template.custom_script_templates.length > 0) or
+        access_point.custom_scripts.length > 0 -%>
+echo "Stopping Cron"
+CRON_PID=`ps ax | grep crond | grep cron.info | grep -v grep | awk '{print $1}'`
+if [ -n "$CRON_PID" ]; then
+    kill $CRON_PID
+fi
+rm $PROGDIR/cron.info
+<% end -%>
 
 echo "Configuration un-installed"

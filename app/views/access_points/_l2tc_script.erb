@@ -13,20 +13,20 @@ check_prereq() {
 
   echo "Checking kernel modules..."  
   for kmod in $KERNEL_MODULES; do
-    if [ \! -f $KERNEL_MPATH/$kmod.ko ]; then
+    if [ ! -f $KERNEL_MPATH/$kmod.ko ]; then
       echo "Prerequisite error: can't find kernel module '$kmod' in '$KERNEL_MPATH'"
       exit 1
     fi
   done
 
   echo "Checking tc tool..."  
-  if [ \! -x $TC_COMMAND ]; then
+  if [ ! -x $TC_COMMAND ]; then
     echo "Prerequisite error: can't find traffic control tool ($TC_COMMAND)"
     exit 1
   fi
 
   echo "Checking ebtables..."  
-  if [ \! -x $EB_COMMAND ]; then
+  if [ ! -x $EB_COMMAND ]; then
     echo "Prerequisite error: can't find ebtables ($EB_COMMAND)"
     exit 1
   fi
@@ -74,7 +74,7 @@ start() {
 
 <% root_handle = 1 %>
 <% access_point.l2tcs.each do |l2tc| %>
-  <% unless l2tc.shapeable.output_band.nil? %>
+  <% unless l2tc.shapeable.output_band.blank? %>
   # Root tc configuration for <%= l2tc.shapeable.friendly_name %>
     <% root_class_id = 1 %>
     <% class_id = root_class_id + 1 %>
@@ -88,7 +88,7 @@ start() {
   # Subinterfaces traffic for <%= l2tc.shapeable.friendly_name %>
     <% l2tc.shapeable.subinterfaces.each do |sub_interface| %>
       <% class_id += 1 %>
-      <% unless sub_interface.output_band.nil? %>
+      <% unless sub_interface.output_band.blank? %>
   # Configuration for <%= l2tc.shapeable.friendly_name %> (subinterface <%= sub_interface.friendly_name %>)
   tc class add dev <%= l2tc.shapeable.name %> parent <%= root_handle %>:<%= root_class_id %> classid <%= root_handle %>:<%= class_id %> htb rate <%= sub_interface.output_band %>kbit ceil <%= l2tc.shapeable.output_band %>kbit burst 20k prio 0
   tc qdisc add dev <%= l2tc.shapeable.name %> parent <%= root_handle %>:<%= class_id %> handle <%= root_handle %><%= class_id %>: sfq perturb 10

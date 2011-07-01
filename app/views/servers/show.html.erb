@@ -44,7 +44,7 @@
 </div>
 
 <%= periodically_call_remote( :url => { :action => 'ajax_stats', :id => @server.id }, 
-                              :frequency => '5', 
+                              :frequency => '15',
                               :update => 'server_stats-block') 
 %>
 

@@ -3,7 +3,7 @@ require "ipaddr"
 class Bridge < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  ADDRESSING_MODES = %w( static dynamic none )
+  ADDRESSING_MODES = %w( static dynamic none unspecified )
 
   validates_inclusion_of :addressing_mode, :in => BridgeTemplate::ADDRESSING_MODES,
                          :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.addressing_mode.blank? }
@@ -50,7 +50,7 @@ class Bridge < ActiveRecord::Base
               i+=1
             end
             if ip_bridges_in_template[i] + 1 > IPAddr.new(self.bridge_template.ip_range_end, Socket::AF_INET).to_i
-              raise "Range exausted" # TO DO: Error reporting
+              raise "Range exhausted" # TO DO: Error reporting
             end
             self.ip = IPAddr.new(ip_bridges_in_template[i] + 1, Socket::AF_INET).to_s
           else

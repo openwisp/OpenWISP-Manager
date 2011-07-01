@@ -14,17 +14,17 @@ class CustomScriptsController < ApplicationController
 
     actions :new, :create do
       allow :wisps_creator
-      allow :access_points_creator, :of => :wisp
+      allow :access_points_custom_scripts_creator, :of => :wisp
     end
 
     actions :edit, :update do
       allow :wisps_manager
-      allow :access_points_manager, :of => :wisp
+      allow :access_points_custom_scripts_manager, :of => :wisp
     end
 
     actions :destroy do
       allow :wisps_destroyer
-      allow :access_points_destroyer, :of => :wisp
+      allow :access_points_custom_scripts_destroyer, :of => :wisp
     end
   end
   

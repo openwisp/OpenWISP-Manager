@@ -1,29 +1,36 @@
 <div id="edit_radio_div">
   <fieldset>
-    <legend><%=t :Editing_radio %></legend>
+    <legend><%= t :Editing_radio %></legend>
     <% remote_form_for([@wisp, @access_point, @radio],
-            :update => { :success => "edit_radio_div", :failure => "edit_radio_div" }
-      ) do |f| %>
-      <p><%= f.error_messages %></p>
+                       :update => {:success => "edit_radio_div", :failure => "edit_radio_div"}
+       ) do |f| %>
+        <p><%= f.error_messages %></p>
 
-      <p>
-				<%= f.label t(:Name) %> : <strong> <%= @radio.name %> </strong> <br />
-      </p>
-      <p>
-        <%= f.label t(:Mode) %> : <strong> <%= @radio.mode %> </strong> <br />
-      </p>
-      <p>
-        <%= f.label t(:Channel) %> <br />
-        <%= f.text_field :channel, :value => @radio.channel %>
-      </p>
+        <p>
+          <%= f.label t(:Name) %> : <strong> <%= @radio.name %> </strong> <br/>
+        </p>
 
-      <p>
-        <%= f.label t(:Notes) %><br />
-        <%= f.text_area :notes, :rows => 3, :value => @radio.notes 	%>
-      </p>
-      <p>
-        <%= f.submit t(:Update) %>
-      </p>
+        <p>
+          <%= f.label t(:Driver) %> : <strong> <%= @radio.driver %> </strong> <br/>
+        </p>
+
+        <p>
+          <%= f.label t(:Mode) %> : <strong> <%= @radio.mode %> </strong> <br/>
+        </p>
+
+        <p>
+          <%= f.label t(:Channel) %> <br/>
+          <%= f.select :channel, Radio.channels_for_mode(@radio.mode), { :selected => @radio.channel.to_s } %>
+        </p>
+
+        <p>
+          <%= f.label t(:Notes) %><br/>
+          <%= f.text_area :notes, :rows => 3, :value => @radio.notes %>
+        </p>
+
+        <p>
+          <%= f.submit t(:Update) %>
+        </p>
     <% end %>
   </fieldset>
 </div>

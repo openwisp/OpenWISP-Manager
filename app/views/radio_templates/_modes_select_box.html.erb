@@ -1,0 +1,10 @@
+<% fields_for(form_object) do |f| %>
+    <%= f.select(:mode, modes, {:selected => selected_mode}, {
+            :onChange => remote_function(
+                    :update => "_channels_select",
+                    :url=> {:action => :channels_for_mode},
+                    :with=> "'mode=' + this.value"
+            )
+    })
+    %>
+<% end %>

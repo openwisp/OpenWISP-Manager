@@ -54,7 +54,7 @@
 </div>
 
 <%= periodically_call_remote( :url => { :action => 'ajax_stats', :wisp_id => @wisp.id, :id => @access_point_template.id},
-                              :frequency => '5',
+                              :frequency => '15',
                               :update => 'access_point_templates_stats-block')
 %>
 

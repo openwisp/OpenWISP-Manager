@@ -10,11 +10,22 @@
         - <%=h @wisp.name %>
     <% end %>
   </title>
-  <%= stylesheet_link_tag 'fluid960/reset' %>
-  <%= stylesheet_link_tag 'fluid960/text' %>
-  <%= stylesheet_link_tag 'fluid960/grid' %>
-  <%= stylesheet_link_tag 'fluid960/layout' %>
-  <%= stylesheet_link_tag 'fluid960/nav' %>
+  <%= stylesheet_link_tag '960/css/reset',
+			  '960/css/text',
+			  '960/css/grid',
+			  '960/css/layout',
+			  '960/css/nav',
+			  '960/css/notification',
+			  'application'
+  %>
+
+  <% for_ie :version => '6' do %>
+    <%= stylesheet_link_tag '960/css/ie6' %>
+  <% end %>
+
+  <% for_ie :if => 'gte', :version => '7' do %>
+    <%= stylesheet_link_tag '960/css/ie' %>
+  <% end %>
 
   <%= stylesheet_link_tag 'custom' %>
 

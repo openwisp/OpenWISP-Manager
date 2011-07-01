@@ -1,0 +1,3 @@
+<% fields_for(form_object) do |f| %>
+    <%= f.select(:channel, channels, { :selected => selected_channel }) %>
+<% end %>

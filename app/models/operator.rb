@@ -23,6 +23,9 @@ class Operator < ActiveRecord::Base
       :access_point_groups_creator, :access_point_groups_viewer, :access_point_groups_manager,
       :access_point_groups_destroyer,
 
+      :access_points_custom_scripts_creator, :access_points_custom_scripts_manager,
+      :access_points_custom_scripts_destroyer,
+
       :servers_viewer, :servers_creator, :servers_manager, :servers_destroyer
   ]
 

@@ -16,7 +16,7 @@
         <table>
           <thead>
             <tr>
-              <th colspan="3"><%= t(:Network_parameters_acquiring) %></th>
+              <th colspan="4"><%= t(:Network_parameters_acquiring) %></th>
             </tr>
           </thead>
           <tbody>
@@ -45,6 +45,13 @@
               }
         %>
         <%= t(:dynamic) %>
+            </td>
+            <td>
+        <%= f.radio_button :addressing_mode, :unspecified,
+              { :onclick => "document.getElementById('_address').style.display='none'",
+                :checked => @addressing_mode == 'unspecified'
+              }
+        %> <%= t(:unspecified) %>
             </td>
           </tr>
         </tbody>

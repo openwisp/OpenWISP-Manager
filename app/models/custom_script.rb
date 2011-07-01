@@ -35,15 +35,15 @@ class CustomScript < ActiveRecord::Base
       errors.add(:cron_month, :cron_month_wrong_format)
     end
 
-    unless self.cron_dayweek =~ /\A\*(\/[0-7])*\Z|\A[0-7]\-[0-7]\Z|\A[0-7](\,[0-7])*\Z|\Asun|mon|tue|wed|thu|fri|sat\Z/
-      errors.add(:cron_dayweek, :cron_dayweek_wrong_format)
+    unless self.cron_weekday =~ /\A\*(\/[0-7])*\Z|\A[0-7]\-[0-7]\Z|\A[0-7](\,[0-7])*\Z|\Asun|mon|tue|wed|thu|fri|sat\Z/
+      errors.add(:cron_weekday, :cron_weekday_wrong_format)
     end
 
   end
 
   private
 
-  OUTDATING_ATTRIBUTES = [:body, :cron_minute, :cron_hour, :cron_day, :cron_month, :cron_dayweek]
+  OUTDATING_ATTRIBUTES = [:body, :cron_minute, :cron_hour, :cron_day, :cron_month, :cron_weekday]
 
   def outdate_configuration_if_required
     if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }

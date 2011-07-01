@@ -19,4 +19,14 @@ module ApplicationHelper
     current_operator && current_operator.has_role?(role, object)
   end
 
+  def for_ie(opts = {:version => nil, :if => nil}, &block)
+    to_include = with_output_buffer(&block)
+    open_tag = "<!--[if "
+    open_tag << "#{opts[:if]} " unless opts[:if].nil?
+    open_tag << "IE"
+    open_tag << " #{opts[:version]}" unless opts[:version].nil?
+    open_tag << "]>"
+    concat(open_tag+capture(&block)+"<![endif]-->")
+  end
+
 end

@@ -1,5 +1,5 @@
 <% content_for :after_defaults do %>
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
     <%= javascript_include_tag 'owm.gmaps' %>
 <% end  %>
 <div class="grid_16">
@@ -159,7 +159,7 @@
                                :update => { :success => "access_point_block" }
             %>
           </li>
-          <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
+          <% if auth?(:wisps_manager) || auth?(:access_points_custom_scripts_manager, @wisp) %>
               <li>
                 <%= link_to_remote t(:Add), :method => :get,
                                    :url => new_wisp_access_point_custom_script_url(@wisp, @access_point),

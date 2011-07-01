@@ -3,7 +3,7 @@ require "ipaddr"
 class BridgeTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
-  ADDRESSING_MODES = %w( static dynamic none )
+  ADDRESSING_MODES = %w( static dynamic none unspecified )
 
   validates_inclusion_of :addressing_mode, :in => BridgeTemplate::ADDRESSING_MODES
 

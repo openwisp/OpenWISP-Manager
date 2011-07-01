@@ -1,8 +1,8 @@
 class RadioTemplatesController < ApplicationController
   layout nil
-  
-  before_filter :load_wisp
-  before_filter :load_access_point_template
+
+  before_filter :load_wisp, :except => [:modes_for_driver, :channels_for_mode]
+  before_filter :load_access_point_template, :except => [:modes_for_driver, :channels_for_mode]
 
   access_control do
     default :deny
@@ -12,12 +12,12 @@ class RadioTemplatesController < ApplicationController
       allow :access_point_templates_viewer, :of => :wisp
     end
 
-    actions :new, :create do
+    actions :new, :create, :modes_for_driver, :channels_for_mode do
       allow :wisps_creator
       allow :access_point_templates_creator, :of => :wisp
     end
 
-    actions :edit, :update do
+    actions :edit, :update, :modes_for_driver, :channels_for_mode do
       allow :wisps_manager
       allow :access_point_templates_manager, :of => :wisp
     end
@@ -27,7 +27,7 @@ class RadioTemplatesController < ApplicationController
       allow :access_point_templates_destroyer, :of => :wisp
     end
   end
-  
+
   # GET /wisps/:wisp_id/access_point_templates/:access_point_template_id/radio_templates
   def index
     @radio_templates = @access_point_template.radio_templates.find(:all)
@@ -48,7 +48,15 @@ class RadioTemplatesController < ApplicationController
 
   # GET /wisps/:wisp_id/access_points/:access_point_template_id/radios/new
   def new
-    @radio_template = @access_point_template.radio_templates.build()
+    selected_driver = RadioTemplate::DRIVERS.first
+    selected_mode = RadioTemplate.modes_for_driver(selected_driver).first
+    selected_channel =  RadioTemplate.channels_for_mode(selected_mode)
+
+    @radio_template = @access_point_template.radio_templates.build(
+        :driver => selected_driver,
+        :mode => selected_mode,
+        :channel => selected_channel
+    )
     RadioTemplate::MAX_VAPS.times { @radio_template.vap_templates.build() }
 
     respond_to do |format|
@@ -98,4 +106,32 @@ class RadioTemplatesController < ApplicationController
       format.html { redirect_to(wisp_access_point_template_radio_templates_url(@wisp, @access_point_template)) }
     end
   end
+
+  # Ajax actions
+  def modes_for_driver
+    modes = RadioTemplate.modes_for_driver(params[:driver])
+    respond_to do |format|
+      format.html {
+        render :partial => 'modes_select_box', :locals => {
+            :modes => modes,
+            :form_object => RadioTemplate.new,
+            :selected_mode => modes.first
+        }
+      }
+    end
+  end
+
+  def channels_for_mode
+    channels = RadioTemplate.channels_for_mode(params[:mode])
+    respond_to do |format|
+      format.html {
+        render :partial => 'channels_select_box', :locals => {
+            :channels => channels,
+            :form_object => RadioTemplate.new,
+            :selected_channel => channels.first.to_s
+        }
+      }
+    end
+  end
+
 end

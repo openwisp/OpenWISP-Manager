@@ -9,10 +9,13 @@ ActionController::Routing::Routes.draw do |map|
   map.welcome_operator 'operators/:id', :controller => 'operators', :action => 'show'
 
   #Ajax Routes
-  map.connect 'wisps/:wisp_id/access_points/ajax_update_gmap', :controller => 'access_points', :action => 'ajax_update_maps'
   map.connect 'wisps/:wisp_id/access_point_templates/ajax_stats', :controller => 'access_point_templates', :action => 'ajax_stats'
   map.connect 'wisps/ajax_stats', :controller => 'wisps', :action => 'ajax_stats'
   map.connect 'servers/ajax_stats', :controller => 'servers', :action => 'ajax_stats'
+  map.connect 'radio_templates/modes_for_driver', :controller => 'radio_templates', :action => 'modes_for_driver'
+  map.connect 'radio_templates/channels_for_mode', :controller => 'radio_templates', :action => 'channels_for_mode'
+  map.connect 'radios/modes_for_driver', :controller => 'radios', :action => 'modes_for_driver'
+  map.connect 'radios/channels_for_mode', :controller => 'radios', :action => 'channels_for_mode'
 
   map.connect 'get_config/:mac_address', :controller => 'access_points', :action => 'get_configuration'
   map.connect 'get_config/:mac_address.md5', :controller => 'access_points', :action => 'get_configuration_md5'

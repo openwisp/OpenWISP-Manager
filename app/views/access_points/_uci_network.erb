@@ -1,26 +1,31 @@
 package 'network'
-<% access_point.bridges.each do |bridge| %>
+
+<% access_point.bridges.each do |bridge| -%>
+
   config 'interface' '<%=h bridge.name %>'
-  <% ifnames = bridge.bridgeables.select { |b| b.class != Vap }.map { |b| b.name } %>
-  <% if ifnames.length > 0 %>
-    option 'ifname' '<%=h ifnames.join(' ')%>'
-  <% end %>
+<% interface_names = bridge.bridgeables.select { |b| b.class != Vap }.map { |b| b.name } -%>
+<% if interface_names.length > 0 -%>
+    option 'ifname' '<%=h interface_names.join(' ')%>'
+<% end -%>
     option 'type' 'bridge'
-  <% if bridge.addressing_mode == 'dynamic' %>
+<% if bridge.addressing_mode == 'dynamic' -%>
     option 'proto' 'dhcp'
-  <% else %>
+<% elsif bridge.addressing_mode == 'static' -%>
     option 'proto' 'static'
-  <% end %>
-  <% if bridge.ip and bridge.ip != '' %>
+<% elsif bridge.addressing_mode == 'none' -%>
+    option 'proto' 'none'
+<% end -%>
+<% if bridge.ip and bridge.ip != '' -%>
     option 'ipaddr' '<%=h bridge.ip %>'
-  <% end %>
-  <% if bridge.netmask and bridge.netmask != '' %>
+<% end -%>
+<% if bridge.netmask.present? -%>
     option 'netmask' '<%=h bridge.netmask %>'
-  <% end %>
-  <% if bridge.gateway and bridge.gateway != '' %>
+<% end -%>
+<% if bridge.gateway.present? -%>
     option 'gateway' '<%=h bridge.gateway %>'
-  <% end %>
-  <% if bridge.dns and bridge.dns != '' %>
+<% end -%>
+<% if bridge.dns.present? -%>
     option 'dns' '<%=h bridge.dns %>'
-  <% end %>
-<% end %>
+<% end -%>
+
+<% end -%>

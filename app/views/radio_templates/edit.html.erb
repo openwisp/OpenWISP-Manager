@@ -1,35 +1,64 @@
 <div id="edit_radio_template_div">
   <fieldset>
-    <legend><%=t :Editing_radio_template %></legend>
+    <legend><%= t :Editing_radio_template %></legend>
     <% remote_form_for([@wisp, @access_point_template, @radio_template],
-            :update => { :success => "edit_radio_template_div", :failure => "edit_radio_template_div" }
-      ) do |f| %>
-      <p><%= f.error_messages %></p>
+                       :update => {:success => "edit_radio_template_div", :failure => "edit_radio_template_div"}
+       ) do |f| %>
+        <p><%= f.error_messages %></p>
 
-      <p>
-        <%= f.label t(:Name) %><br />
-        <%= f.text_field :name %>
-      </p>
-      <p>
-        <%= f.label t(:Mode) %><br />
-        <%= f.select(:mode, RadioTemplate::MODES) %>
-      </p>
-      <p>
-        <%= f.label t(:Default_Channel) %><br />
-        <%= f.text_field :channel %>
-      </p>
+        <p>
+          <%= f.label t(:Driver) %><br/>
+          <%= f.select(:driver, RadioTemplate::DRIVERS, {}, {
+                  :onChange => remote_function(
+                          :update => "_modes_select",
+                          :url=> {:action => :modes_for_driver},
+                          :with=> "'driver=' + this.value")
+          })
+          %>
+        </p>
 
-      <p>
-        <%= f.label t(:Notes) %><br />
-        <%= f.text_area :notes, :rows => 3 %>
-      </p>
-    
-      <% f.fields_for :vap_templates do |vf| %>
-        <%= render :partial => 'vap', :locals => { :vap_template_form => vf }  %>
-      <% end %>
-      <p>
-        <%= f.submit t(:Update) %>
-      </p>
+        <p>
+          <%= f.label t(:Driver_slot) %><br/>
+          <%= f.select(:driver_slot, (0..RadioTemplate::MAX_SLOTS-1)) %>
+        </p>
+
+        <p>
+          <%= f.label t(:Mode) %><br/>
+          <span id='_modes_select'>
+            <%= render :partial => 'modes_select_box',
+                       :locals => {
+                               :modes => RadioTemplate.modes_for_driver(@radio_template.driver),
+                               :form_object => @radio_template,
+                               :selected_mode => @radio_template.mode
+                       }
+            %>
+          </span>
+        </p>
+
+        <p>
+          <%= f.label t(:Default_Channel) %><br/>
+          <span id='_channels_select'>
+            <%= render :partial => 'channels_select_box',
+                       :locals => {
+                               :channels => RadioTemplate.channels_for_mode(@radio_template.mode),
+                               :form_object => @radio_template,
+                               :selected_channel => @radio_template.channel.to_s
+                       }
+            %>
+          </span>
+        </p>
+
+        <p>
+          <%= f.label t(:Notes) %><br/>
+          <%= f.text_area :notes, :rows => 3 %>
+        </p>
+
+        <% f.fields_for :vap_templates do |vf| %>
+            <%= render :partial => 'vap', :locals => {:vap_template_form => vf} %>
+        <% end %>
+        <p>
+          <%= f.submit t(:Update) %>
+        </p>
     <% end %>
   </fieldset>
 </div>
