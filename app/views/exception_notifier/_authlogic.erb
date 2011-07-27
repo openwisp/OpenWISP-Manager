@@ -1,0 +1,7 @@
+* operator: <%# PP.pp(@request.env['authlogic_operator'], "") %>
+<% if @authlogic_operator %>
+    - login: <%= @authlogic_operator.login %>
+    - ip: <%= @authlogic_operator.current_login_ip %>
+<% else %>
+    No operator connected...
+<% end %>

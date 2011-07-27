@@ -114,7 +114,6 @@ class ApplicationController < ActionController::Base
 
   exception_data :load_additional_exception_data
   def load_additional_exception_data
-    request.env['authlogic_operator'] = current_operator rescue nil
-    request.env['authlogic_user'] = current_user rescue nil
+    { :authlogic_operator => (current_operator rescue nil) }
   end
 end
