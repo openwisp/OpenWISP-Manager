@@ -4,6 +4,8 @@ require 'yaml'
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  include ExceptionNotification::Notifiable
+
   before_filter :configure_gmap_key, :set_locale
 
   helper_method :current_operator_session, :current_operator, :home_path_for
@@ -93,11 +95,11 @@ class ApplicationController < ActionController::Base
   def load_wisps
     @wisps = Wisp.all
   end
-  
+
   def load_wisp
     @wisp = Wisp.find(params[:wisp_id])
   end
-  
+
   def load_access_point
     @access_point = @wisp.access_points.find(params[:access_point_id])
   end
@@ -108,5 +110,11 @@ class ApplicationController < ActionController::Base
 
   def load_server
     @server = Server.find(params[:server_id])
+  end
+
+  exception_data :load_additional_exception_data
+  def load_additional_exception_data
+    request.env['authlogic_operator'] = current_operator rescue nil
+    request.env['authlogic_user'] = current_user rescue nil
   end
 end
