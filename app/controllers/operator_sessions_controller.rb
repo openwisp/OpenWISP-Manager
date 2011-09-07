@@ -1,6 +1,5 @@
 class OperatorSessionsController < ApplicationController
   before_filter :require_no_operator, :only => [:new, :create]
-  before_filter :require_operator, :only => :destroy
 
   def new
     @operator_session = OperatorSession.new

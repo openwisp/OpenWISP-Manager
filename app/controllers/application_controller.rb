@@ -6,7 +6,7 @@ require 'yaml'
 class ApplicationController < ActionController::Base
   include ExceptionNotification::Notifiable
 
-  before_filter :configure_gmap_key, :set_locale
+  before_filter :configure_gmap_key, :set_locale, :require_operator
 
   helper_method :current_operator_session, :current_operator, :home_path_for
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
