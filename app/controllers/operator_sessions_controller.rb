@@ -1,4 +1,5 @@
 class OperatorSessionsController < ApplicationController
+  skip_before_filter :require_operator, :only => [:new, :create]
   before_filter :require_no_operator, :only => [:new, :create]
 
   def new

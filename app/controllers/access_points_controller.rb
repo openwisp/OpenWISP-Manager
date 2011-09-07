@@ -2,6 +2,7 @@ class AccessPointsController < ApplicationController
   include Addons::Mappable
 
   before_filter :load_wisp, :except => [:get_configuration, :get_configuration_md5]
+  skip_before_filter :require_operator, :only => [:get_configuration, :get_configuration_md5]
   before_filter :require_no_operator, :only => [:get_configuration, :get_configuration_md5]
 
   access_control do
