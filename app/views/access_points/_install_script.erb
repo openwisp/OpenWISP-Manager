@@ -43,7 +43,10 @@ done
 # Network
 echo "Creating bridges"
 uci -m import network -f ./uci/network.conf
-sleep 5 # Openwrt UCI bug workaround
+# ----------- Openwrt boot-bug workaround
+vconfig set_name_type DEV_PLUS_VID_NO_PAD
+sleep 5 
+# ----------- Openwrt boot-bug workaround
 <% access_point.bridges.each do |b| -%>
 echo "Enabling bridge <%=h b.name %>"
 ifup <%=h b.name %>
