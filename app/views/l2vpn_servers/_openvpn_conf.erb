@@ -46,7 +46,7 @@ ca          /etc/openvpn/<%=h ca_name  + '-ca-crt.pem' %>
 cert        /etc/openvpn/<%=h ca_name  + '-server-crt.pem ' %>
 key         /etc/openvpn/<%=h ca_name  + '-server-key.pem ' %>
 dh          /etc/openvpn/<%=h ca_name  + '-dh1024.pem' %>
-tls-auth    /etc/openvpn/<%=h ca_name  + '-tls-data-key.pem 0' %>
+#tls-auth    /etc/openvpn/<%=h ca_name  + '-tls-data-key.pem 0' %>
 <% end %>
 
 keepalive    5 15
@@ -62,5 +62,5 @@ persist-tun
 verb         1
 mute         20
 
-management      127.0.0.1 12122 /path/to/<%=h l2vpn_server.name.gsub(" ", "_") + '-management-pass'%>
-management-forget-disconnect
+#management      127.0.0.1 12122 /path/to/<%=h l2vpn_server.name.gsub(" ", "_") + '-management-pass'%>
+#management-forget-disconnect
