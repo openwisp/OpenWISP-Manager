@@ -1,6 +1,6 @@
 if Rails.env.production?
-  recipients = 'root@localhost'
-  sender = 'root@localhost'
+  recipients = %w(wifi-dev@caspur.it)
+  sender = 'owm-exceptions@owm.inroma.roma.it'
   email_subject_prefix = '[OWM] '
 
   ExceptionNotification::Notifier.exception_recipients = recipients

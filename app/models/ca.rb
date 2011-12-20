@@ -291,6 +291,8 @@ class Ca < ActiveRecord::Base
         validity_time = DEFAULT_SERVER_CRT_VALIDITY_TIME
       else
         validity_time = DEFAULT_CLIENT_CRT_VALIDITY_TIME 
+      end
+    end
 
     cert = OpenSSL::X509::Certificate.new(x509_certificate.certificate)
     cert.not_before = Time.now
@@ -318,6 +320,8 @@ class Ca < ActiveRecord::Base
         validity_time = DEFAULT_SERVER_CRT_VALIDITY_TIME
       else
         validity_time = DEFAULT_CLIENT_CRT_VALIDITY_TIME 
+      end
+    end
 
     key_length = options[:key_length] || DEFAULT_CERTIFICATE_KEY_LEN
 
