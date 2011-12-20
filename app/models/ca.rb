@@ -65,8 +65,9 @@ class Ca < ActiveRecord::Base
   DEFAULT_CA_CRT_VALIDITY_TIME = 10.years # 10 years
 
   DEFAULT_CERTIFICATE_KEY_LEN = 1024
-  DEFAULT_CERTIFICATE_CRT_VALIDITY_TIME = 1.year # 1 year
-
+  DEFAULT_CLIENT_CRT_VALIDITY_TIME = 1.year  # 1 year
+  DEFAULT_SERVER_CRT_VALIDITY_TIME = 2.years # 2 years
+  
   DEFAULT_TLS_AUTH_KEY_LENGTH = 2048
   DEFAULT_DH_LENGTH = 1024
 
@@ -146,7 +147,7 @@ class Ca < ActiveRecord::Base
   end
 
   def create_openvpn_client_certificate(certifiable_entity, options = {})
-    validity_time = options[:validity_time] || DEFAULT_CERTIFICATE_CRT_VALIDITY_TIME
+    validity_time = options[:validity_time] || DEFAULT_CLIENT_CRT_VALIDITY_TIME
     key_length = options[:key_length] || DEFAULT_CERTIFICATE_KEY_LEN
 
     increment_serial()
@@ -191,7 +192,7 @@ class Ca < ActiveRecord::Base
   end
 
   def create_openvpn_server_certificate(certifiable_entity, options = {})
-    validity_time = options[:validity_time] || DEFAULT_CERTIFICATE_CRT_VALIDITY_TIME
+    validity_time = options[:validity_time] || DEFAULT_SERVER_CRT_VALIDITY_TIME
     key_length = options[:key_length] || DEFAULT_CERTIFICATE_KEY_LEN
 
     increment_serial()
@@ -282,8 +283,14 @@ class Ca < ActiveRecord::Base
   end
 
   def renew_certificate!(x509_certificate, options = {})
-    validity_time = options[:validity_time] ||
-        (x509_certificate.id == self.x509_certificate.id ? DEFAULT_CA_CRT_VALIDITY_TIME : DEFAULT_CERTIFICATE_CRT_VALIDITY_TIME)
+    validity_time = options[:validity_time]
+    if options[:validity_time].nil?
+      if x509_certificate.belongs_to_ca?
+        validity_time = DEFAULT_CA_CRT_VALIDITY_TIME
+      elsif x509_certificate.belongs_to_vpn_server?
+        validity_time = DEFAULT_SERVER_CRT_VALIDITY_TIME
+      else
+        validity_time = DEFAULT_CLIENT_CRT_VALIDITY_TIME 
 
     cert = OpenSSL::X509::Certificate.new(x509_certificate.certificate)
     cert.not_before = Time.now
@@ -303,7 +310,15 @@ class Ca < ActiveRecord::Base
       raise("BUG: can't reissue my own certificate!")
     end
 
-    validity_time = options[:validity_time] || DEFAULT_CERTIFICATE_CRT_VALIDITY_TIME
+    validity_time = options[:validity_time]
+    if options[:validity_time].nil?
+      if x509_certificate.belongs_to_ca?
+        validity_time = DEFAULT_CA_CRT_VALIDITY_TIME
+      elsif x509_certificate.belongs_to_vpn_server?
+        validity_time = DEFAULT_SERVER_CRT_VALIDITY_TIME
+      else
+        validity_time = DEFAULT_CLIENT_CRT_VALIDITY_TIME 
+
     key_length = options[:key_length] || DEFAULT_CERTIFICATE_KEY_LEN
 
     increment_serial()

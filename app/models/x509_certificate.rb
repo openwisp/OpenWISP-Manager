@@ -56,6 +56,19 @@ class X509Certificate < ActiveRecord::Base
     c.to_text
   end
 
+  def belongs_to_vpn_server?
+    !self.certifiable.nil? and self.certifiable.kind_of? L2vpnServer
+  end
+  
+  def belongs_to_ca?
+    !self.certifiable.nil? and self.certifiable.kind_of? Ca
+  end
+  
+  def belongs_to_vpn_client?
+    !self.certifiable.nil? and self.certifiable.kind_of? L2vpnClient
+  end
+  
+  
   private
 
   OUTDATING_ATTRIBUTES = [:dn, :certificate, :key, :id]

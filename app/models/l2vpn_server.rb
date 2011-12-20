@@ -85,7 +85,7 @@ class L2vpnServer < ActiveRecord::Base
   before_destroy :outdate_configuration_if_required
 
   after_create do |record|
-    record.wisp.ca.create_openvpn_server_certificate(record, {:validity_time => 2.years})
+    record.wisp.ca.create_openvpn_server_certificate(record, {:validity_time => Ca::DEFAULT_SERVER_CRT_VALIDITY_TIME})
   end
 
   def generate_configuration
