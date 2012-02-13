@@ -34,7 +34,7 @@
     </div>
     <div class="clear">&nbsp;</div>
 <% else %>
-    <% if auth?(:wisps_manager) || auth?(:access_point_manager, @wisp) %>
+    <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
         <div class="grid_14 prefix_1 suffix_1">
           <div class="box">
             <h2><a href="#" id="toggle-warnings"><%= t(:Warning) %></a></h2>
