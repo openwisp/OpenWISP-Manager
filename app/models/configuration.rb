@@ -37,6 +37,8 @@ class Configuration < ActiveRecord::Base
 
   def set(value = '')
     self.system_key? && raise("BUG: key " + key + "is readonly!")
+    self.value = value
+    self.save!
   end
 
   def system_key?
