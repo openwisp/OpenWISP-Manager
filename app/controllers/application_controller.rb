@@ -113,7 +113,12 @@ class ApplicationController < ActionController::Base
   end
 
   def load_wisp
-    @wisp = Wisp.find(params[:wisp_id])
+    search_id = params[:wisp_id].blank? ? params[:id] : params[:wisp_id]
+    if search_id =~ /^[0-9]+$/
+      @wisp = Wisp.find(search_id)
+    else
+      @wisp = Wisp.find_by_name(search_id)
+    end
   end
 
   def load_access_point

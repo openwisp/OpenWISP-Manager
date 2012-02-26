@@ -122,9 +122,4 @@ class WispsController < ApplicationController
     end
   end
 
-  private
-
-  def load_wisp
-    @wisp = Wisp.find(params[:id])
-  end
 end
