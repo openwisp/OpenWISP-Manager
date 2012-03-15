@@ -14,13 +14,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+desc "Load fixtures into the current environment's database This implementation will work for owm fixtures."
+
 namespace :db do
-  desc "Load seed fixtures (from db/fixtures) into the current environment's database." 
-  
-  task :seed => :environment do
-    require 'active_record/fixtures'
-    Dir.glob(RAILS_ROOT + '/db/fixtures/*.yml').each do |file|
-      Fixtures.create_fixtures('db/fixtures', File.basename(file, '.*'))
-    end
-  end
+   namespace :fixtures do
+      task :load_custom => :environment do
+         require 'active_record/fixtures'
+         Dir.glob("#{Rails.root}/db/fixtures/*.yml").each do |file|
+           puts "Loading db/fixtures/#{File.basename(file)}"
+           Fixtures.create_fixtures('db/fixtures', File.basename(file, '.*'))
+         end
+      end
+   end
 end
+
+# Execute db:fixtures:load_custom _before_ db:seed
+Rake::Task["db:seed"].enhance ["db:fixtures:load_custom"]
