@@ -31,6 +31,9 @@ class Ca < ActiveRecord::Base
   validates_length_of :o, :maximum => 128
   validates_format_of :cn, :with => /\A[\s\w\d\._']+\Z/i
   validates_length_of :cn, :maximum => 128
+  validates_uniqueness_of :cn
+  
+  attr_readonly :c, :st, :l, :o, :cn
 
   has_many :x509_certificates, :dependent => :destroy
   has_one :x509_certificate, :as => :certifiable, :dependent => :destroy
