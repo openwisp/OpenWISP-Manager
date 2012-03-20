@@ -25,7 +25,7 @@
       <p><%= f.error_messages %></p>
 
       <p>
-        <%= f.label t(:Output_band_for) + " #{@l2tc_template.shapeable_template.friendly_name}" %><br />
+        <%= f.label t(:Output_band_for_interface, :interface => @l2tc_template.shapeable_template.friendly_name) %><br />
         <%= text_field "shapeables", :output_band, :value => params[:shapeables][:output_band] %>
       </p>
 
