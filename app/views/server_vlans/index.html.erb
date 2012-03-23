@@ -44,7 +44,7 @@
             <% unless device.vlans[0] == vlan %>
               <tr>
             <% end %>
-            <td style="width:54px;";">
+            <td style="width:54px;">
               <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), 
                     :method => :delete,
                     :url => server_vlan_path(@server, vlan),

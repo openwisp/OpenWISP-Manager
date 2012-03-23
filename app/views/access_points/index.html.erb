@@ -53,7 +53,7 @@
 
             <% access_points.each do |access_point| %>
                 <tr>
-                  <td style="width:54px;";">
+                  <td style="width:54px;">
                     <%= link_to image_tag("configure.png", :border=>0, :size => "16x16", :alt => t(:Configure)), wisp_access_point_path(@wisp, access_point),
                                 :title => t(:Configure)
                     %>

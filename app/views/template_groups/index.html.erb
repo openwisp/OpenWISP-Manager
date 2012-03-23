@@ -47,7 +47,7 @@
       <tbody>
         <% @template_groups.each do |template_group| %>
           <tr>
-            <td style="width:54px;";">
+            <td style="width:54px;">
               <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_template_group_path(@wisp, template_group),
                           :title => t(:Edit_template_group)
               %>

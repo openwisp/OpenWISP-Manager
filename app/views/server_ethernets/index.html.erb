@@ -36,7 +36,7 @@
     <tbody>
     <% @ethernets.each do |ethernet| %>
       <tr>
-        <td style="width:54px;";">
+        <td style="width:54px;">
           <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
                 :method => :get,
                 :url => edit_server_ethernet_path(@server, ethernet),

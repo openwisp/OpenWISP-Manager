@@ -36,7 +36,7 @@
     <tbody>
     <% @ethernet_templates.each do |ethernet_template| %>
         <tr>
-          <td style="width:54px;";">
+          <td style="width:54px;">
             <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
                 <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
                                    :method => :get,
