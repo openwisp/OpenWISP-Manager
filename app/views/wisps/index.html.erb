@@ -44,7 +44,7 @@
         <% @wisps.each do |wisp| %>
             <% if auth?(:wisps_viewer) || auth?(:wisp_viewer, wisp) %>
                 <tr>
-                  <td style="width:48px;">
+                  <td style="width:54px;">
                     <%= link_to image_tag("configure.png", :border=>0, :size => "16x16", :alt => t(:Configure)), wisp,
                                 :title => t(:Configure)
                     %>

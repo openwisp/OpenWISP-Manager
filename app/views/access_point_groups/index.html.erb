@@ -47,7 +47,7 @@
         <tbody>
         <% @access_point_groups.each do |access_point_group| %>
             <tr>
-              <td style="width:32px;">
+              <td style="width:54px;";">
                 <% if auth?(:wisps_manager) || auth?(:access_point_groups_manager, @wisp) %>
                     <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_access_point_group_path(@wisp, access_point_group),
                                 :title => t(:Edit_access_point_group)

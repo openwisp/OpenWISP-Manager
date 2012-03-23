@@ -39,7 +39,7 @@
     <tbody>
       <% @l2vpn_servers.each do |l2vpn_server| %>
         <tr>
-            <td style="width:32px;">
+            <td style="width:54px;";">
               <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
                     :method => :get,
                     :url => edit_server_l2vpn_server_path(@server, l2vpn_server),

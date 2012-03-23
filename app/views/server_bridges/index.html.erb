@@ -46,7 +46,7 @@
   <% @bridges.each do |bridge| %>
     <tr>
       <% if bridge.bridgeables.length == 0 %> 
-      <td style="width:32px;">
+      <td style="width:54px;";">
         <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
               :method => :get,
               :url => edit_server_bridge_path(@server, bridge),
@@ -82,7 +82,7 @@
         <% end %>
       </td>
     <% else %>
-      <td rowspan="<%= bridge.bridgeables.length %>" style="width:32px;">
+      <td rowspan="<%= bridge.bridgeables.length %>" style="width:54px;";">
         <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
               :method => :get,
               :url => edit_server_bridge_path(@server, bridge),

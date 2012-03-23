@@ -41,7 +41,7 @@
     <% @l2tcs.each do |l2tc| %>
         <tr>
           <% if l2tc.shapeable.subinterfaces.length == 0 %>
-              <td style="width:32px;">
+              <td style="width:54px;";">
                 <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
                     <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
                                        :method => :get,
@@ -74,7 +74,7 @@
                 <% end %>
               </td>
           <% else %>
-              <td rowspan="<%= l2tc.shapeable.subinterfaces.length %>" style="width:32px;">
+              <td rowspan="<%= l2tc.shapeable.subinterfaces.length %>" style="width:54px;";">
                 <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
                     <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
                                        :method => :get,

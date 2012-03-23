@@ -47,7 +47,7 @@
     <% @radio_templates.each do |radio_template| %>
         <tr>
           <% if radio_template.vap_templates.length == 0 %>
-              <td style="width:32px;">
+              <td style="width:54px;";">
                 <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
                     <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
                                        :method => :get,
@@ -83,7 +83,7 @@
                 <% end %>
               </td>
           <% else %>
-              <td rowspan="<%= radio_template.vap_templates.length %>" style="width:32px;">
+              <td rowspan="<%= radio_template.vap_templates.length %>" style="width:54px;";">
                 <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
                     <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
                                        :method => :get,

@@ -46,7 +46,7 @@
         <% @operators.each do |operator| %>
             <tr>
               <% if operator.roles.length == 0 %>
-                  <td style="width:32px;">
+                  <td style="width:54px;";">
                     <% if auth?(:wisps_manager) || auth?(:operators_manager, @wisp) %>
                         <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_operator_path(@wisp, operator),
                                     :title => t(:Editing_operator)
@@ -72,7 +72,7 @@
                     <% end %>
                   </td>
               <% else %>
-                  <td rowspan="<%= operator.roles.length %>" style="width:32px;">
+                  <td rowspan="<%= operator.roles.length %>" style="width:54px;";">
                     <% if auth?(:wisps_manager) || auth?(:operators_manager, @wisp) %>
                         <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_operator_path(@wisp, operator),
                                     :title => t(:Editing_operator)

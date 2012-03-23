@@ -46,7 +46,7 @@
     <tbody>
     <% @custom_script_templates.each do |custom_script_template| %>
         <tr>
-          <td style="width:32px;">
+          <td style="width:54px;";">
             <em><%= t :Inherited %></em>
           </td>
           <td rowspan="1"><%=h custom_script_template.name %></td>
@@ -72,7 +72,7 @@
     <% end %>
     <% if @custom_script_templates.length > 0%>
         <tr>
-          <td style="width:32px;"></td>
+          <td style="width:54px;";"></td>
           <td rowspan="1"></td>
           <td></td>
           <td rowspan="1"></td>
@@ -85,7 +85,7 @@
     <% end %>
     <% @custom_scripts.each do |custom_script| %>
         <tr>
-          <td style="width:32px;">
+          <td style="width:54px;";">
             <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
                 <%= link_to_remote image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)),
                                    :method => :get,

@@ -44,7 +44,7 @@
                   <% unless device_template.vlan_templates[0] == vlan_template %>
                     <tr>
                 <% end %>
-                <td style="width:32px;">
+                <td style="width:54px;";">
                   <% if auth?(:wisps_manager) || auth?(:access_point_templates_manager, @wisp) %>
                       <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)),
                                          :method => :delete,

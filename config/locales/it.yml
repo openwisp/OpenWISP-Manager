@@ -494,8 +494,8 @@ it:
       wisps: "Wireless ISPs"
       x509_certificate: "Certificato x509"
       x509_certificates: "Certificati x509"
-      l2vpn: "VPN layer 2"
-      l2vpns: "VPN layer 2"
+      l2vpn: "VPN L2"
+      l2vpns: "VPN L2"
 
       access_point_template: "template di access point"
       access_point_templates: "templates di access point"
