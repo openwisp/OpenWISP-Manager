@@ -1,3 +1,4 @@
+#!/bin/sh
 <%#
 # This file is part of the OpenWISP Manager
 #
@@ -16,9 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #%>
 
-#!/bin/sh
-
-PROGDIR=`dirname $0`
+PROGDIR=$(cd -P -- "$(dirname $0)" && pwd -P)
 
 # Undo changes
 # L2TCs
@@ -62,11 +61,11 @@ wifi up <%= r.name %>
         access_point.access_point_template.custom_script_templates.length > 0) or
         access_point.custom_scripts.length > 0 -%>
 echo "Stopping Cron"
-CRON_PID=`ps ax | grep crond | grep cron.info | grep -v grep | awk '{print $1}'`
-if [ -n "$CRON_PID" ]; then
-    kill $CRON_PID
-fi
-rm $PROGDIR/cron.info
+
+start-stop-daemon -p /var/run/openwisp_crond.pid -K
+rm -rf  $PROGDIR/crontabs/
+rm /var/run/openwisp_crond.pid
+
 <% end -%>
 
 echo "Configuration un-installed"

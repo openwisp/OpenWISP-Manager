@@ -1,3 +1,4 @@
+#!/bin/sh
 <%#
 # This file is part of the OpenWISP Manager
 #
@@ -16,9 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #%>
 
-#!/bin/sh
-
-PROGDIR=`dirname $0`
+PROGDIR=$(cd -P -- "$(dirname $0)" && pwd -P)
 
 # Deploy new configuration
 echo "Deploying new configuration"
@@ -41,10 +40,10 @@ done
 
 # Network
 echo "Creating bridges"
-uci -m import network -f ./uci/network.conf
+uci -m import network -f $PROGDIR/uci/network.conf
 # ----------- Openwrt boot-bug workaround
 vconfig set_name_type DEV_PLUS_VID_NO_PAD
-sleep 5 
+sleep 5
 # ----------- Openwrt boot-bug workaround
 <% access_point.bridges.each do |b| -%>
 echo "Enabling bridge <%=h b.name %>"
@@ -53,7 +52,7 @@ ifup <%=h b.name %>
 
 # Wifi
 echo "Applying wifi configuration"
-uci -m import wireless -f ./uci/wireless.conf
+uci -m import wireless -f $PROGDIR/uci/wireless.conf
 echo "Enabling wifi"
 <% access_point.radios.each do |r| -%>
 wifi up <%= r.name %>
@@ -62,7 +61,7 @@ wifi up <%= r.name %>
 # VPNs
 echo "Applying l2 vpn(s) configuration"
 <% if access_point.l2vpn_clients.length > 0 -%>
-uci -m import openvpn -f ./uci/openvpn.conf
+uci -m import openvpn -f $PROGDIR/uci/openvpn.conf
 echo "Enabling l2 vpn(s)"
 /etc/init.d/openvpn start
 <% end -%>
@@ -72,23 +71,25 @@ echo "Applying l2 tc configuration"
 $PROGDIR/l2tc_script.sh start
 
 # Cron Scripts
+<% if (!access_point.access_point_template.nil? and access_point.access_point_template.custom_script_templates.length > 0) or access_point.custom_scripts.length > 0 -%>
+mkdir -p  $PROGDIR/crontabs
+rm $PROGDIR/crond.pid >/dev/null 2>&1
 
 ## Inherited from template
 <% unless access_point.access_point_template.nil? -%>
     <% access_point.access_point_template.custom_script_templates.each do |c| -%>
-echo "<%=c.cron_minute %> <%=c.cron_hour %> <%=c.cron_day %> <%=c.cron_month %> <%=c.cron_weekday %> $PROGDIR/cron_scripts/T_<%= c.name %>" >> $PROGDIR/cron.info
+echo "<%=c.cron_minute %> <%=c.cron_hour %> <%=c.cron_day %> <%=c.cron_month %> <%=c.cron_weekday %> $PROGDIR/cron_scripts/T_<%= c.name %>" >> $PROGDIR/crontabs/root
     <% end -%>
 <% end -%>
 
 ## Owned by access point
 <% access_point.custom_scripts.each do |c| -%>
-echo "<%=c.cron_minute %> <%=c.cron_hour %> <%=c.cron_day %> <%=c.cron_month %> <%=c.cron_weekday %> $PROGDIR/cron_scripts/<%= c.name %>" >> $PROGDIR/cron.info
+echo "<%=c.cron_minute %> <%=c.cron_hour %> <%=c.cron_day %> <%=c.cron_month %> <%=c.cron_weekday %> $PROGDIR/cron_scripts/<%= c.name %>" >> $PROGDIR/crontabs/root
 <% end -%>
 
 # Add info to crontab
-<% if (!access_point.access_point_template.nil? and access_point.access_point_template.custom_script_templates.length > 0) or  access_point.custom_scripts.length > 0 -%>
 echo "Running Cron"
-crond -c $PROGDIR/cron.info -l 5
+start-stop-daemon -m -p /var/run/openwisp_crond.pid -S -b -x crond -- -f -c $PROGDIR/crontabs/ -l 5
 <% end -%>
 
 echo "New configuration now active"
