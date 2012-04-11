@@ -50,9 +50,9 @@
     option 'server' '<%= h vap.radius_auth_server %>'
     option 'port' '<%= h vap.radius_auth_server_port %>'
 <% if vap.radius_acct_server.present? -%>
-    option 'acctserver' '<%= h vap.radius_acct_server %>'
-    option 'acctport' '<%= h vap.radius_acct_server_port %>'
-    option 'acctkey' '<%= h vap.key %>'
+    option 'acct_server' '<%= h vap.radius_acct_server %>'
+    option 'acct_port' '<%= h vap.radius_acct_server_port %>'
+    option 'acct_secret' '<%= h vap.key %>'
 <% end -%>
 <% end -%>
 <% end -%>
