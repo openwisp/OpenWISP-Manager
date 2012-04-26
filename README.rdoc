@@ -1,0 +1,185 @@
+= OpenWISP Manager
+
+== Installation instructions
+
+=== Prerequisites
+
+Being a RoR application, the OpenWISP Manager (OWM) can be 
+deployed using any of the methods Rails supports.
+
+Even so, what we are currently using (and find quite stable) is the following enviroment:
+* Ruby Enterprise Edition 1.8 (http://www.rubyenterpriseedition.com/index.html)
+* Apache 2.2 (http://www.apache.org/)
+* Phusion Passenger 2.2 (http://www.modrails.com/index.html)
+* MySQL 5.1 (http://dev.mysql.com/downloads/mysql/)
+
+You should take these steps to ensure you have the right gems installed on your system.
+
+    gem install bundler
+    bundle install --deployment
+
+
+=== Installation
+
+In order to install Ruby Enterprise Edition please refer to http://www.rubyenterpriseedition.com/download.html and follow the on-screen instructions. 
+
+Once checked out owm from our svn repository install the required gems, and other required software, then create an empty database called owm via mysql and set up your database.yml correctly to match your credentials.
+
+Create the GMAPS API KEY file in <owm_root>/config/gmaps_api_key.yml with your own key. See the example file <owm_root>/config/gmaps_api_key.yml.example .
+
+So run rake db:migrate to create an empty database and rake db:seed to populate database with default data. 
+After the steps above you should have a working OpenWISP Manager.
+
+==== Sample web server configuration
+
+If you are going to use Apache2 and Passenger, you should include the following snippet to your virtual host configuration:
+
+PassengerDefaultUser www-data
+
+    Alias <RAILS BASE URI> "<RAILS BASE PATH>/owm/public/"
+    <Directory <RAILS BASE PATH>/owm/public>
+       Options ExecCGI FollowSymLinks
+       AllowOverride all
+       Order allow,deny
+       Allow from all
+       RailsEnv production
+       RailsBaseURI "<RAILS BASE URI>"
+    </Directory>
+
+    # We need a rewrite rule here because by default the OWF will use http://<server IP>/get_config/<MAC ADDRESS>[.md5]
+    # to download the access point configuration.
+    RewriteEngine on
+    RewriteRule ^/get_config(.+)/$ <RAILS BASE URI>/get_config$1 [L]
+
+    <Location "/get_config">
+       Order Deny,Allow
+       Deny from all
+       Allow from <your access point setup network (setup VPN)>
+    </Location>
+
+    <Location "<RAILS BASE URI>/get_config">
+       Order Deny,Allow
+       Deny from all
+       Allow from <your access point setup network (setup VPN)>
+    </Location>
+
+
+==== Startup script
+
+The following script (Ubuntu/Debian style) should be named owm-daemons. It assumes OpenWISP Manager is running on ruby enterprise and that the application was deployed to /var/rails/owm.
+Of course you can change any of that to whatever fits your needs.
+
+    #!/bin/sh
+    ### BEGIN INIT INFO
+    # Provides:          owm-daemons
+    # Required-Start:    $local_fs $network  
+    # Required-Stop:     $local_fs $network 
+    # Default-Start:     2 3 4 5
+    # Default-Stop:      0 1 6
+    # Short-Description: Starting owm-daemons
+    # Description:       Starting owm-daemons
+    ### END INIT INFO#
+
+    ########## Variables for openwisp-daemons ##########
+
+    # The directory in which all the various OpenWisp
+    # applications are deployed. Generally it's /var/www
+    # or /var/rails
+    OPENWISP_BASE_PATH="/var/rails"
+
+    # The daemon you wish to start with this script
+    # (it must have already been deployed of course).
+    OPENWISP_APP="owm" 
+
+    # The Rails environment in which the script must be run.
+    # It will almost always be set to production.
+    RAILS_ENV="production" 
+
+    ####################################################
+
+    export PATH RAILS_ENV
+
+    # Define LSB log_* functions.
+    # Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+    . /lib/lsb/init-functions
+
+    bundle_exec() {
+      cd $1 && bundle exec $2
+      return $?
+    }
+
+    openwisp_daemons_start() {
+      bundle_exec $OPENWISP_BASE_PATH/$OPENWISP_APP 'rake daemons:start'
+    }
+
+    openwisp_daemons_stop() {
+      bundle_exec $OPENWISP_BASE_PATH/$OPENWISP_APP 'rake daemons:stop'
+    }
+
+    openwisp_daemons_restart() {
+      bundle_exec $OPENWISP_BASE_PATH/$OPENWISP_APP 'rake daemons:restart'
+    }
+
+    openwisp_daemons_status() {
+      bundle_exec $OPENWISP_BASE_PATH/$OPENWISP_APP 'rake daemons:status'
+    }
+
+    case "$1" in
+      start)
+        log_daemon_msg "Starting OpenWISP daemon" "$NAME" 
+        openwisp_daemons_start
+        RET="$?" 
+        log_end_msg $RET
+        return $RET
+        ;;
+      stop)
+        log_daemon_msg "Stopping OpenWISP daemon" "$NAME" 
+        openwisp_daemons_stop
+        RET="$?" 
+        log_end_msg $RET
+        return $RET
+        ;;
+      restart)
+        log_daemon_msg "Restarting OpenWISP daemon" "$NAME" 
+        openwisp_daemons_restart
+        RET="$?" 
+        log_end_msg $RET
+        return $RET
+        ;;
+      status)
+        openwisp_daemons_status
+        RET="$?" 
+        return $RET
+        ;;
+      *)
+        echo "Usage: /etc/init.d/$NAME {start|stop|restart|status}" >&2
+        exit 1
+        ;;
+    esac
+
+    exit 0
+
+
+As usual, you need to
+
+    chmod +x owm-daemons
+    /etc/init.d/owm-daemons start
+
+and enable the script to be run at boot (e.g., with the update-rc.d command).
+
+== Copyright
+
+Copyright (C) 2012 OpenWISP.org
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
