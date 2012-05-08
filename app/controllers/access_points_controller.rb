@@ -213,7 +213,7 @@ class AccessPointsController < ApplicationController
         format.html { redirect_to(wisp_access_point_url(@wisp, @access_point)) }
       end
     else
-      @hselected_access_point_template = @access_point.access_point_template.id.to_s
+      @selected_access_point_template = @access_point.access_point_template.id.to_s
 
       respond_to do |format|
         format.html { render :action => "edit" }
