@@ -31,7 +31,7 @@ class Bridge < ActiveRecord::Base
                           :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.blank? }
   validates_format_of :name, :with => /\A[a-z][a-z0-9]*\Z/i,
                       :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.blank? }
-  validates_length_of :name, :maximum => 8,
+  validates_length_of :name, :maximum => 5,
                       :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.blank? }
 
   has_many :ethernets, :dependent => :nullify
