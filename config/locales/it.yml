@@ -332,6 +332,12 @@ it:
   unspecified: "non specificato"
   OWISPManager_servers: "Server per Wireless ISP"
   vWisps_manager: "OWM"
+  Do_search: "Cerca"
+  Search: "Ricerca"
+  Reset: "Resetta"
+  Scope: "Ambito"
+  Wisp_only: "Solo {{wisp}}"
+  All_wisps: "Tutti i WISP"
 
   number:
     format:
