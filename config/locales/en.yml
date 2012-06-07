@@ -332,6 +332,12 @@ en:
   unspecified: "unspecified"
   OWISPManager_servers: "Wireless ISP servers"
   vWisps_manager: "OWM"
+  Search: "Search"
+  Do_search: "Search"
+  Reset: "Reset"
+  Scope: "Scope"
+  Wisp_only: "{{wisp}} only"
+  All_wisps: "All WISPs"
 
   activerecord:
     # Translate model names. Used in Model.human_name().
