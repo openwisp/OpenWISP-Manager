@@ -20,11 +20,27 @@
 <div class="grid_16">
   <div class="box">
     <h4><a><%= t(:Access_points_list) %> - <%=h @wisp.name %></a></h4>
+    <%# SEARCH - added in june 2012 %>
+    <br />
+    <h2><%= t(:Search) %></h2>
+    <div class="block">
+      <form action="" method="get" id="search">
+        <input type="text" name="q" value="<%= @q %>" />
+        <input type="submit" value="<%= t(:Do_search) %>" />
+        <input type="reset" value="<%= t(:Reset) %>" onclick="location.href='./access_points'" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <%= t(:Scope) %>:&nbsp;
+        <input type="radio" name="scope" value="local" <%= 'checked="checked" ' if @scope == "local" or not @scope.present? %>/> <%= t(:Wisp_only, :wisp => @wisp.name) %>
+        <input type="radio" name="scope" value="global" <%= 'checked="checked" ' if @scope == "global" %>/> <%= t(:All_wisps) %>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <%= t(:Name) %> <input type="checkbox" name="name" <%= 'checked="checked" ' if @name == 'on' or not @q %>/> &nbsp;
+        <%= t(:Mac_address) %> <input type="checkbox" name="mac" <%= 'checked="checked" ' if @mac == 'on' or not @q %>/> &nbsp;
+        <%= t(:Address) %> <input type="checkbox" name="address" <%= 'checked="checked" ' if @address == 'on' or not @q %>/> &nbsp;
+      </form>
+    </div>
   </div>
 </div>
 <div class="clear">&nbsp;</div>
-
-<%# TODO: Filtering by templates %>
 
 <% @access_points.group_by(&:access_point_template).each do |access_point_template, access_points| %>
 
