@@ -185,7 +185,7 @@ it:
   Listing_access_point_groups: "Gruppi di access point definiti"
   Listing_access_point_templates: "Template di access point definiti"
   Listing_access_points: "Access point definiti"
-  Listing_access_points_for_template: "Access point per il template {{template}}"
+  Listing_access_points_for_template: "Access point per il template %{template}"
   Listing_bridge_templates: "Template di bridge definiti"
   Listing_bridges: "Bridge presenti"
   Listing_custom_script_templates: "Template di Script definiti"
