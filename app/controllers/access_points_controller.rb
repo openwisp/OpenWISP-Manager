@@ -141,10 +141,14 @@ class AccessPointsController < ApplicationController
       @access_points = query.all(:conditions => condition)
     end
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json
-      format.xml { render :xml => @access_points }
+    if params[:ajax].present?
+      render :action => "_index_partial", :layout => false
+    else
+      respond_to do |format|
+        format.html # index.html.erb
+        format.json
+        format.xml { render :xml => @access_points }
+      end
     end
   end
 
@@ -294,9 +298,3 @@ class AccessPointsController < ApplicationController
     redirect_to wisp_access_points_url(@wisp)
   end
 end
-
-#def search
-#  q = params[:q]
-#
-#  render "search"
-#end
