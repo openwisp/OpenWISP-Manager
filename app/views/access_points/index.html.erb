@@ -28,15 +28,15 @@
         <input type="text" name="q" value="<%= @q %>" id="q" />
         <input type="submit" value="<%= t(:Do_search) %>" />
         <input type="reset" value="<%= t(:Reset) %>" />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <%= t(:Scope) %>:&nbsp;
-        <input type="radio" name="scope" value="local" <%= 'checked="checked" ' if @scope == "local" or not @scope.present? %>/> <%= t(:Wisp_only, :wisp => @wisp.name) %>
+        <label><input type="radio" name="scope" value="local" <%= 'checked="checked" ' if @scope == "local" or not @scope.present? %>/> <%= t(:Wisp_only, :wisp => @wisp.name) %></label>
         &nbsp;&nbsp;
-        <input type="radio" name="scope" value="global" <%= 'checked="checked" ' if @scope == "global" %>/> <%= t(:All_wisps) %>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <%= t(:Name) %> <input type="checkbox" name="name" <%= 'checked="checked" ' if @name == 'on' or not @q %>/> &nbsp;
-        <%= t(:Mac_address) %> <input type="checkbox" name="mac" <%= 'checked="checked" ' if @mac == 'on' or not @q %>/> &nbsp;
-        <%= t(:Address) %> <input type="checkbox" name="address" <%= 'checked="checked" ' if @address == 'on' or not @q %>/> &nbsp;
+        <label><input type="radio" name="scope" value="global" <%= 'checked="checked" ' if @scope == "global" %>/> <%= t(:All_wisps) %></label>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <%= t(:Search_in) %>: &nbsp;&nbsp; <label><%= t(:Name) %> <input type="checkbox" name="name" <%= 'checked="checked" ' if @name == 'on' or not @q %>/></label> &nbsp;
+        <label><%= t(:Mac_address) %> <input type="checkbox" name="mac" <%= 'checked="checked" ' if @mac == 'on' or not @q %>/></label> &nbsp;
+        <label><%= t(:Address) %> <input type="checkbox" name="address" <%= 'checked="checked" ' if @address == 'on' or not @q %>/></label> &nbsp;
       </form>
       <script type="text/javascript">
         // does an asynchronous request to search access points
@@ -81,8 +81,9 @@
         .find('#q').keyup(function(e){
           // store input value
           var value = $(this).val();
-          // if not pressing enter and value is longer than 3 characters and value is not empty
-          if(e.which != 13 && value.length > 3 && value != ''){
+          // if not pressing enter and value is longer than 3
+          // or if value is empty
+          if((e.which != 13 && value.length > 3) || value == '' ){
             cancelDelayedSearch();
             setDelayedSearch();
           }

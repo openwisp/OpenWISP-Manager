@@ -334,6 +334,7 @@ it:
   vWisps_manager: "OWM"
   Do_search: "Cerca"
   Search: "Ricerca"
+  Search_in: "Cerca in"
   Reset: "Resetta"
   Scope: "Ambito"
   Wisp_only: "Solo {{wisp}}"
