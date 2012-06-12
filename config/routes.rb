@@ -9,6 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.welcome_operator 'operators/:id', :controller => 'operators', :action => 'show'
 
   #Ajax Routes
+  map.connect 'wisps/:wisp_id/access_points_ajax', :controller => 'access_points', :action => 'index', :ajax => 'true'
   map.connect 'wisps/:wisp_id/access_point_templates/ajax_stats', :controller => 'access_point_templates', :action => 'ajax_stats'
   map.connect 'wisps/ajax_stats', :controller => 'wisps', :action => 'ajax_stats'
   map.connect 'servers/ajax_stats', :controller => 'servers', :action => 'ajax_stats'
