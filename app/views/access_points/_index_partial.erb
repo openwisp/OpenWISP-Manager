@@ -1,0 +1,87 @@
+<%#
+# This file is part of the OpenWISP Manager
+#
+# Copyright (C) 2012 OpenWISP.org
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#%>
+<% @access_points.group_by(&:access_point_template).each do |access_point_template, access_points| %>
+    <div class="grid_14 prefix_1 suffix_1">
+      <div class="box">
+        <h2>
+          <a href="#" id="toggle-forms_<%= access_point_template.nil? ? 'none' : access_point_template.id %>">
+            <%= t(:Listing_access_points_for_template, :template => h(access_point_template.nil? ? t(:None) : access_point_template.name)) %>
+          </a>
+        </h2>
+        <div class="block" id="access_points_block_<%= access_point_template.nil? ? 'none' : access_point_template.id %>">
+          <table id="access_points-table_<%= access_point_template.nil? ? 'none' : access_point_template.id %>">
+            <thead>
+            <tr>
+              <th scope="col" class="head-left"><%=t :Operations %></th>
+              <th scope="col" class="head"><%=t :Name %></th>
+              <th scope="col" class="head"><%=t :Mac_address %></th>
+              <th scope="col" class="head"><%=t :Internal %></th>
+              <th scope="col" class="head"><%=t :Activation_date %></th>
+              <th scope="col" class="head"><%=t :Address %></th>
+              <th scope="col" class="head"><%=t :City %></th>
+              <th scope="col" class="head"><%=t :Zip %></th>
+              <th scope="col" class="head-right"><%=t :Notes %></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <% access_points.each do |access_point| %>
+                <tr>
+                  <td style="width:54px;">
+                    <%= link_to image_tag("configure.png", :border=>0, :size => "16x16", :alt => t(:Configure)), wisp_access_point_path(@wisp, access_point),
+                                :title => t(:Configure)
+                    %>
+                    <% if auth?(:wisps_manager) || auth?(:access_points_manager, @wisp) %>
+                        <%= link_to image_tag("edit.png", :border=>0, :size => "16x16", :alt => t(:Edit)), edit_wisp_access_point_path(@wisp, access_point),
+                                    :title => t(:Edit_access_point)
+                        %>
+                    <% end %>
+                    <% if auth?(:wisps_destroyer) || auth?(:access_points_destroyer, @wisp) %>
+                        <%= link_to image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), wisp_access_point_path(@wisp, access_point),
+                                    :title => t(:Destroy_access_point),
+                                    :confirm => t(:Are_you_sure_access_point_destroy),
+                                    :method => :delete
+                        %>
+                    <% end %>
+                  </td>
+                  <td><%= link_to h(access_point.name), wisp_access_point_path(@wisp, access_point) %></td>
+                  <td><%=h access_point.mac_address %></td>
+                  <td><%=  access_point.internal? ? t(:_yes) : t(:_no) %></td>
+                  <td><%=h access_point.activation_date %></td>
+                  <td><%=h access_point.address %></td>
+                  <td><%=h access_point.city %></td>
+                  <td><%=h access_point.zip %></td>
+                  <td>
+                    <% if (access_point.notes.nil? or access_point.notes.length == 0) %>
+                        &nbsp;
+                    <% else %>
+                        <%= link_to image_tag("notes.png", :border=>0, :size => "16x16", :alt => t(:Notes)), "#",
+                                    :title => h(access_point.notes)
+                        %>
+                    <% end %>
+                  </td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="clear">&nbsp;</div>
+<% end  %>

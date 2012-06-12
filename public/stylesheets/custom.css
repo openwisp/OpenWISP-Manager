@@ -133,3 +133,4 @@ h1#branding {
 }
 
 #search{ margin-bottom: 7px }
+input[type=submit], input[type=button], input[type=reset], button{ cursor: pointer }
