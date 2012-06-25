@@ -134,3 +134,22 @@ h1#branding {
 
 #search{ margin-bottom: 7px }
 input[type=submit], input[type=button], input[type=reset], button{ cursor: pointer }
+
+.remove{
+    background-color: #d00000;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    float: right;
+}
+.remove:hover{ color: #fff }
+
+.add{
+    background-color: green;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    float: left;
+    margin-bottom: 20px;
+}
+.add:hover{ color:  #fff }
