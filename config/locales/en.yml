@@ -339,6 +339,9 @@ en:
   Scope: "Scope"
   Wisp_only: "{{wisp}} only"
   All_wisps: "All WISPs"
+  Remove: "Remove"
+  MaximumVapError: "Maximum vap interfaces for this type of driver reached"
+
 
   activerecord:
     # Translate model names. Used in Model.human_name().

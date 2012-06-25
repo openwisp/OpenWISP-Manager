@@ -339,6 +339,8 @@ it:
   Scope: "Ambito"
   Wisp_only: "Solo {{wisp}}"
   All_wisps: "Tutti i WISP"
+  Remove: "Rimuovi"
+  MaximumVapError: "È stato raggiunto il limite massimo di interfacce vap per questo tipo di driver"
 
   number:
     format:

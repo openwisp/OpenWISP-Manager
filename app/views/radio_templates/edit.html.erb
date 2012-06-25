@@ -1,4 +1,4 @@
-<%#
+  <%#
 # This file is part of the OpenWISP Manager
 #
 # Copyright (C) 2012 OpenWISP.org
@@ -72,12 +72,25 @@
           <%= f.text_area :notes, :rows => 3 %>
         </p>
 
-        <% f.fields_for :vap_templates do |vf| %>
+        <div id="vap_templates">
+          <% f.fields_for :vap_templates do |vf| %>
             <%= render :partial => 'vap', :locals => {:vap_template_form => vf} %>
-        <% end %>
+          <% end %>
+        </div>
+
         <p>
           <%= f.submit t(:Update) %>
         </p>
+
     <% end %>
   </fieldset>
+
+  <script type="text/javascript">
+    window.i18n = {
+      maximumVapError: '<%= t(:MaximumVapError)  %>',
+      add: '<%= t(:Add) %>',
+      remove: '<%= t(:Remove) %>'
+    };
+  </script>
+  <script type="text/javascript" src="<%= URI.parse(root_url).merge(javascript_path('owm.vap')) %>"></script>
 </div>
