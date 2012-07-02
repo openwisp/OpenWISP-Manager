@@ -28,7 +28,7 @@ class BridgeTemplate < ActiveRecord::Base
 
   validates_uniqueness_of :name, :scope => :access_point_template_id
   validates_format_of :name, :with => /\A[a-z][a-z0-9]*\Z/i
-  validates_length_of :name, :maximum => 8
+  validates_length_of :name, :maximum => 5
 
   has_many :ethernet_templates, :dependent => :nullify
   has_many :tap_templates, :dependent => :nullify
