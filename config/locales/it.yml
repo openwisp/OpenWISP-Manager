@@ -111,6 +111,7 @@ it:
   Dn_prefix: "Prefisso per il distinguish name"
   Dns: "DNS"
   Download: "Scarica"
+  Download_Config: "Scarica configurazione"
   Driver: "Driver"
   Driver_slot: "Slot driver"
   Edit: "Modifica"

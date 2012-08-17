@@ -111,6 +111,7 @@ en:
   Dn_prefix: "Distinguish name prefix"
   Dns: "DNS"
   Download: "Download"
+  Download_Config: "Download Configuration"
   Driver: "Driver"
   Driver_slot: "Driver slot"
   Edit: "Edit"
