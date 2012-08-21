@@ -60,7 +60,7 @@
                         %>
                     <% end %>
                   </td>
-                  <td><%= link_to h(access_point.name), wisp_access_point_path(@wisp, access_point) %></td>
+                  <td><%= link_to h(access_point.name), wisp_access_point_path(access_point.wisp_id, access_point) %></td>
                   <td><%=h access_point.mac_address %></td>
                   <td><%=  access_point.internal? ? t(:_yes) : t(:_no) %></td>
                   <td><%=h access_point.activation_date %></td>

@@ -25,8 +25,19 @@ $(document).ready(function() {
             gmaps.drawMap(this);
         });
     }
+    owm.activateToggleBox();
 });
 
 function exists(_selector) {
     return ($(_selector).length > 0);
+}
+
+owm = {
+    // make it possible to minimize parts of the layout
+    activateToggleBox: function(){
+        $('.box h2 a').click(function(e){
+            e.preventDefault()
+            $(this).parent().parent().find('.block').slideToggle(250);
+        });
+    }
 }

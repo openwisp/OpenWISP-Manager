@@ -20,7 +20,8 @@ class AccessPointsController < ApplicationController
 
   before_filter :load_wisp, :except => [:get_configuration, :get_configuration_md5]
   skip_before_filter :require_operator, :only => [:get_configuration, :get_configuration_md5]
-  before_filter :require_no_operator, :only => [:get_configuration, :get_configuration_md5]
+  # verify if removing this line is not an issue
+  #before_filter :require_no_operator, :only => [:get_configuration, :get_configuration_md5]
 
   access_control do
     default :deny
