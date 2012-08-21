@@ -7,7 +7,7 @@
 
 .fieldWithErrors input {
     width:97%;
-    margin-left:2px;
+    margin-left:2px;    
 }
 
 .fieldWithErrors select {
@@ -153,3 +153,10 @@ input[type=submit], input[type=button], input[type=reset], button{ cursor: point
     margin-bottom: 20px;
 }
 .add:hover{ color:  #fff }
+
+.button-wrapper{ padding: 0 }
+.button-wrapper h5{ margin: 0 }
+.button-wrapper a{ display: block; padding: 7px 0px; margin: 0 auto }
+
+.contrast{ background-color: #333; color: #fff }
+.contrast:hover{ background-color: #000; color: #fff }

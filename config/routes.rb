@@ -18,9 +18,9 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'radios/modes_for_driver', :controller => 'radios', :action => 'modes_for_driver'
   map.connect 'radios/channels_for_mode', :controller => 'radios', :action => 'channels_for_mode'
 
-  map.connect 'get_config/:mac_address', :controller => 'access_points', :action => 'get_configuration'
-  map.connect 'get_config/:mac_address.md5', :controller => 'access_points', :action => 'get_configuration_md5'
-
+  map.get_config 'get_config/:mac_address', :controller => 'access_points', :action => 'get_configuration'
+  map.get_config_md5 'get_config/:mac_address.md5', :controller => 'access_points', :action => 'get_configuration_md5'
+  map.get_server_config 'get_server_config/:id', :controller => 'l2vpn_servers', :action => 'get_server_configuration'
 
   map.resources :custom_scripts
   map.resources :custom_script_templates

@@ -57,6 +57,9 @@
       <td><strong><%= t :L2vpn_server_mtu_discovery %></strong></td>
       <td><%= h @l2vpn_server.mtu_disc %></td>
     </tr>
+    <%
+    notes = h(@l2vpn_server.notes).gsub(/\n/, "<br>")
+    if(notes != '') %>
     <tr>
       <td colspan="2">&nbsp;</td>
     </tr>
@@ -64,8 +67,12 @@
       <td colspan="2"><strong><%= t :Notes %></strong></td>
     </tr>
     <tr>
-      <td colspan="2"><%= h(@l2vpn_server.notes).gsub(/\n/, "<br>") %></td>
+      <td colspan="2"><%= notes %></td>
     </tr>
+    <% end %>
   </table>
+  <div class="box center button-wrapper">
+    <h5><a href="<%= url_for get_server_config_path(:id => @l2vpn_server.id) %>" class="contrast"><%= t(:Download_Config) %></a></h5>
+  </div>
 </div>
 
