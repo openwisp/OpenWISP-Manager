@@ -69,6 +69,7 @@ it:
   Clear: "Azzera"
   Clear_l2tc_template: "Azzera informazioni di shaping"
   Cn: "Common name"
+  Config: "Config"
   Configure: "Configura"
   Country: "Nazione"
   Create: "Crea"

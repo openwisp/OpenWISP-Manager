@@ -18,9 +18,9 @@
 class L2vpnServersController < ApplicationController
   layout nil
 
-  before_filter :load_server
-  before_filter :load_l2vpn_server, :except => [ :index, :new, :create ]
-  before_filter :load_wisps, :except => [ :index, :show, :destroy ]
+  before_filter :load_server, :except => [ :get_server_configuration ]
+  before_filter :load_l2vpn_server, :except => [ :index, :new, :create, :get_server_configuration ]
+  before_filter :load_wisps, :except => [ :index, :show, :destroy, :get_server_configuration ]
   before_filter :load_server_ip, :only => [ :new, :create, :edit ]
 
   access_control do
@@ -30,7 +30,7 @@ class L2vpnServersController < ApplicationController
       allow :servers_viewer
     end
 
-    actions :new, :create do
+    actions :new, :create, :get_server_configuration do
       allow :servers_creator
     end
 
@@ -106,6 +106,21 @@ class L2vpnServersController < ApplicationController
       format.html { redirect_to(server_l2vpn_servers_url(@server)) }
     end
   end
+  
+  def get_server_configuration
+    # retrieve L2vpnServer object
+    l2vpn_server = L2vpnServer.find(params[:id])
+    # if found
+    if !l2vpn_server.nil?
+      # Sending configuration files for the L2vpnServer
+      send_file SERVERS_CONFIGURATION_PATH.join(
+                    "server-openvpn-#{l2vpn_server.server_id}-#{params[:id]}.tar.gz"
+                )
+    # else 404
+    else
+      send_file "public/404.html", :status => 404
+    end
+  end
 
   private
 
@@ -122,4 +137,5 @@ class L2vpnServersController < ApplicationController
   def load_l2vpn_server
     @l2vpn_server = @server.l2vpn_servers.find(params[:id])
   end
+  
 end

@@ -28,12 +28,13 @@
         <th scope="col" class="head"><%=t :L2vpn_server_port %></th>
         <th scope="col" class="head"><%=t :L2vpn_server_cipher %></th>
         <th scope="col" class="head-right"><%=t :L2vpn_server_protocol %></th>
+		<th scope="col" class="head-right"><%=t :Config %></th>
       </tr>
     </thead>
     <tfoot>
       <tr>
         <td colspan="1" class="foot-left"></td>
-        <td colspan="4" class="foot" style="text-align: center;">&nbsp;</td>
+        <td colspan="5" class="foot" style="text-align: center;">&nbsp;</td>
         <td colspan="1" class="foot-right">&nbsp;</td>
       </tr>
     </tfoot>
@@ -47,10 +48,10 @@
                     :title => t(:Edit),
                     :update => { :success => "list_l2vpn_servers_div", :failure => "list_l2vpn_servers_div" }
 
-              %>
+              %>			  
               <%= link_to_remote image_tag("delete.png", :border=>0, :size => "16x16", :alt => t(:Destroy)), 
                     :method => :delete,
-                    :url =>server_l2vpn_server_path(@server, l2vpn_server),
+                    :url => server_l2vpn_server_path(@server, l2vpn_server),
                     :title => t(:Destroy_l2vpn_server),
                     :confirm => t(:Are_you_sure_l2vpn_server_destroy),
                     :update => { :success => "list_l2vpn_servers_div", :failure => "list_l2vpn_servers_div" }
@@ -68,6 +69,7 @@
             <td><%=h l2vpn_server.port %></td>
             <td><%=h l2vpn_server.cipher %></td>
             <td><%=h l2vpn_server.protocol %></td>
+			<td><%= link_to t(:Download), get_server_config_path(:id => l2vpn_server.id) %></td>
         </tr>  
       <% end %>
     </tbody>
