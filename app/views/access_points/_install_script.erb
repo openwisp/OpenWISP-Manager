@@ -49,6 +49,18 @@ sleep 5
 <% access_point.bridges.each do |b| -%>
 echo "Enabling bridge <%=h b.name %>"
 ifup <%=h b.name %>
+<% if b.addressing_mode == 'static' -%>
+# Waiting for an IP address before starting WiFi configuration: 
+# For instance if 802.1x is used the IP address to reach the RADIUS server
+# could be configured here...
+__timeout=10
+while [ -z "$(ip address show dev <%=h b.name %> | grep <%=h b.ip %>)" -o __timeout -le 0 ]; do 
+    sleep 1
+    __timeout=`expr \( $__timeout - 1 \)`
+    if [ __timeout -le 0 ]; then
+        echo "Timeout waiting for an IP address on bridge '<%=h b.name %>'!"
+    fi
+done
 <% end -%>
 
 # Wifi
