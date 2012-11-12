@@ -60,6 +60,7 @@ while [ -z "$(ip address show dev br-<%=h b.name %> | grep <%=h b.ip %>)" -o $__
   __timeout=`expr \( $__timeout - 1 \)`
   if [ $__timeout -le 0 ]; then
     echo "Timeout waiting for an IP address on bridge '<%=h b.name %>'!"
+    break
   fi
 done
 <% end -%>
