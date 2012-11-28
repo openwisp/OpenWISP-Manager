@@ -117,7 +117,8 @@ class AccessPointsController < ApplicationController
           @access_point = AccessPoint.find_by_common_name(params[:id])
 
           # Enforce access control on wisp for access point
-          @access_point = nil if @access_point.wisp != @wisp
+          # Creates an empty access point (for XML rendering) if no AP is found or the AP doesn't belong to @wisp
+          @access_point = AccessPoint.new if @access_point.nil? or @access_point.wisp != @wisp
         end
 
         render :xml => @access_point
