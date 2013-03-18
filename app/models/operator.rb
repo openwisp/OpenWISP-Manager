@@ -43,7 +43,9 @@ class Operator < ActiveRecord::Base
       :access_points_custom_scripts_creator, :access_points_custom_scripts_manager,
       :access_points_custom_scripts_destroyer,
 
-      :servers_viewer, :servers_creator, :servers_manager, :servers_destroyer
+      :servers_viewer, :servers_creator, :servers_manager, :servers_destroyer,
+      
+      :ca_manager
   ]
 
   def roles
