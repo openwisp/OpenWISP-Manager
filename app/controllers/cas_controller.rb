@@ -24,11 +24,13 @@ class CasController < ApplicationController
     action :show do
       allow :wisps_viewer
       allow :wisp_viewer, :of => :wisp
+      allow :ca_manager
     end
 
     action :crl do
       allow :wisps_manager
       allow :wisp_manager, :of => :wisp
+      allow :ca_manager
     end
   end
 
