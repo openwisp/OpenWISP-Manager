@@ -108,7 +108,7 @@
                 <ul>
                   <li><%= link_to t(:All), wisp_access_points_path(@wisp) %></li>
                   <li><%= link_to t(:Outdated), outdated_access_points_path(@wisp) %></li>
-
+                  <li><%= link_to t(:Create_New), new_wisp_access_point_path(@wisp) %></li>
                   <% if auth?(:wisps_viewer) || auth?(:access_point_groups_viewer, @wisp) %>
                       <li><%= link_to t(:Groups), wisp_access_point_groups_path(@wisp) %></li>
                   <% end %>
