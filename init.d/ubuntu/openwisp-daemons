@@ -1,0 +1,113 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          openwisp-daemons
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starting openwisp-daemons
+# Description:       Starting openwisp-daemons
+### END INIT INFO#
+
+########## Variables for openwisp-daemons ##########
+
+# The $PATH variable should contain the path to the
+# ruby interpreter (and to the bundle executable).
+PATH="/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+
+# The directory in which all the various OpenWisp
+# applications are deployed. Generally it's /var/www
+# or /var/rails
+OPENWISP_BASE_PATH="/var/rails"
+
+# The list of daemons you wish to start with this script
+# (they must be already been deployed of course).
+OPENWISP_DAEMONS="owm"
+
+# The Rails environment in which the script must be run.
+# It will almost always be set to production.
+RAILS_ENV="production"
+
+####################################################
+
+export PATH RAILS_ENV
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+. /lib/lsb/init-functions
+
+bundle_exec() {
+  cd $1 && bundle exec $2
+  return $?
+}
+
+echo_daemon() {
+  echo "################## $1 ##################" | tr [:lower:] [:upper:]
+}
+
+openwisp_daemons_start() {
+  for CURRENT_DAEMON in $OPENWISP_DAEMONS; do
+    echo_daemon $CURRENT_DAEMON
+    bundle_exec $OPENWISP_BASE_PATH/$CURRENT_DAEMON 'rake daemons:start'
+    echo ""
+  done
+}
+
+openwisp_daemons_stop() {
+  for CURRENT_DAEMON in $OPENWISP_DAEMONS; do
+    echo_daemon $CURRENT_DAEMON
+    bundle_exec $OPENWISP_BASE_PATH/$CURRENT_DAEMON 'rake daemons:stop'
+    echo ""
+  done
+}
+
+openwisp_daemons_restart() {
+  for CURRENT_DAEMON in $OPENWISP_DAEMONS; do
+    echo_daemon $CURRENT_DAEMON
+    bundle_exec $OPENWISP_BASE_PATH/$CURRENT_DAEMON 'rake daemons:restart'
+    echo ""
+  done
+}
+
+openwisp_daemons_status() {
+  for CURRENT_DAEMON in $OPENWISP_DAEMONS; do
+    echo_daemon $CURRENT_DAEMON
+    bundle_exec $OPENWISP_BASE_PATH/$CURRENT_DAEMON 'rake daemons:status'
+    echo ""
+  done
+}
+
+case "$1" in
+  start)
+    log_daemon_msg "Starting OpenWISP daemons" "$NAME"
+    openwisp_daemons_start
+    RET="0"
+    log_end_msg $RET
+    return $RET
+    ;;
+  stop)
+    log_daemon_msg "Stopping OpenWISP daemons" "$NAME"
+    openwisp_daemons_stop
+    RET="0"
+    log_end_msg $RET
+    return $RET
+    ;;
+  restart)
+    log_daemon_msg "Restarting OpenWISP daemons" "$NAME"
+    openwisp_daemons_restart
+    RET="0"
+    log_end_msg $RET
+    return $RET
+    ;;
+  status)
+    openwisp_daemons_status
+    RET="0"
+    return $RET
+    ;;
+  *)
+    echo "Usage: /etc/init.d/$NAME {start|stop|restart|status}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0
