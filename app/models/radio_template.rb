@@ -133,7 +133,7 @@ class RadioTemplate < ActiveRecord::Base
 
   private
 
-  OUTDATING_ATTRIBUTES = [:driver, :driver_slot, :mode, :channel, :output_band, :id]
+  OUTDATING_ATTRIBUTES = [:driver, :driver_slot, :mode, :channel, :output_band, :input_band, :id]
 
   def outdate_configuration_if_required
     if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }

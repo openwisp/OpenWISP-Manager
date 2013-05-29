@@ -28,17 +28,25 @@ class L2tc < ActiveRecord::Base
   # (see ethernet, radio, tap, vlan and vap)
 
   def validate
-    sum = 0
-    self.shapeable.subinterfaces.each do |s|
-      sum += s.output_band_percent unless s.output_band_percent.nil?
+    input_sum = 0
+    output_sum = 0
+    self.shapeable_template.subinterfaces.each do |s|
+      input_sum += s.input_band_percent unless s.input_band_percent.blank? or s.input_band_percent.nil?
+      output_sum += s.output_band_percent unless s.output_band_percent.blank? or s.output_band_percent.nil?
     end
-    if sum > 100
+
+    if input_sum > 100 or output_sum > 100
       errors.add_to_base(:Subinterface_percentage_sum_greater_than_100_perc)
       return false
     end
 
-    if sum > 0 and (self.shapeable.output_band.blank? or self.shapeable.output_band.nil?)
-      errors.add_to_base(:Interface_must_be_specified)
+    if input_sum > 0 and (self.shapeable_template.input_band.blank? or self.shapeable_template.input_band.nil?)
+      errors.add_to_base(:Input_interface_must_be_specified)
+      return false
+    end
+
+    if output_sum > 0 and (self.shapeable_template.output_band.blank? or self.shapeable_template.output_band.nil?)
+      errors.add_to_base(:Output_interface_must_be_specified)
       return false
     end
 
@@ -65,6 +73,7 @@ class L2tc < ActiveRecord::Base
     end
   end
 
+  # Unused ATM
   def optimal_r2q
     if !self.shapeable.output_band.nil?
       max = self.shapeable.output_band

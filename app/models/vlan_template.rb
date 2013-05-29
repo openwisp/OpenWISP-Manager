@@ -89,7 +89,7 @@ class VlanTemplate < ActiveRecord::Base
   private
 
   OUTDATING_ATTRIBUTES = [
-      :tag, :output_band_percent, :bridge_template_id, :id
+      :tag, :output_band_percent, :input_band_percent, :bridge_template_id, :id
   ]
 
   def outdate_configuration_if_required

@@ -77,10 +77,6 @@ class Vlan < ActiveRecord::Base
     read_attribute(:output_band_percent)
   end
 
-  def machine
-    self.interface.machine
-  end
-
   def output_band
     if self.interface.output_band.blank? or self.output_band_percent.blank?
       nil
@@ -89,13 +85,29 @@ class Vlan < ActiveRecord::Base
     end
   end
 
-  def tc_protocol
-    '802.1q'
+  def input_band_percent
+    if read_attribute(:input_band_percent).blank? and !template.nil?
+      return template.input_band_percent
+    end
+
+    read_attribute(:input_band_percent)
+  end
+
+  def input_band
+    if self.interface.input_band.blank? or self.input_band_percent.blank?
+      nil
+    else
+      self.interface.input_band * self.input_band_percent / 100
+    end
+  end
+
+  def machine
+    self.interface.machine
   end
 
   private
 
-  OUTDATING_ATTRIBUTES = [:tag, :output_band_percent, :bridge_id]
+  OUTDATING_ATTRIBUTES = [:tag, :output_band_percent, :input_band_percent, :bridge_id]
 
   def outdate_configuration_if_required
     if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }

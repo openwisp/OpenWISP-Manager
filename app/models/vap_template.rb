@@ -161,7 +161,7 @@ class VapTemplate < ActiveRecord::Base
 
   OUTDATING_ATTRIBUTES = [
       :essid, :visibility, :encryption, :key, :radius_auth_server, :radius_acct_server,
-      :output_band_percent, :bridge_template_id, :id
+      :output_band_percent, :input_band_percent, :bridge_template_id, :id
   ]
 
   def outdate_configuration_if_required

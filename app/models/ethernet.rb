@@ -97,7 +97,7 @@ class Ethernet < ActiveRecord::Base
 
   private
 
-  OUTDATING_ATTRIBUTES = [:name, :bridge_id, :output_band]
+  OUTDATING_ATTRIBUTES = [:name, :bridge_id, :output_band, :input_band]
 
   def outdate_configuration_if_required
     if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }

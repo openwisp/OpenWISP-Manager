@@ -87,13 +87,21 @@ class Tap < ActiveRecord::Base
     read_attribute(:output_band)
   end
 
+  def input_band
+    if read_attribute(:input_band).blank? and !template.nil?
+      return template.input_band
+    end
+
+    read_attribute(:input_band)
+  end
+
   def machine
     self.l2vpn.machine
   end
 
   private
 
-  OUTDATING_ATTRIBUTES = [:bridge_id, :output_band]
+  OUTDATING_ATTRIBUTES = [:bridge_id, :output_band, :input_band]
 
   def outdate_configuration_if_required
     if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }

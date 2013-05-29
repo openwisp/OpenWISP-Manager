@@ -21,7 +21,7 @@
   <legend><%=t :Subinterface %></legend>
   <p>
     <%= subinterface_form.label t(:Output_band_for_interface, :interface => subinterface.friendly_name) %><br />
-    <%= select_tag("subinterfaces[#{iteration}][output_band_percent]", 
+    <%= select_tag("subinterfaces[#{iteration}][#{item_band_percent}]",
       options_for_select(
         [
           ['-',''],
