@@ -30,7 +30,7 @@ class L2tc < ActiveRecord::Base
   def validate
     input_sum = 0
     output_sum = 0
-    self.shapeable_template.subinterfaces.each do |s|
+    self.shapeable.subinterfaces.each do |s|
       input_sum += s.input_band_percent unless s.input_band_percent.blank? or s.input_band_percent.nil?
       output_sum += s.output_band_percent unless s.output_band_percent.blank? or s.output_band_percent.nil?
     end
