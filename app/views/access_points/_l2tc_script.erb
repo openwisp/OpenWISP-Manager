@@ -1,4 +1,3 @@
-#!/bin/sh /etc/rc.common
 <%#
 # This file is part of the OpenWISP Manager
 #
@@ -16,7 +15,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#%>
+#
+-%>
+#!/bin/sh /etc/rc.common
 
 KERNEL_VERSION=`uname -r`
 KERNEL_MODULES="sch_htb sch_prio sch_sfq cls_fw sch_dsmark sch_ingress sch_tbf sch_red sch_hfsc act_police cls_tcindex cls_flow cls_route cls_u32"
@@ -66,16 +67,16 @@ unload_modules() {
 
 stop() {
 
-<% access_point.l2tcs.each do |l2tc| %>
-  <% l2tc.shapeable.subinterfaces.each do |sub_interface| %>
-    <% if sub_interface.output_band.present? %>
-       tc qdisc del dev <%= sub_interface.name %> root
-    <% end %>
-    <% if sub_interface.input_band.present? %>
-       tc qdisc del dev <%= sub_interface.name %> ingress
-    <% end %>
-  <% end %>
-<% end %>
+<% access_point.l2tcs.each do |l2tc| -%>
+  <% l2tc.shapeable.subinterfaces.each do |sub_interface| -%>
+    <% if sub_interface.output_band.present? -%>
+  tc qdisc del dev <%= sub_interface.name %> root
+    <% end -%>
+    <% if sub_interface.input_band.present? -%>
+  tc qdisc del dev <%= sub_interface.name %> ingress
+    <% end -%>
+  <% end -%>
+<% end -%>
 
   unload_modules
 }
@@ -85,51 +86,52 @@ start() {
   check_prereq
   load_modules
 
-<% access_point.l2tcs.each do |l2tc| %>
-  <% l2tc.shapeable.subinterfaces.each do |sub_interface| %>
-    <% if sub_interface.output_band.present? %>
-        #shaping output traffic (user upload)
-        #creating parent qdisc for root
-        tc qdisc add dev <%= sub_interface.name %> root handle 1: htb default 2
+<% access_point.l2tcs.each do |l2tc| -%>
+  <% l2tc.shapeable.subinterfaces.each do |sub_interface| -%>
+    <% if sub_interface.output_band.present? -%>
 
-        #aggregated traffic shaping parent class
-        # 0.187 * X is calculated as 1.5 *X/8 (as stated here: https://learningnetwork.cisco.com/thread/24611)
-        tc class add dev <%= sub_interface.name %> parent 1 classid 1:1 htb rate <%= sub_interface.output_band %>kbit burst <%= 0.187 * sub_interface.output_band %>k
+  #shaping output traffic (user upload)
+  #creating parent qdisc for root
+  tc qdisc add dev <%= sub_interface.name %> root handle 1: htb default 2
 
-        #default traffic shaping class
-        tc class add dev <%= sub_interface.name %> parent 1:1 classid 1:2 htb rate <%= sub_interface.output_band / 2 %>kbit ceil <%= sub_interface.output_band %>kbit
+  #aggregated traffic shaping parent class
+  # 0.187*X is calculated as 1.5*X/8 (as stated here: https://learningnetwork.cisco.com/thread/24611)
+  tc class add dev <%= sub_interface.name %> parent 1 classid 1:1 htb rate <%= sub_interface.output_band %>kbit burst <%= (0.187 * sub_interface.output_band).round %>k
 
-        <%#
-        #specific ToS traffic shaping (for each ToS specify a filter with specific preference,
-        # the highest the best, and increment flowid by 2, classid for relative class is equal to flowid +1)
-        tc filter add dev <device> parent 1:1 protocol ip preference <upload filter rule preference> u32 match ip tos <tos> <tos mask> flowid <upload flowid>
-        tc class add dev <device> parent < upload flowid> classid <upload classid> htb rate <custom class upload minimum bandwidth>kbit ceil <custom class upload maximum bandwidth>kbit
-        %>
-        <% end %>
+  #default traffic shaping class
+  tc class add dev <%= sub_interface.name %> parent 1:1 classid 1:2 htb rate <%= (sub_interface.output_band / 2).round %>kbit ceil <%= sub_interface.output_band %>kbit
 
-        <% if sub_interface.input_band.present? %>
-        #policing input traffic (user download)
-        #creating parent qdisc for ingress
-        tc qdisc add dev <%= sub_interface.name %> ingress
+  <%#
+  #specific ToS traffic shaping (for each ToS specify a filter with specific preference,
+  # the highest the best, and increment flowid by 2, classid for relative class is equal to flowid +1)
+  tc filter add dev <device> parent 1:1 protocol ip preference <upload filter rule preference> u32 match ip tos <tos> <tos mask> flowid <upload flowid>
+  tc class add dev <device> parent < upload flowid> classid <upload classid> htb rate <custom class upload minimum bandwidth>kbit ceil <custom class upload maximum bandwidth>kbit
+  -%>
+    <% end -%>
 
-        #default policer with lowest preference(last checked)
-        tc filter add dev <%= sub_interface.name %> parent ffff: preference 0 u32 match u32 0x0 0x0 police rate <%= sub_interface.input_band %>kbit burst <%= 0.187 * sub_interface.input_band %>k drop flowid :1
+    <% if sub_interface.input_band.present? -%>
+  #policing input traffic (user download)
+  #creating parent qdisc for ingress
+  tc qdisc add dev <%= sub_interface.name %> ingress
 
-        <%#
-        #specific ToS policing (select preference, the higher the first, Tos, policing and flowid)
-        tc filter add dev <device> parent ffff: protocol ip preference <download filter rule preference> u32 match ip tos <tos> <tos mask> police rate <custom download police bandwidth>kbit burst <custom download police burst>k drop flowid <download flowid>
-        %>
-    <% end %>
-  <% end %>
+  #default policer with lowest preference(last checked)
+  tc filter add dev <%= sub_interface.name %> parent ffff: preference 0 u32 match u32 0x0 0x0 police rate <%= sub_interface.input_band %>kbit burst <%= (0.187 * sub_interface.input_band).round %>k drop flowid :1
 
-<% end %>
+  <%#
+  #specific ToS policing (select preference, the higher the first, Tos, policing and flowid)
+  tc filter add dev <device> parent ffff: protocol ip preference <download filter rule preference> u32 match ip tos <tos> <tos mask> police rate <custom download police bandwidth>kbit burst <custom download police burst>k drop flowid <download flowid>
+  -%>
+    <% end -%>
+  <% end -%>
+
+<% end -%>
 }
 
 boot() {
-        start
+  start
 }
 
 restart() {
-        stop
-        start
+  stop
+  start
 }
