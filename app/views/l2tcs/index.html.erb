@@ -25,11 +25,11 @@
     <tr>
       <th scope="col" class="head-right"><%=t :Operations %></th>
       <th scope="col" class="head"><%=t :Interface %></th>
+      <th scope="col" class="head"><%=t :Output_band %> (Kbps)</th>
       <th scope="col" class="head"><%=t :Input_band %> (Kbps)</th>
-      <th scope="col" class="head"><%=t :Output_band %> (%)</th>
       <th scope="col" class="head"><%=t :Subinterface %></th>
-      <th scope="col" class="head"><%=t :Input_band %> (Kbps)</th>
       <th scope="col" class="head"><%=t :Output_band %> (%)</th>
+      <th scope="col" class="head"><%=t :Input_band %> (%)</th>
       <th scope="col" class="head-right"><%=t :Notes %></th>
     </tr>
     </thead>
@@ -65,8 +65,8 @@
                 <% end %>
               </td>
               <td><%=h l2tc.shapeable.friendly_name %></td>
-              <td><%=h l2tc.shapeable.input_band %></td>
               <td><%=h l2tc.shapeable.output_band %></td>
+              <td><%=h l2tc.shapeable.input_band %></td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
               <td>
@@ -102,14 +102,14 @@
                 <%=h l2tc.shapeable.friendly_name %>
               </td>
               <td rowspan="<%= l2tc.shapeable.subinterfaces.length %>">
-                <%=h l2tc.shapeable.input_band %>
-              </td>
-              <td rowspan="<%= l2tc.shapeable.subinterfaces.length %>">
                 <%=h l2tc.shapeable.output_band %>
               </td>
+              <td rowspan="<%= l2tc.shapeable.subinterfaces.length %>">
+                <%=h l2tc.shapeable.input_band %>
+              </td>
               <td><%=h l2tc.shapeable.subinterfaces[0].friendly_name %></td>
-              <td><%=h l2tc.shapeable.subinterfaces[0].input_band_percent %></td>
               <td><%=h l2tc.shapeable.subinterfaces[0].output_band_percent %></td>
+              <td><%=h l2tc.shapeable.subinterfaces[0].input_band_percent %></td>
               <td rowspan="<%= l2tc.shapeable.subinterfaces.length %>">
                 <% if (l2tc.notes.nil? or l2tc.notes.length == 0) %>
                     &nbsp;
@@ -125,8 +125,8 @@
             <% l2tc.shapeable.subinterfaces.values_at(1..l2tc.shapeable.subinterfaces.length-1).each do |s| %>
                 <tr>
                   <td><%=h s.friendly_name %></td>
-                  <td><%=h s.input_band_percent %></td>
                   <td><%=h s.output_band_percent %></td>
+                  <td><%=h s.input_band_percent %></td>
                 </tr>
             <% end %>
         <% end %>
