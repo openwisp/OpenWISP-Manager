@@ -24,6 +24,8 @@ class Vlan < ActiveRecord::Base
                             :greater_than_or_equal_to => 1,
                             :less_than_or_equal_to => 4094,
                             :unless => Proc.new { |b| b.interface.is_a?(AccessPoint) and b.tag.nil? }
+  validates_numericality_of :output_band_percent, :greater_than => 0, :less_than_or_equal_to => 100, :allow_blank => true
+  validates_numericality_of :input_band_percent, :greater_than => 0, :less_than_or_equal_to => 100, :allow_blank => true
 
   belongs_to :interface, :polymorphic => true
 

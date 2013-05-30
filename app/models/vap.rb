@@ -18,6 +18,9 @@
 class Vap < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  validates_numericality_of :output_band_percent, :greater_than => 0, :less_than_or_equal_to => 100, :allow_blank => true
+  validates_numericality_of :input_band_percent, :greater_than => 0, :less_than_or_equal_to => 100, :allow_blank => true
+
   NAME_PREFIX = "vap"
 
   ENC_TYPES = %w(none wep psk psk2 wpa wpa2 pskmixed wpamixed)

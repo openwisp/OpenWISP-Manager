@@ -26,6 +26,8 @@ class Ethernet < ActiveRecord::Base
                       :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
   validates_length_of :name, :maximum => 8,
                       :unless => Proc.new { |b| b.machine.is_a?(AccessPoint) and b.name.nil? }
+  validates_numericality_of :output_band, :greater_than => 0, :allow_blank => true
+  validates_numericality_of :input_band, :greater_than => 0, :allow_blank => true
 
   belongs_to :bridge
   belongs_to :machine, :polymorphic => true

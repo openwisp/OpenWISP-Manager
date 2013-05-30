@@ -22,6 +22,8 @@ class VlanTemplate < ActiveRecord::Base
   validates_numericality_of :tag,
                             :greater_than_or_equal_to => 1,
                             :less_than_or_equal_to => 4094
+  validates_numericality_of :output_band_percent, :greater_than => 0, :less_than_or_equal_to => 100, :allow_blank => true
+  validates_numericality_of :input_band_percent, :greater_than => 0, :less_than_or_equal_to => 100, :allow_blank => true
 
   belongs_to :bridge_template
 

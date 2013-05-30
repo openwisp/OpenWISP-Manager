@@ -18,6 +18,9 @@
 class TapTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  validates_numericality_of :output_band, :greater_than => 0, :allow_blank => true
+  validates_numericality_of :input_band, :greater_than => 0, :allow_blank => true
+
   belongs_to :bridge_template
   belongs_to :l2vpn_template
 

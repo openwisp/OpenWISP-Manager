@@ -36,7 +36,6 @@ class Radio < ActiveRecord::Base
   MAX_SLOTS = 4
   MAX_VAPS = 4
 
-
   validates_inclusion_of :driver, :in => DRIVERS, :allow_blank => true
   validates_uniqueness_of :driver_slot, :scope => [:access_point_id, :driver], :allow_blank => true
   validates_numericality_of :driver_slot, :less_than => MAX_SLOTS, :greater_than_or_equal_to => 0, :allow_blank => true
@@ -45,6 +44,8 @@ class Radio < ActiveRecord::Base
   validates_inclusion_of :mode, :in => MAC80211_MODES, :if => Proc.new { |r| r.driver == "mac80211" },
                          :message => :invalid_mode_for_selected_driver, :allow_blank => true
   validates_numericality_of :channel
+  validates_numericality_of :output_band, :greater_than => 0, :allow_blank => true
+  validates_numericality_of :input_band, :greater_than => 0, :allow_blank => true
 
   has_many :vaps, :dependent => :destroy
   has_many :subinterfaces, :class_name => 'Vap', :foreign_key => :radio_id
