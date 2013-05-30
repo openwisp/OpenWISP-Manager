@@ -147,6 +147,8 @@ it:
   Groups_for_access_point: "Gruppi di access point"
   Home: "Home"
   Inherited: "Ereditato"
+  Input_band: "Banda di input"
+  Input_band_for_interface: "Banda input per {{interface}} (Kbps)"
   Interface: "Interfaccia"
   Internal: "Interno"
   Internal_qm: "Interno?"

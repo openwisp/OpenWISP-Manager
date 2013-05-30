@@ -147,6 +147,8 @@ en:
   Groups_for_access_point: "Access point groups"
   Home: "Home"
   Inherited: "Inherited"
+  Input_band: "Input bandwidth"
+  Input_band_for_interface: "Input bandwidth for {{interface}} (Kbps)"
   Interface: "Interface"
   Internal: "Indoor"
   Internal_qm: "Indoor?"
