@@ -15,32 +15,32 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-class AddInputbandToShapeables < ActiveRecord::Migration
+class AddInputBandToShapeables < ActiveRecord::Migration
   def self.up
-    add_colum :ethernet_template, :input_band, :integer
-    add_colum :ethernet, :input_band, :integer
-    add_colum :radio_template, :input_band, :integer
-    add_colum :radio, :input_band, :integer
-    add_colum :tap_template, :input_band, :integer
-    add_colum :tap, :input_band, :integer
+    add_column :ethernet_templates, :input_band, :integer
+    add_column :ethernets, :input_band, :integer
+    add_column :radio_templates, :input_band, :integer
+    add_column :radios, :input_band, :integer
+    add_column :tap_templates, :input_band, :integer
+    add_column :taps, :input_band, :integer
 
-    add_colum :vlan_template, :input_band_percent, :integer
-    add_colum :vlan, :input_band_percent, :integer
-    add_colum :vap_template, :input_band_percent, :integer
-    add_colum :vap, :input_band_percent, :integer
+    add_column :vlan_templates, :input_band_percent, :integer
+    add_column :vlans, :input_band_percent, :integer
+    add_column :vap_templates, :input_band_percent, :integer
+    add_column :vaps, :input_band_percent, :integer
   end
 
   def self.down
-    remove_colum :ethernet_template, :input_band
-    remove_colum :ethernet, :input_band
-    remove_colum :radio_template, :input_band
-    remove_colum :radio, :input_band
-    remove_colum :tap_template, :input_band
-    remove_colum :tap, :input_band
+    remove_column :ethernet_templates, :input_band
+    remove_column :ethernets, :input_band
+    remove_column :radio_templates, :input_band
+    remove_column :radios, :input_band
+    remove_column :tap_templates, :input_band
+    remove_column :taps, :input_band
 
-    remove_colum :vlan_template, :input_band_percent
-    remove_colum :vlan, :input_band_percent
-    remove_colum :vap_template, :input_band_percent
-    remove_colum :vap, :input_band_percent
+    remove_column :vlan_templates, :input_band_percent
+    remove_column :vlans, :input_band_percent
+    remove_column :vap_templates, :input_band_percent
+    remove_column :vaps, :input_band_percent
   end
 end
