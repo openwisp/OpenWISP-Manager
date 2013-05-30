@@ -40,12 +40,12 @@ class L2tc < ActiveRecord::Base
       return false
     end
 
-    if input_sum > 0 and (self.shapeable_template.input_band.blank? or self.shapeable_template.input_band.nil?)
+    if input_sum > 0 and self.shapeable.input_band.blank?
       errors.add_to_base(:Input_interface_must_be_specified)
       return false
     end
 
-    if output_sum > 0 and (self.shapeable_template.output_band.blank? or self.shapeable_template.output_band.nil?)
+    if output_sum > 0 and self.shapeable.output_band.blank?
       errors.add_to_base(:Output_interface_must_be_specified)
       return false
     end
