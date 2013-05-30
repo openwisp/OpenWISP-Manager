@@ -18,7 +18,7 @@
 #%>
 
 <fieldset>
-  <legend><%=t :Subinterface_template %></legend>
+  <legend><%=t :Subinterface_template %> <%= subinterface_template.friendly_name %></legend>
   <p>
     <%= subinterface_template_form.label t(:Bandwidth_for_interface, :interface => subinterface_template.friendly_name) %><br />
     <%= select_tag("subinterfaces[#{iteration}][#{item_band_percent}]", 

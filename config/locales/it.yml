@@ -58,7 +58,7 @@ it:
   Are_you_sure_vlan_template_destroy: "Sei sicuro di voler eliminare il template di vlan?"
   Are_you_sure_wisp_destroy: "Sei sicuro di voler eliminare il WISP? (ATTENZIONE: saranno cancellate definitivamente tutte le informazioni del WISP compresi gli access point definiti!!)"
   Back: "Indietro"
-  Bandwidth_for_interface: "Banda per l'interfaccia"
+  Bandwidth_for_interface: "Banda per l'interfaccia {{interface}} (Kbps)"
   Bridgeables: "Interfacce collegabili ad un bridge"
   Bridged_interfaces: "Interfacce in bridging"
   Bridges: "Bridge"
