@@ -58,6 +58,7 @@ en:
   Are_you_sure_vlan_template_destroy: "Are you sure you want to delete this vlan template?"
   Are_you_sure_wisp_destroy: "Are you sure you want to delete this WISP? (WARNING: every info and every access point defined for the WISP will be definitively deleted!!)"
   Back: "Back"
+  Bandwidth_for_interface: "Bandwidth for interface"
   Bridgeables: "Bridgeable interfaces"
   Bridged_interfaces: "Bridged interfaces"
   Bridges: "Bridges"

@@ -83,7 +83,7 @@ class L2tcTemplatesController < ApplicationController
         i = 0
         @l2tc_template.shapeable_template.subinterfaces.each do |s|
           s.output_band_percent = params[:subinterfaces]["#{i}"][:output_band_percent]
-          s.output_band_percent = params[:subinterfaces]["#{i}"][:input_band_percent]
+          s.input_band_percent = params[:subinterfaces]["#{i}"][:input_band_percent]
           unless s.save
             result = false
             raise ActiveRecord::Rollback
