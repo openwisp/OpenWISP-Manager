@@ -18,6 +18,9 @@
 class VapTemplate < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  validates_numericality_of :output_band_percent, :greater_than => 0, :less_than_or_equal_to => 100, :allow_blank => true
+  validates_numericality_of :input_band_percent, :greater_than => 0, :less_than_or_equal_to => 100, :allow_blank => true
+
   NAME_PREFIX = "vap"
 
   ENC_TYPES = %w(none wep psk psk2 wpa wpa2 pskmixed wpamixed)
@@ -161,7 +164,7 @@ class VapTemplate < ActiveRecord::Base
 
   OUTDATING_ATTRIBUTES = [
       :essid, :visibility, :encryption, :key, :radius_auth_server, :radius_acct_server,
-      :output_band_percent, :bridge_template_id, :id
+      :output_band_percent, :input_band_percent, :bridge_template_id, :id
   ]
 
   def outdate_configuration_if_required

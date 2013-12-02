@@ -24,6 +24,8 @@ class EthernetTemplate < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :access_point_template_id
   validates_format_of :name, :with => /\A[a-z][\s\w\d_\.]*\Z/i
   validates_length_of :name, :maximum => 8
+  validates_numericality_of :output_band, :greater_than => 0, :allow_blank => true
+  validates_numericality_of :input_band, :greater_than => 0, :allow_blank => true
 
   belongs_to :bridge_template
 
@@ -95,7 +97,7 @@ class EthernetTemplate < ActiveRecord::Base
 
   private
 
-  OUTDATING_ATTRIBUTES = [:name, :bridge_template_id, :output_band, :id]
+  OUTDATING_ATTRIBUTES = [:name, :bridge_template_id, :output_band, :input_band, :id]
 
   def outdate_configuration_if_required
     if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }

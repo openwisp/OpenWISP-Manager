@@ -59,11 +59,13 @@ class L2tcTemplatesController < ApplicationController
 
     params[:shapeables] = {}
     params[:shapeables][:output_band] = @l2tc_template.shapeable_template.output_band
+    params[:shapeables][:input_band] = @l2tc_template.shapeable_template.input_band
     params[:subinterfaces] = {}
     i = 0
     @l2tc_template.shapeable_template.subinterfaces.each do |s|
       params[:subinterfaces]["#{i}"] = {}
       params[:subinterfaces]["#{i}"][:output_band_percent] = s.output_band_percent
+      params[:subinterfaces]["#{i}"][:input_band_percent] = s.input_band_percent
       i += 1
     end
 
@@ -76,10 +78,12 @@ class L2tcTemplatesController < ApplicationController
 
     L2tcTemplate.transaction do
       @l2tc_template.shapeable_template.output_band = params[:shapeables][:output_band]
+      @l2tc_template.shapeable_template.input_band = params[:shapeables][:input_band]
       if @l2tc_template.shapeable_template.save
         i = 0
         @l2tc_template.shapeable_template.subinterfaces.each do |s|
           s.output_band_percent = params[:subinterfaces]["#{i}"][:output_band_percent]
+          s.input_band_percent = params[:subinterfaces]["#{i}"][:input_band_percent]
           unless s.save
             result = false
             raise ActiveRecord::Rollback
@@ -110,8 +114,10 @@ class L2tcTemplatesController < ApplicationController
   def destroy
     @l2tc_template = @access_point_template.l2tc_templates.find(params[:id])
     @l2tc_template.shapeable_template.output_band = nil
+    @l2tc_template.shapeable_template.input_band = nil
     @l2tc_template.shapeable_template.subinterfaces.each do |s|
       s.output_band_percent = nil
+      s.input_band_percent = nil
       s.save!
     end
     @l2tc_template.shapeable_template.save!

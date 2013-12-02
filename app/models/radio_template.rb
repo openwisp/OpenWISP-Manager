@@ -45,6 +45,8 @@ class RadioTemplate < ActiveRecord::Base
   validates_inclusion_of :mode, :in => MAC80211_MODES, :if => Proc.new { |rt| rt.driver == "mac80211" },
                          :message => :invalid_mode_for_selected_driver
   validates_numericality_of :channel
+  validates_numericality_of :output_band, :greater_than => 0, :allow_blank => true
+  validates_numericality_of :input_band, :greater_than => 0, :allow_blank => true
 
   has_many :vap_templates, :dependent => :destroy
   has_many :subinterfaces, :class_name => 'VapTemplate', :foreign_key => :radio_template_id
@@ -133,7 +135,7 @@ class RadioTemplate < ActiveRecord::Base
 
   private
 
-  OUTDATING_ATTRIBUTES = [:driver, :driver_slot, :mode, :channel, :output_band, :id]
+  OUTDATING_ATTRIBUTES = [:driver, :driver_slot, :mode, :channel, :output_band, :input_band, :id]
 
   def outdate_configuration_if_required
     if destroyed? or OUTDATING_ATTRIBUTES.any? { |attribute| send "#{attribute}_changed?" }

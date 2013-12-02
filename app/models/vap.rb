@@ -18,6 +18,9 @@
 class Vap < ActiveRecord::Base
   acts_as_authorization_object :subject_class_name => 'Operator'
 
+  validates_numericality_of :output_band_percent, :greater_than => 0, :less_than_or_equal_to => 100, :allow_blank => true
+  validates_numericality_of :input_band_percent, :greater_than => 0, :less_than_or_equal_to => 100, :allow_blank => true
+
   NAME_PREFIX = "vap"
 
   ENC_TYPES = %w(none wep psk psk2 wpa wpa2 pskmixed wpamixed)
@@ -165,6 +168,22 @@ class Vap < ActiveRecord::Base
     read_attribute(:radius_acct_server_port)
   end
 
+  def input_band_percent
+    if read_attribute(:input_band_percent).blank? and !template.nil?
+      return template.input_band_percent
+    end
+
+    read_attribute(:input_band_percent)
+  end
+
+  def input_band
+    if self.radio.input_band.blank? or self.input_band_percent.blank?
+      nil
+    else
+      self.radio.input_band * self.input_band_percent / 100
+    end
+  end
+
   def output_band_percent
     if read_attribute(:output_band_percent).blank? and !template.nil?
       return template.output_band_percent
@@ -181,15 +200,11 @@ class Vap < ActiveRecord::Base
     end
   end
 
-  def tc_protocol
-    'ip'
-  end
-
   private
 
   OUTDATING_ATTRIBUTES = [
       :essid, :visibility, :encryption, :key, :radius_auth_server, :radius_acct_server,
-      :output_band_percent, :bridge_id
+      :output_band_percent, :input_band_percent, :bridge_id
   ]
 
   def outdate_configuration_if_required
