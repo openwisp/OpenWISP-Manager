@@ -16,6 +16,7 @@ en:
   Access_point_groups: "Access point groups"
   Access_point_groups_list: "Access point groups list"
   Access_point_position: "Access point position"
+  Access_point_position_error: "the same GPS coordinates are already used by another access point"
   Access_point_statistics: "Access point stats"
   Access_point_uptime_statistics: "Access point uptime"
   Access_point_template: "Access point template"

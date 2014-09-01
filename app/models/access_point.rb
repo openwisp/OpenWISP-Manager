@@ -44,6 +44,7 @@ class AccessPoint < ActiveRecord::Base
   validates_format_of :zip, :with => /\A[\s\w\d]+\Z/
   validates_length_of :zip, :maximum => 32
 
+  validates_uniqueness_of :lat, :scope => :lon, :message => I18n.t(:Access_point_position_error)
 
   belongs_to :wisp
   belongs_to :access_point_group

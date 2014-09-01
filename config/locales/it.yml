@@ -16,6 +16,7 @@ it:
   Access_point_groups: "Gruppi di access point"
   Access_point_groups_list: "Lista dei gruppi di access point"
   Access_point_position: "Posizione access point"
+  Access_point_position_error: "le stesse coordinate GPS inserite sono già utilizzate da un altro access point"
   Access_point_statistics: "Statistiche access point"
   Access_point_uptime_statistics: "Uptime access point"
   Access_point_template: "Template di access point"
@@ -303,7 +304,7 @@ it:
   Update_access_point_warning:
     one: "Attenzione, sarà modificato il seguente access point"
     other: "Attenzione, saranno modificati i seguenti {{count}} access point"
-  Update_one_access_point_warning: "Attenzione, la configurazione del access point è stata modificata ma non è ancora stata applicata."
+  Update_one_access_point_warning: "Attenzione, la configurazione dell'access point è stata modificata ma non è ancora stata applicata."
   Username: "Nome Utente"
   Valid: "Valido"
   VapTemplates: "Template di VAP"
