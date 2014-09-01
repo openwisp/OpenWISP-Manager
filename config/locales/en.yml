@@ -70,6 +70,7 @@ en:
   Clear: "Clear"
   Clear_l2tc_template: "Clear shaping rules"
   Cn: "Common name"
+  Config: "Config"
   Configure: "Configure"
   Country: "Country"
   Create: "Create"
@@ -112,6 +113,7 @@ en:
   Dn_prefix: "Distinguish name prefix"
   Dns: "DNS"
   Download: "Download"
+  Download_Config: "Download Configuration"
   Driver: "Driver"
   Driver_slot: "Driver slot"
   Edit: "Edit"
@@ -188,7 +190,7 @@ en:
   Listing_access_point_groups: "Access point groups defined"
   Listing_access_point_templates: "Access point templates defined"
   Listing_access_points: "Access point defined"
-  Listing_access_points_for_template: "Access points linked to template {{template}}"
+  Listing_access_points_for_template: "Access points linked to template %{template}"
   Listing_bridge_templates: "Bridge templates defined"
   Listing_bridges: "Bridges available"
   Listing_custom_script_templates: "Script Templates defined"
@@ -335,6 +337,16 @@ en:
   unspecified: "unspecified"
   OWISPManager_servers: "Wireless ISP servers"
   vWisps_manager: "OWM"
+  Do_search: "Search"
+  Search: "Search"
+  Search_in: "Search in"
+  Reset: "Reset"
+  Scope: "Scope"
+  Wisp_only: "{{wisp}} only"
+  All_wisps: "All WISPs"
+  Remove: "Remove"
+  MaximumVapError: "Maximum vap interfaces for this type of driver reached"
+
 
   activerecord:
     # Translate model names. Used in Model.human_name().

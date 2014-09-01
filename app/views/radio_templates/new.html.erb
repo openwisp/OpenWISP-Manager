@@ -72,12 +72,24 @@
           <%= f.text_area :notes, :rows => 3 %>
         </p>
 
+        <div id="vap_templates">
         <% f.fields_for :vap_templates do |vf| %>
             <%= render :partial => 'vap', :locals => {:vap_template_form => vf} %>
         <% end %>
+        </div>
+
         <p>
           <%= f.submit t(:Create) %>
         </p>
     <% end %>
   </fieldset>
+
+  <script type="text/javascript">
+    window.i18n = {
+      maximumVapError: '<%= t(:MaximumVapError)  %>',
+      add: '<%= t(:Add) %>',
+      remove: '<%= t(:Remove) %>'
+    };
+  </script>
+  <script type="text/javascript" src="<%= URI.parse(root_url).merge(javascript_path('owm.vap')) %>"></script>
 </div>

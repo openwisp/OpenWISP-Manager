@@ -69,4 +69,7 @@
       </p>
     <% end %>
   </fieldset>
+  <div class="box center button-wrapper">
+    <h5><a href="<%= url_for get_server_config_path(:id => @l2vpn_server.id) %>" class="contrast"><%= t(:Download_Config) %></a></h5>
+  </div>
 </div>

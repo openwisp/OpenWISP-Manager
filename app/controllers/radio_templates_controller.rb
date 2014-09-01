@@ -74,7 +74,8 @@ class RadioTemplatesController < ApplicationController
         :mode => selected_mode,
         :channel => selected_channel
     )
-    RadioTemplate::MAX_VAPS.times { @radio_template.vap_templates.build() }
+    #RadioTemplate::MAX_VAPS.times { @radio_template.vap_templates.build() }
+    @radio_template.vap_templates.build()
 
     respond_to do |format|
       format.html # new.html.erb
@@ -84,7 +85,9 @@ class RadioTemplatesController < ApplicationController
   # GET /wisps/:wisp_id/access_points/:access_point_template_id/radios/1/edit
   def edit
     @radio_template = @access_point_template.radio_templates.find(params[:id])
-    (RadioTemplate::MAX_VAPS - @radio_template.vap_templates.length).times { @radio_template.vap_templates.build }
+    #(RadioTemplate::MAX_VAPS - @radio_template.vap_templates.length).times { @radio_template.vap_templates.build }
+    @radio_template.vap_templates.build
+
   end
 
   # POST /wisps/:wisp_id/access_points/:access_point_template_id/radios

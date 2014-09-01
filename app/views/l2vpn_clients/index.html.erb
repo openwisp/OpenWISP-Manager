@@ -20,7 +20,6 @@
 <div id="list_l2vpn_clients_div">
   <a><%=t :Listing_l2vpn_clients %></a>
 
-
   <table id="l2vpn_clients-table">
     <thead>
       <tr>
@@ -51,4 +50,9 @@
     <% end %>
     </tbody>
   </table>
+  
+  <div class="box center button-wrapper">
+    <h5><a href="<%= url_for get_config_path(:mac_address => @access_point.mac_address) %>" class="contrast"><%= t(:Download_Config) %></a></h5>
+  </div>
+  
 </div>

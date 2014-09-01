@@ -20,7 +20,8 @@ class AccessPointsController < ApplicationController
 
   before_filter :load_wisp, :except => [:get_configuration, :get_configuration_md5]
   skip_before_filter :require_operator, :only => [:get_configuration, :get_configuration_md5]
-  before_filter :require_no_operator, :only => [:get_configuration, :get_configuration_md5]
+  # verify if removing this line is not an issue
+  #before_filter :require_no_operator, :only => [:get_configuration, :get_configuration_md5]
 
   access_control do
     default :deny
@@ -96,12 +97,59 @@ class AccessPointsController < ApplicationController
 
   # GET /wisps/:wisp_id/access_points
   def index
-    @access_points = @wisp.access_points
+    # search parameters
+    # these are used also in the view to determine the values of input elements
+    @q = params[:q]
+    @scope = params[:scope]
+    @mac = params[:mac]
+    @name = params[:name]
+    @address = params[:address]
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json
-      format.xml { render :xml => @access_points }
+    # look in all the wisps
+    if @scope.present? and @scope == "global"
+      query = AccessPoint
+    # look in current wisp only
+    else
+      query = @wisp.access_points
+    end
+
+    # if no search query has been passed
+    if not @q.present? and @q != ''
+      # just retrieve all the access points
+      @access_points = query
+    # else search according to the passed parameters
+    else
+      condition = ['']
+      value = "%#{@q}%"
+      # if mac address checkbox is checked
+      if @mac == 'on'
+        condition[0] += 'mac_address LIKE ?'
+        condition.push(value)
+      end
+      # if name checkbox is checked
+      if @name == 'on'
+        condition[0] += 'OR ' if condition.count > 1
+        condition[0] += 'name LIKE ?'
+        condition.push(value)
+      end
+      # if address checkbox is checked
+      if @address == 'on'
+        condition[0] += 'OR ' if condition.count > 1
+        condition[0] += 'address LIKE ?'
+        condition.push(value)
+      end
+      # filter access points accordingly
+      @access_points = query.all(:conditions => condition)
+    end
+
+    if params[:ajax].present?
+      render :action => "_index_partial", :layout => false
+    else
+      respond_to do |format|
+        format.html # index.html.erb
+        format.json
+        format.xml { render :xml => @access_points }
+      end
     end
   end
 

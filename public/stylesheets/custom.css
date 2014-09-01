@@ -7,7 +7,7 @@
 
 .fieldWithErrors input {
     width:97%;
-    margin-left:2px;
+    margin-left:2px;    
 }
 
 .fieldWithErrors select {
@@ -131,3 +131,32 @@ h1#branding {
 .center {
     text-align:center;
 }
+
+#search{ margin-bottom: 7px }
+input[type=submit], input[type=button], input[type=reset], button{ cursor: pointer }
+
+.remove{
+    background-color: #d00000;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    float: right;
+}
+.remove:hover{ color: #fff }
+
+.add{
+    background-color: green;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    float: left;
+    margin-bottom: 20px;
+}
+.add:hover{ color:  #fff }
+
+.button-wrapper{ padding: 0 }
+.button-wrapper h5{ margin: 0 }
+.button-wrapper a{ display: block; padding: 7px 0px; margin: 0 auto }
+
+.contrast{ background-color: #333; color: #fff }
+.contrast:hover{ background-color: #000; color: #fff }
