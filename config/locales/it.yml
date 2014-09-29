@@ -490,6 +490,7 @@ it:
         needed_for_static_addressent: "necessario per indirizzamento statico"
         cannot_update_addressing_on_linked_template: "Non puo' essere aggiornato l'indirizzamento per un template in uso"
         invalid_mode_for_selected_driver: "non è valido per il driver selezionato"
+        record_invalid: "invalid record"
 
     # Translate model names. Used in Model.human_name().
     models:

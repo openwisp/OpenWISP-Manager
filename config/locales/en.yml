@@ -390,6 +390,7 @@ en:
         needed_for_static_addressent: "needed for static addressing"
         cannot_update_addressing_on_linked_template: "Cannot update addressing for a template in use"
         invalid_mode_for_selected_driver: "is invalid for the selected driver"
+        record_invalid: "invalid record"
 
     # Translate model attribute names. Used in Model.human_attribute_name(attribute).
     attributes:
