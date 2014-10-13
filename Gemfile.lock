@@ -1,6 +1,6 @@
 GIT
-  remote: git://github.com/dguerri/packet.git
-  revision: f4630410bfe4552607a5747bb11f6ee4740d9870
+  remote: git://github.com/gnufied/packet.git
+  revision: 64d67edaae1a39b7117e20d6735902e685464d97
   specs:
     packet (0.1.15)
 

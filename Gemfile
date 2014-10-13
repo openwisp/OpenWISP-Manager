@@ -16,7 +16,7 @@ gem 'exception_notification', '~> 2.3.3.0'
 gem 'somehow_has_relation', '>= 0.0.7'
 
 gem 'chronic', '>= 0.2.3'
-gem 'packet', '0.1.15', :git => 'git://github.com/dguerri/packet.git'
+gem 'packet', '0.1.15', :git => 'git://github.com/gnufied/packet.git'
 
 gem 'i18n', '~> 0.4.1'
 
