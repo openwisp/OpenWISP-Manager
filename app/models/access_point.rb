@@ -24,7 +24,7 @@ class AccessPoint < ActiveRecord::Base
                    :lat_column_name => :lat,
                    :lng_column_name => :lon
 
-  validates_presence_of :name, :mac_address, :address, :city, :zip
+  validates_presence_of :name, :mac_address, :address, :city, :zip, :vendor, :model
   validates_presence_of :lat, :lon, :message => :not_valid_f
 
   validates_uniqueness_of :name, :mac_address, :case_sensitive => false
