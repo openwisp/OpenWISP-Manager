@@ -74,6 +74,24 @@ class AccessPoint < ActiveRecord::Base
     L2vpnClient.find_by_identifier(cn).access_point rescue nil
   end
 
+  def self.VENDORS
+    [
+      ["Ubiquiti Networks", "ubiquiti"],
+      ["Abcom", "abcom"],
+      ["Pc Engines", "pc-engines"]
+    ]
+  end
+
+  def self.MODELS
+    [
+      ["Nanostation M2", "nanostation-m2"],
+      ["Nanostation Loco M2", "nanostation-loco-m2"],
+      ["Picostation 2", "picostation-2"],
+      ["Picostation M2 HP", "picostation-m2-hp"],
+      ["Abcom", "abcom"],
+      ["Alix", "alix"],
+    ]
+  end
 
   # Instance methods
 

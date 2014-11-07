@@ -54,12 +54,12 @@
             </p>
             <p>
               <%= f.label t(:Vendor)  %>
-              <%= f.text_field :vendor, :maxlength => 32 %>
+              <%= select(:access_point, :vendor, options_for_select(AccessPoint.VENDORS)) %>
               <br>
             </p>
             <p>
               <%= f.label t(:Model)  %>
-              <%= f.text_field :model, :maxlength => 32 %>
+              <%= select(:access_point, :model, options_for_select(AccessPoint.MODELS)) %>
               <br>
             </p>
             <p>
