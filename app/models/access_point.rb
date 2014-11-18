@@ -88,6 +88,7 @@ class AccessPoint < ActiveRecord::Base
       ["Nanostation Loco M2", "nanostation-loco-m2"],
       ["Picostation 2", "picostation-2"],
       ["Picostation M2 HP", "picostation-m2-hp"],
+      ["Unifi", "unifi"],
       ["AboCom", "abocom"],
       ["Alix", "alix"],
     ]
