@@ -77,8 +77,8 @@ class AccessPoint < ActiveRecord::Base
   def self.VENDORS
     [
       ["Ubiquiti Networks", "ubiquiti"],
-      ["Abcom", "abcom"],
-      ["Pc Engines", "pc-engines"]
+      ["AboCom", "abocom"],
+      ["PC Engines", "pc-engines"]
     ]
   end
 
@@ -88,7 +88,7 @@ class AccessPoint < ActiveRecord::Base
       ["Nanostation Loco M2", "nanostation-loco-m2"],
       ["Picostation 2", "picostation-2"],
       ["Picostation M2 HP", "picostation-m2-hp"],
-      ["Abcom", "abcom"],
+      ["AboCom", "abocom"],
       ["Alix", "alix"],
     ]
   end
