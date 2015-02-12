@@ -200,16 +200,28 @@ class AccessPoint < ActiveRecord::Base
           end
         end
 
-        @vpn_scripts["vpn_#{l2vpn_client.identifier}_script.sh"] = ActionView::Base.new(Rails::Configuration.new.view_path).render(:partial => "access_points/vpn_script", :locals => {:l2vpn_bridges => l2vpn_bridges, :l2vpn_vaps => l2vpn_vaps})
+        @vpn_scripts["vpn_#{l2vpn_client.identifier}_script_up.sh"] = ActionView::Base.new(Rails::Configuration.new.view_path).render(:partial => "access_points/vpn_script_up", :locals => {:l2vpn_bridges => l2vpn_bridges, :l2vpn_vaps => l2vpn_vaps})
 
         tar.new_entry do |entry|
-          entry.pathname = "openvpn/vpn_#{l2vpn_client.identifier}_script.sh"
+          entry.pathname = "openvpn/vpn_#{l2vpn_client.identifier}_script_up.sh"
           entry.mode = 33128
           entry.mtime = entry.ctime = entry.atime = entries_date
-          entry.size = @vpn_scripts["vpn_#{l2vpn_client.identifier}_script.sh"].length
+          entry.size = @vpn_scripts["vpn_#{l2vpn_client.identifier}_script_up.sh"].length
           tar.write_header(entry)
-          tar.write_data(@vpn_scripts["vpn_#{l2vpn_client.identifier}_script.sh"])
+          tar.write_data(@vpn_scripts["vpn_#{l2vpn_client.identifier}_script_up.sh"])
         end
+
+        @vpn_scripts["vpn_#{l2vpn_client.identifier}_script_down.sh"] = ActionView::Base.new(Rails::Configuration.new.view_path).render(:partial => "access_points/vpn_script_down", :locals => {:l2vpn_bridges => l2vpn_bridges, :l2vpn_vaps => l2vpn_vaps})
+
+        tar.new_entry do |entry|
+          entry.pathname = "openvpn/vpn_#{l2vpn_client.identifier}_script_down.sh"
+          entry.mode = 33128
+          entry.mtime = entry.ctime = entry.atime = entries_date
+          entry.size = @vpn_scripts["vpn_#{l2vpn_client.identifier}_script_down.sh"].length
+          tar.write_header(entry)
+          tar.write_data(@vpn_scripts["vpn_#{l2vpn_client.identifier}_script_down.sh"])
+        end
+
       end
 
       unless self.access_point_template.nil?

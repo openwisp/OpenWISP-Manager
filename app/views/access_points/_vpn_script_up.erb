@@ -19,37 +19,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #%>
 
-up() {
-  rm -f /tmp/will_reboot
-  return 0
-}
-
-
-down() {
-  # When openvpn lost connection restart AP, after config time
-  # This will place the AP in safemode
-  REBOOT_ENABLE=`uci -q get owispmanager.vpn_fail.reboot_enabled || echo 1`
-  REBOOT_DELAY=`uci -q get owispmanager.vpn_fail.reboot_delay || echo 180`
-  if [ "$REBOOT_ENABLE" -eq "1" ]; then
-    touch /tmp/will_reboot
-    sleep $REBOOT_DELAY
-    if [ -f /tmp/will_reboot ]; then
-      reboot
-    fi
-  fi
-  return 0
-}
-
-# Syntax:  <script> tap_dev tap_mtu link_mtu ifconfig_local_ip ifconfig_netmask [ init | restart | ??? ]
-eval "last=\${$#}"
-case "$last" in
-  init)
-    up
-    ;;
-  restart)
-    down ; up
-    ;;
-  *)
-    down
-    ;;
-esac
+rm -f /tmp/will_reboot
