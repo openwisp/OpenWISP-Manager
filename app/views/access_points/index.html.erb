@@ -110,7 +110,7 @@
 </div>
 <div class="clear">&nbsp;</div>
 
-<% if (auth?(:wisps_creator) || auth?(:access_points_creator, @wisp)) && @access_points.length > 15  %>
+<% if (auth?(:wisps_creator) || auth?(:access_points_creator, @wisp)) && @access_points.length > 5  %>
     <div class="grid_14 prefix_1 suffix_1">
       <div class="box center button-wrapper">
         <h5><%= link_to t(:Create_New), new_wisp_access_point_path(@wisp) %></h5>
