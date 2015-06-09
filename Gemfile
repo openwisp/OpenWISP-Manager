@@ -2,7 +2,7 @@ source :gemcutter
 
 gem 'rails', '2.3.11'
 gem 'mysql'
-
+gem 'redis', '~> 3.2.1'
 gem 'geokit', '>= 1.5.0'
 
 gem 'authlogic', '>= 2.1.3'
