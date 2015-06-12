@@ -93,6 +93,11 @@ class AccessPointGroupsController < ApplicationController
       if @access_point_group.save
         flash[:notice] = t(:AccessPointGroup_was_successfully_created)
         format.html { redirect_to(wisp_access_point_group_url(@wisp, @access_point_group)) }
+        # Starts an async job for ap configuration creation
+        worker = MiddleMan.worker(:configuration_worker)
+        worker.async_store_redis_ap_info(
+          :arg => { :access_point_group_id => [ @access_point_group.id ] }
+        )
       else
         format.html { render :action => "new" }
       end
@@ -114,6 +119,10 @@ class AccessPointGroupsController < ApplicationController
       if @access_point_group.update_attributes(params[:access_point_group])
         flash[:notice] = t(:AccessPointGroup_was_successfully_updated)
         format.html { redirect_to(wisp_access_point_group_url(@wisp, @access_point_group)) }
+        worker = MiddleMan.worker(:configuration_worker)
+        worker.async_store_redis_ap_info(
+          :arg => { :access_point_group_id => [ @access_point_group.id ] }
+        )
       else
         format.html { render :action => "edit" }
       end

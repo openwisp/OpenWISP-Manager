@@ -4,12 +4,12 @@ namespace :redis do
     redis_s=Redis.new(:host => "test4.inroma.roma.it", :port => 6379, :db => 0)
     wisp = Wisp.find_by_id(ENV['wisp'])
     wisp.access_points.each do |ap| 
-       MACADDRESS=ap.mac_address
-       NAME=ap.name
+       macaddress=ap.mac_address
+       name=ap.name
        group=ap.access_point_group_id
        gr=AccessPointGroup.find_by_id(group) 
        begin
-          URL=gr.site_url
+          url=gr.site_url
        rescue Exception => e
        end
        l2vpn_cert=ap.l2vpn_clients
@@ -23,14 +23,14 @@ namespace :redis do
           begin
           cert_id=infocert.id
           #puts infocert.id
-          distinguished_name=X509Certificate.find(cert_id).dn
-          COMMONNAME=distinguished_name.split("CN=")[1]	  
-          puts NAME+" "+MACADDRESS+" "+URL+" "+COMMONNAME
+	  distinguished_name=X509Certificate.find(:first,:conditions => [ "certifiable_id = ?", cert_id]).dn
+          commonname=distinguished_name.split("CN=")[1]	  
+          redis_s.mapped_hmset("access_points:"+commonname, {"NAME" => name, "MACADDRESS"=> macaddress, "URL" => url})
           rescue Exception => e
 		puts "Problem with Access Points "+ap.id.to_s
+                puts name+" "+macaddress+" "+url+" "+commonname
 	  end
        end
-       redis_s.mapped_hmset("access_points:l2vpn_client_2_1805_1797", {"NAME" => "unifi_test", "MACADDRESS"=> "dc:9f:db:26:7b:69"})
     end
   end
   task :help do
