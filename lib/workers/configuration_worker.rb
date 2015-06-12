@@ -114,7 +114,7 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
        url=group.site_url
        l2vpn_cert=ap.l2vpn_clients
        l2vpn_cert.each do |infocert|
-          begin
+              begin
               cert_id=infocert.id
               #puts infocert.id
               distinguished_name=X509Certificate.find(:first,:conditions => [ "certifiable_id = ?", cert_id]).dn
@@ -124,7 +124,61 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
               rescue Exception => e
                 puts "Problem with Access Points "+ap.id.to_s
               end
-          end
        end
     end
+  end
+  def remove_redis_url_info(options={})
+    # Update AP Keys without URL information
+    # When deleting a Group this is the only one operation needed
+    redis_s=Redis.new(:host => "test4.inroma.roma.it", :port => 6379, :db => 0)
+    options[:access_point_group_id] || raise("BUG: missing :access_group_id arg")
+    group=AccessPointGroup.find(options[:access_point_group_id][0])
+    allap=AccessPoint.all(:conditions => [ "access_point_group_id = ?", options[:access_point_group_id][0] ])
+    allap.each do | ap |
+       macaddress=ap.mac_address
+       name=ap.name
+       l2vpn_cert=ap.l2vpn_clients
+       l2vpn_cert.each do |infocert|
+             begin
+              cert_id=infocert.id
+              #puts infocert.id
+              distinguished_name=X509Certificate.find(:first,:conditions => [ "certifiable_id = ?", cert_id]).dn
+              commonname=distinguished_name.split("CN=")[1]
+              puts name+" "+macaddress+" "+url+" "+commonname
+	      redis_s.mapped_hmset("access_points:"+commonname, {"NAME" => name, "MACADDRESS"=> macaddress})
+              rescue Exception => e
+                puts "Problem with Access Points "+ap.id.to_s
+              end
+          end
+     end
+   end
+  def remove_update_redis_ap_info(options={})
+    # Remove AP from redis DB during the AP destroy
+    redis_s=Redis.new(:host => "test4.inroma.roma.it", :port => 6379, :db => 0)
+    options[:access_point_ids] || raise("BUG: missing :access_point_ids arg")
+    allap=AccessPoint.find(options[:access_point_ids][0])
+    method=options[:method]
+    allap.each do | ap |
+       macaddress=ap.mac_address
+       name=ap.name
+       l2vpn_cert=ap.l2vpn_clients
+       l2vpn_cert.each do |infocert|
+             begin
+              cert_id=infocert.id
+              #puts infocert.id
+              distinguished_name=X509Certificate.find(:first,:conditions => [ "certifiable_id = ?", cert_id]).dn
+              commonname=distinguished_name.split("CN=")[1]
+              puts name+" "+macaddress+" "+url+" "+commonname
+              if (method == "remove")  {
+	           redis_s.del("access_points:"+commonname)
+              }
+	      else if (method == "update" ){
+             	  redis_s.mapped_hmset("access_points:"+commonname, {"NAME" => name, "MACADDRESS"=> macaddress})
+	      }
+              rescue Exception => e
+                puts "Problem with Access Points "+ap.id.to_s
+              end
+          end
+     end
+   end
 end

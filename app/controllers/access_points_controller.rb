@@ -285,6 +285,9 @@ class AccessPointsController < ApplicationController
     worker.async_delete_access_points_configuration(
         :arg => { :access_point_ids => [ @access_point.id ] }
     )
+    worker.async_remove_redis_ap_info(
+        :arg => { :access_point_ids => [ @access_point.id ] }
+    )
 
     @access_point.destroy
 
