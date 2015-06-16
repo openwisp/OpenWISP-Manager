@@ -105,24 +105,35 @@
           <td><%=h (@access_point.last_configuration_retrieve_ip ? @access_point.last_configuration_retrieve_ip : '-') %></td>
         </tr>
         <% if @access_point.notes.length > 0 %>
-            <tr>
-              <td colspan="2">&nbsp;</td>
-            </tr>
-            <tr>
-              <td colspan="2"><strong><%=t :Notes %></strong></td>
-            </tr>
-            <tr>
-              <td colspan="2"><%= h(@access_point.notes).gsub(/\n/, "<br>") %></td>
-            </tr>
+          <tr>
+            <td colspan="2">&nbsp;</td>
+          </tr>
+          <tr>
+            <td colspan="2"><strong><%=t :Notes %></strong></td>
+          </tr>
+          <tr>
+            <td colspan="2"><%= h(@access_point.notes).gsub(/\n/, "<br>") %></td>
+          </tr>
         <% end %>
         <% if  @access_point.access_point_group.present? %>
+          <tr>
+            <td colspan="2">&nbsp;</td>
+          </tr>
+          <tr>
+            <td><strong><%=t :Access_point_group %></strong></td>
+            <td><%= link_to h(@access_point.access_point_group.name), wisp_access_point_group_path(@wisp, @access_point.access_point_group) %></td>
+          </tr>
+        <% end %>
+        <% (1..AccessPoint.attachments_limit).each do |n| %>
+          <% filename = @access_point.attributes["file#{n}"] %>
+          <% if filename %>
             <tr>
-              <td colspan="2">&nbsp;</td>
+              <td><strong><%=t :Attachment %> <%= n %></strong></td>
+              <td>
+                <%= link_to filename, access_point_attachment_path(@wisp, @access_point, n) %>
+              </td>
             </tr>
-            <tr>
-              <td><strong><%=t :Access_point_group %></strong></td>
-              <td><%= link_to h(@access_point.access_point_group.name), wisp_access_point_group_path(@wisp, @access_point.access_point_group) %></td>
-            </tr>
+          <% end %>
         <% end %>
       </table>
     </div>

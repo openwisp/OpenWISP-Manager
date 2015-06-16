@@ -349,7 +349,10 @@ en:
   All_wisps: "All WISPs"
   Remove: "Remove"
   MaximumVapError: "Maximum vap interfaces for this type of driver reached"
-
+  Attachments: "Attachments"
+  Attachment: "Attachment"
+  file: "file"
+  Save_access_point_before_attachments: "Please save the access point before adding attachments"
 
   activerecord:
     # Translate model names. Used in Model.human_name().

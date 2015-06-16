@@ -349,6 +349,10 @@ it:
   All_wisps: "Tutti i WISP"
   Remove: "Rimuovi"
   MaximumVapError: "È stato raggiunto il limite massimo di interfacce vap per questo tipo di driver"
+  Attachments: "Allegati"
+  Attachment: "Allegato"
+  file: "file"
+  Save_access_point_before_attachments: "E' necessario salvare l'access point prima di aggiungere allegati"
 
   number:
     format:

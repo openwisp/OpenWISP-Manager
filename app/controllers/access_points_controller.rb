@@ -46,6 +46,11 @@ class AccessPointsController < ApplicationController
       allow :access_points_destroyer, :of => :wisp
     end
 
+    actions :attachment do
+      allow :wisps_viewer
+      allow :access_points_viewer, :of => :wisp
+    end
+
     allow all, :to => [:get_configuration, :get_configuration_md5]
   end
 
@@ -257,6 +262,8 @@ class AccessPointsController < ApplicationController
     @access_point_templates = @wisp.access_point_templates
 
     if @access_point.update_attributes(params[:access_point])
+      @access_point.save_attachments(params[:access_point])
+
       respond_to do |format|
         flash[:notice] = t(:AccessPoint_was_successfully_updated)
         format.html { redirect_to(wisp_access_point_url(@wisp, @access_point)) }
@@ -298,5 +305,17 @@ class AccessPointsController < ApplicationController
     worker.async_create_access_points_configuration(:arg => { :access_point_ids => access_points.map{ |ap| ap.id } })
 
     redirect_to wisp_access_points_url(@wisp)
+  end
+
+  # /wisps/:wisp_id/access_points/attachments/<file>
+  def attachment
+    @access_point = @wisp.access_points.find(params[:id])
+    attachment_parts = @access_point.attachment_parts(params[:file_num])
+
+    if attachment_parts
+      send_file(attachment_parts[0], :filename => attachment_parts[1])
+    else
+      raise ActiveRecord::RecordNotFound
+    end
   end
 end

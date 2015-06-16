@@ -43,7 +43,7 @@
     </ul>
     <div class="clear">&nbsp;</div>
     <div class="block" id="access_point_block">
-      <% form_for([@wisp, @access_point]) do |f| %>
+      <% form_for([@wisp, @access_point], :html => {:multipart => true}) do |f| %>
           <p><%= f.error_messages %></p>
           <fieldset>
             <legend><%=t :General_infos %></legend>
@@ -95,6 +95,23 @@
               <%= f.text_area :notes, :rows => 3 %>
             </p>
 
+          </fieldset>
+
+          <fieldset>
+            <legend>
+              <%=t :Attachments %>
+            </legend>
+            <% (1..AccessPoint.attachments_limit).each do |n| %>
+              <% filename = @access_point.attributes["file#{n}"] %>
+              <p>
+                <%= f.label t(:file) %> <%= n %>:
+                  <% if filename %>
+                    <%= link_to filename, access_point_attachment_path(@wisp, @access_point, n) %>
+                  <% end %>
+                <br>
+                <%= f.file_field "file#{n}".to_sym %>
+              </p>
+            <% end %>
           </fieldset>
 
           <fieldset>

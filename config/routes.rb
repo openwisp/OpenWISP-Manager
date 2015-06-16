@@ -7,6 +7,8 @@ ActionController::Routing::Routes.draw do |map|
   # Outdated access point update (either single or all)
   map.outdated_access_points_update 'wisps/:wisp_id/access_points/update_outdated/:id', :controller => 'access_points', :action => 'update_outdated'
   map.welcome_operator 'operators/:id', :controller => 'operators', :action => 'show'
+  # access point attachments
+  map.access_point_attachment 'wisps/:wisp_id/access_points/:id/attachments/:file_num', :controller => 'access_points', :action => 'attachment', :conditions => { :method => :get }, :requirements => { :file_num => /\d/ }
 
   #Ajax Routes
   map.connect 'wisps/:wisp_id/access_points_ajax', :controller => 'access_points', :action => 'index', :ajax => 'true'

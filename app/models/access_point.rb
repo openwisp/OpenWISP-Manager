@@ -376,6 +376,57 @@ class AccessPoint < ActiveRecord::Base
     end
   end
 
+  def self.attachments_limit
+    6
+  end
+
+  def attachments_directory
+    "#{Rails.root}/private/access_points_attachments/#{self.id}"
+  end
+
+  def save_attachments(params)
+    changed = false
+
+    (0..AccessPoint.attachments_limit).each do |n|
+      file = params["file#{n}"]
+      unless file.nil?
+        self.save_file(file)
+        self.send("file#{n}=", file.original_filename)
+        changed = true
+      end
+    end
+
+    if changed
+      self.save
+    end
+  end
+
+  def attachment_parts(file_num)
+    unless (1..AccessPoint.attachments_limit).to_a.include?(file_num.to_i)
+      return false
+    end
+
+    name = self.attributes["file#{file_num}"]
+    path = File.join(attachments_directory, name)
+
+    if File.exists?(path)
+      [path, name]
+    else
+      false
+    end
+  end
+
+  protected
+
+  def save_file(file)
+    name =  file.original_filename
+    # create dir if it does not exist
+    FileUtils::mkdir_p(attachments_directory)
+    # write file
+    path = File.join(attachments_directory, name)
+    File.open(path, "wb") { |f| f.write(file.read) }
+  end
+
   private
 
   def self.reset_last_configuration_retrieve_ip_for(ip_addr)
