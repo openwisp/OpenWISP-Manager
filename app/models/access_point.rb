@@ -23,6 +23,7 @@ class AccessPoint < ActiveRecord::Base
                    :distance_field_name => :distance,
                    :lat_column_name => :lat,
                    :lng_column_name => :lon
+  
 
   validates_presence_of :name, :mac_address, :address, :city, :zip, :vendor, :model
   validates_presence_of :lat, :lon, :message => :not_valid_f
@@ -68,6 +69,21 @@ class AccessPoint < ActiveRecord::Base
     self.mac_address.downcase!
   end
 
+  def remove_from_redis_info
+    redis_s=Redis.new(:host => "test4.inroma.roma.it", :port => 6379, :db => 0)
+    l2vpn_cert=self.l2vpn_clients
+    l2vpn_cert.each do |infocert|
+       begin
+         cert_id=infocert.id
+         #puts infocert.id
+         distinguished_name=X509Certificate.find(:first,:conditions => [ "certifiable_id = ?", cert_id]).dn
+         commonname=distinguished_name.split("CN=")[1]
+         redis_s.del("access_points:"+commonname)
+       rescue Exception => e
+          puts e.to_s
+       end
+    end
+  end
   # Class methods
 
   def self.find_by_common_name(cn)

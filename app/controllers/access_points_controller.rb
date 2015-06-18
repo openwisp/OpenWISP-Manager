@@ -236,7 +236,6 @@ class AccessPointsController < ApplicationController
       worker.async_create_access_points_configuration(
           :arg => { :access_point_ids => [ @access_point.id ] }
       )
-
       respond_to do |format|
         flash[:notice] = t(:AccessPoint_was_successfully_created)
         format.html { redirect_to(wisp_access_point_url(@wisp, @access_point)) }
@@ -285,10 +284,8 @@ class AccessPointsController < ApplicationController
     worker.async_delete_access_points_configuration(
         :arg => { :access_point_ids => [ @access_point.id ] }
     )
-    worker.async_remove_redis_ap_info(
-        :arg => { :access_point_ids => [ @access_point.id ] }
-    )
-
+    
+    @access_point.remove_from_redis_info
     @access_point.destroy
 
     respond_to do |format|
@@ -306,6 +303,7 @@ class AccessPointsController < ApplicationController
 
     worker = MiddleMan.worker(:configuration_worker)
     worker.async_create_access_points_configuration(:arg => { :access_point_ids => access_points.map{ |ap| ap.id } })
+    worker.async_update_redis_ap_info(:arg => { :access_point_ids => access_points.map{ |ap| ap.id }, :method =>"insert" })
 
     redirect_to wisp_access_points_url(@wisp)
   end

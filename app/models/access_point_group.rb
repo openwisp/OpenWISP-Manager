@@ -29,6 +29,27 @@ class AccessPointGroup < ActiveRecord::Base
   has_many :access_points
 
   belongs_to :wisp
+  
+  def remove_from_redis_info
+    redis_s=Redis.new(:host => "test4.inroma.roma.it", :port => 6379, :db => 0)
+    allap=AccessPoint.all(:conditions => [ "access_point_group_id = ?", self.id ])
+    allap.each do | ap |
+       macaddress=ap.mac_address
+       name=ap.name
+       l2vpn_cert=ap.l2vpn_clients
+       l2vpn_cert.each do |infocert|
+          begin
+            cert_id=infocert.id
+            #puts infocert.id
+            distinguished_name=X509Certificate.find(:first,:conditions => [ "certifiable_id = ?", cert_id]).dn
+            commonname=distinguished_name.split("CN=")[1]
+            redis_s.hdel("access_points:"+commonname, "URL")
+         rescue Exception => e
+            puts e.to_s 
+	 end
+       end
+     end
+  end
 
   def to_xml(options = {}, &block)
     options.merge!(:only => [:id, :name, :site_url])

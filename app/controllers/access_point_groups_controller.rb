@@ -95,8 +95,8 @@ class AccessPointGroupsController < ApplicationController
         format.html { redirect_to(wisp_access_point_group_url(@wisp, @access_point_group)) }
         # Starts an async job for ap configuration creation
         worker = MiddleMan.worker(:configuration_worker)
-        worker.async_store_redis_ap_info(
-          :arg => { :access_point_group_id => [ @access_point_group.id ] }
+        worker.async_update_redis_ap_info_by_group(
+          :arg => { :access_point_group_id => [ @access_point_group.id ], :method => "insert" }
         )
       else
         format.html { render :action => "new" }
@@ -120,8 +120,8 @@ class AccessPointGroupsController < ApplicationController
         flash[:notice] = t(:AccessPointGroup_was_successfully_updated)
         format.html { redirect_to(wisp_access_point_group_url(@wisp, @access_point_group)) }
         worker = MiddleMan.worker(:configuration_worker)
-        worker.async_store_redis_ap_info(
-          :arg => { :access_point_group_id => [ @access_point_group.id ] }
+        worker.async_update_redis_ap_info_by_group(
+          :arg => { :access_point_group_id => [ @access_point_group.id ] , :method => "insert"}
         )
       else
         format.html { render :action => "edit" }
@@ -131,8 +131,8 @@ class AccessPointGroupsController < ApplicationController
 
   # DELETE /wisps/:wisp_id/access_point_groups/1
   def destroy
+    @access_point_group.remove_from_redis_info
     @access_point_group.destroy
-
     respond_to do |format|
       format.html { redirect_to(wisp_access_point_groups_url) }
     end
