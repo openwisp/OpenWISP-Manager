@@ -105,12 +105,15 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
   def update_redis_ap_info_by_group(options={})
      # Update AP Keys when updatinf a Group
 
-    redis_s=Redis.new(:host => "test4.inroma.roma.it", :port => 6379, :db => 0)
     options[:access_point_group_id] || raise("BUG: missing :access_group_id arg")
     options[:method] || raise("BUG: missing :method")
+
     group=AccessPointGroup.find(options[:access_point_group_id][0])
     allap=AccessPoint.all(:conditions => [ "access_point_group_id = ?", options[:access_point_group_id][0] ])
     puts options[:access_point_group_id][0]
+    wisp=Wisp.find(allap[0].wisp_id)
+    redis_s=Redis.new(:host => wisp.redis_server, :port => wisp.redis_port, :db => wisp.redis_db)
+
     allap.each do | ap |
        macaddress=ap.mac_address
        name=ap.name
@@ -123,7 +126,7 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
             commonname=distinguished_name.split("CN=")[1]
 	    if options[:method] == "insert"
                 url=group.site_url
-	        redis_s.mapped_hmset("access_points:"+commonname, {"NAME" => name, "MACADDRESS"=> macaddress, "URL" => url})
+	        redis_s.mapped_hmset("access_points:"+commonname, {"NAME" => name, "MACADDRESS"=> macaddress, "URL" => url, "WISP" => wisp.name})
 	    elsif options[:method] == "delete"
 	        redis_s.mapped_hmset("access_points:"+commonname, {"NAME" => name, "MACADDRESS"=> macaddress})
  	    end
@@ -135,12 +138,15 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
   end
 
   def update_redis_ap_info(options={})
-     # Update AP Keys when updating a Group
-
-    redis_s=Redis.new(:host => "test4.inroma.roma.it", :port => 6379, :db => 0)
-    options[:access_point_id] || raise("BUG: missing :access_point_id arg")
+    # Update AP Keys when updating a Group
+    
+    options[:access_point_ids] || raise("BUG: missing :access_point_ids arg")
     options[:method] || raise("BUG: missing :method")
-    options[:access_point_id].each do |ap_x| 
+
+    wisp=Wisp.find(:access_point_ids[0].wisp_id)
+    redis_s=Redis.new(:host => wisp.redis_server, :port => wisp.redis_port, :db => wisp.redis_db)
+
+    options[:access_point_ids].each do |ap_x| 
        ap=AccessPoint.find(ap_x)
        macaddress=ap.mac_address
        name=ap.name
@@ -152,7 +158,7 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
            distinguished_name=X509Certificate.find(:first,:conditions => [ "certifiable_id = ?", cert_id]).dn
            commonname=distinguished_name.split("CN=")[1]
            if options[:method]=="insert"
-             redis_s.mapped_hmset("access_points:"+commonname, {"NAME" => name, "MACADDRESS"=> macaddress})
+             redis_s.mapped_hmset("access_points:"+commonname, {"NAME" => name, "MACADDRESS"=> macaddress, "WISP" => wisp.name})
            elsif options[:method]=="delete"
              redis_s.del("access_points:"+commonname)
            end
