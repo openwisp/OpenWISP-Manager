@@ -180,9 +180,9 @@ Access Points information are stored in hashes with keys *access_points:common_n
 
 To setup redis server connectivity settings, please fill in the requested form on the WISP web page
 
-* *redis server*: IP address of the server
-* *redis port*: IP port of the server (usually is 6379)
-* *redis db*: db of the redis server (usually is '0')
+* *redis server* : IP address of the server
+* *redis port* : IP port of the server (usually is 6379)
+* *redis db* : db of the redis server (usually is '0')
 
 == Copyright
 
