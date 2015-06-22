@@ -70,7 +70,8 @@ class AccessPoint < ActiveRecord::Base
   end
 
   def remove_from_redis_info
-    redis_s=Redis.new(:host => "test4.inroma.roma.it", :port => 6379, :db => 0)
+    wisp=Wisp.find(self.wisp_id)
+    redis_s=Redis.new(:host => wisp.redis_server, :port => wisp.redis_port, :db => wisp.redis_db)
     l2vpn_cert=self.l2vpn_clients
     l2vpn_cert.each do |infocert|
        begin

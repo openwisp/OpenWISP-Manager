@@ -110,6 +110,7 @@ class AccessPointTemplatesController < ApplicationController
   # DELETE /wisps/:wisp_id/access_point_templates/1
   def destroy
     @access_point_template.destroy
+    @access_point_template.remove_redis_info
 
     respond_to do |format|
       format.html { redirect_to(wisp_access_point_templates_url(@wisp)) }

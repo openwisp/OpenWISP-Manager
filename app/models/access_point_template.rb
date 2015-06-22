@@ -55,5 +55,26 @@ class AccessPointTemplate < ActiveRecord::Base
     (self.ethernet_templates.map { |e| e.vlan_templates } +
         self.tap_templates.map { |t| t.vlan_templates }).flatten
   end
+  
+  def remove_from_redis_info
+    allap=AccessPoint.all(:conditions => [ "access_point_template_id ?", self.id])
+    wisp=Wisp.find(allap[0].wisp_id)
+    redis_s=Redis.new(:host => wisp.redis_server, :port => wisp.redis_port, :db => wisp.redis_db)
+    allap.each do |ap|
+      l2vpn_cert=self.l2vpn_clients
+      l2vpn_cert.each do |infocert|
+         begin
+           cert_id=infocert.id
+           #puts infocert.id
+           distinguished_name=X509Certificate.find(:first,:conditions => [ "certifiable_id = ?", cert_id]).dn
+           commonname=distinguished_name.split("CN=")[1]
+           redis_s.del("access_points:"+commonname)
+         rescue Exception => e
+           puts e.to_s
+         end
+      end
+    end
+  end
+  # Class methods
 
 end

@@ -31,8 +31,9 @@ class AccessPointGroup < ActiveRecord::Base
   belongs_to :wisp
   
   def remove_from_redis_info
-    redis_s=Redis.new(:host => "test4.inroma.roma.it", :port => 6379, :db => 0)
     allap=AccessPoint.all(:conditions => [ "access_point_group_id = ?", self.id ])
+    wisp=Wisp.find(allap[0].wisp_id)
+    redis_s=Redis.new(:host => wisp.redis_server, :port => wisp.redis_port, :db => wisp.redis_db)
     allap.each do | ap |
        macaddress=ap.mac_address
        name=ap.name
