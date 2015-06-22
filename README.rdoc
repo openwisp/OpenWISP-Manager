@@ -167,6 +167,23 @@ As usual, you need to
 
 and enable the script to be run at boot (e.g., with the update-rc.d command).
 
+
+==== Redis Configuration
+
+Redis database is used in order to provide customed captive page and access points stats.
+Access Points information are stored in hashes with keys *access_points:common_name* and the following fields:
+
+* *NAME*
+* *MACADDRESS*
+* *URL*
+* *WISP*
+
+To setup redis server connectivity settings, please fill in the requested form on the WISP web page
+
+* *redis server*: IP address of the server
+* *redis port*: IP port of the server (usually is 6379)
+* *redis db*: db of the redis server (usually is '0')
+
 == Copyright
 
 Copyright (C) 2012 OpenWISP.org
