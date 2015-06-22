@@ -56,6 +56,23 @@
           <%= f.password_field :owmw_password %>
         </p>
       </fieldset>
+      <fieldset>
+        <legend><%=t :Redis_services %></legend>
+
+        <p>
+          <%= f.label :redis_server, t(:Redis_server) %><br />
+          <%= f.text_field :redis_server %>
+        </p>
+        <p>
+          <%= f.label :redis_port, t(:Redis_port) %><br />
+          <%= f.text_field :redis_port %>
+        </p>
+        <p>
+          <%= f.label :redis_db, t(:Redis_db) %><br />
+          <%= f.text_field :redis_db %>
+        </p>
+      </fieldset>
+
 
 
       <p><%= f.submit t( wisp.new_record? ? :Create : :Update ) %></p>
