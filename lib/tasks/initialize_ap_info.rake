@@ -1,8 +1,8 @@
 namespace :redis do
   desc "Initialize redis database with captive page and access points info."
   task :load_all_ap_info => :environment do
-    redis_s=Redis.new(:host => "test4.inroma.roma.it", :port => 6379, :db => 0)
     wisp = Wisp.find_by_id(ENV['wisp'])
+    redis_s=Redis.new(:host => wisp.redis_server, :port => wisp.redis_port, :db => wisp.redis_db )
     wisp.access_points.each do |ap| 
        macaddress=ap.mac_address
        name=ap.name
@@ -25,7 +25,7 @@ namespace :redis do
           #puts infocert.id
 	  distinguished_name=X509Certificate.find(:first,:conditions => [ "certifiable_id = ?", cert_id]).dn
           commonname=distinguished_name.split("CN=")[1]	  
-          redis_s.mapped_hmset("access_points:"+commonname, {"NAME" => name, "MACADDRESS"=> macaddress, "URL" => url})
+          redis_s.mapped_hmset("access_points:"+commonname, {"NAME" => name, "MACADDRESS"=> macaddress, "URL" => url, "WISP" => wisp.name})
           rescue Exception => e
 		puts "Problem with Access Points "+ap.id.to_s
                 puts name+" "+macaddress+" "+url+" "+commonname
