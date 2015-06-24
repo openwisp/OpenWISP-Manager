@@ -303,7 +303,7 @@ class AccessPointsController < ApplicationController
 
     worker = MiddleMan.worker(:configuration_worker)
     worker.async_create_access_points_configuration(:arg => { :access_point_ids => access_points.map{ |ap| ap.id } })
-    worker.async_update_redis_ap_info(:arg => { :access_point_ids => access_points.map{ |ap| ap.id }, :method =>"insert" })
+    worker.async_update_redis_ap_info(:arg => { :access_point_ids => access_points.map{ |ap| ap.id }, :method =>"insert", :wisp_id => @wisp.id })
 
     redirect_to wisp_access_points_url(@wisp)
   end

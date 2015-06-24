@@ -4,7 +4,7 @@ namespace :redis do
     wisp = Wisp.find_by_id(ENV['wisp'])
     redis_s=Redis.new(:host => wisp.redis_server, :port => wisp.redis_port, :db => wisp.redis_db )
     wisp.access_points.each do |ap| 
-       macaddress=ap.mac_address
+       macaddress=ap.mac_address.upcase
        name=ap.name
        group=ap.access_point_group_id
        gr=AccessPointGroup.find_by_id(group) 

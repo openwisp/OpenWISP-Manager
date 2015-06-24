@@ -115,7 +115,7 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
     redis_s=Redis.new(:host => wisp.redis_server, :port => wisp.redis_port, :db => wisp.redis_db)
 
     allap.each do | ap |
-       macaddress=ap.mac_address
+       macaddress=ap.mac_address.upcase
        name=ap.name
        l2vpn_cert=ap.l2vpn_clients
        l2vpn_cert.each do |infocert|
@@ -142,13 +142,13 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
     
     options[:access_point_ids] || raise("BUG: missing :access_point_ids arg")
     options[:method] || raise("BUG: missing :method")
-
-    wisp=Wisp.find(:access_point_ids[0].wisp_id)
+    options[:wisp_id] || raise("BUG: missing :wisp_id")
+    wisp=Wisp.find(options[:wisp_id])
     redis_s=Redis.new(:host => wisp.redis_server, :port => wisp.redis_port, :db => wisp.redis_db)
 
     options[:access_point_ids].each do |ap_x| 
        ap=AccessPoint.find(ap_x)
-       macaddress=ap.mac_address
+       macaddress=ap.mac_address.upcase
        name=ap.name
        l2vpn_cert=ap.l2vpn_clients
        l2vpn_cert.each do |infocert|
@@ -168,4 +168,34 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
        end
     end
   end
+
+  def clean_up_redis
+      wisp_a=Wisp.all
+      wisp_a.each do |wisp|
+	begin 
+         redis_s=Redis.new(:host => wisp.redis_server, :port => wisp.redis_port, :db => wisp.redis_db)
+         rediskey=redis_s.keys()
+         rediskey.each do |rk|
+            cert=rk.split(":")[1]
+            cert_like="%"+cert+"%"
+	    puts "LOOPING keys access_points:"+cert
+	    begin 
+               distinguished_name=X509Certificate.find(:first, :conditions => ["dn like ? ", cert_like]).dn
+               commonname=distinguished_name.split("CN=")[1]
+               if commonname == cert 
+	          puts commonname+" FOUND"
+               else
+	          puts "access_points:"+cert+" KEY TO BE DELETED"
+	       end
+            rescue Exception => e
+               puts "Problem, exception "+e.to_s
+               next
+            end
+	 end
+	 rescue Exception => e
+	   puts "Problem, exception "+e.to_s
+	   next
+         end
+      end
+    end
 end

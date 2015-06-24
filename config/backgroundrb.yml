@@ -2,3 +2,7 @@
   :ip: 0.0.0.0
   :port: 11006
 
+:schedules:
+ :configuration_worker:
+  :clean_up_redis:
+   :trigger_args: 0 */5  *  * * *

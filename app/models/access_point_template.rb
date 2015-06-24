@@ -57,11 +57,10 @@ class AccessPointTemplate < ActiveRecord::Base
   end
   
   def remove_from_redis_info
-    allap=AccessPoint.all(:conditions => [ "access_point_template_id ?", self.id])
-    wisp=Wisp.find(allap[0].wisp_id)
+    allap=AccessPoint.all(:conditions, [ "access_point_template_id ?", self.id])
     redis_s=Redis.new(:host => wisp.redis_server, :port => wisp.redis_port, :db => wisp.redis_db)
     allap.each do |ap|
-      l2vpn_cert=self.l2vpn_clients
+      l2vpn_cert=ap.l2vpn_clients
       l2vpn_cert.each do |infocert|
          begin
            cert_id=infocert.id
@@ -75,6 +74,4 @@ class AccessPointTemplate < ActiveRecord::Base
       end
     end
   end
-  # Class methods
-
 end
