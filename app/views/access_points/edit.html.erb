@@ -54,12 +54,12 @@
             </p>
             <p>
               <%= f.label t(:Vendor)  %>
-              <%= select(:access_point, :vendor, options_for_select(AccessPoint.VENDORS)) %>
+              <%= select(:access_point, :vendor, options_for_select(AccessPoint.VENDORS, @access_point.vendor)) %>
               <br>
             </p>
             <p>
               <%= f.label t(:Model)  %>
-              <%= select(:access_point, :model, options_for_select(AccessPoint.MODELS)) %>
+              <%= select(:access_point, :model, options_for_select(AccessPoint.MODELS, @access_point.model)) %>
               <br>
             </p>
             <p>
