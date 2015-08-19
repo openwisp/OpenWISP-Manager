@@ -186,6 +186,7 @@ class ConfigurationWorker < BackgrounDRb::MetaWorker
 	          puts commonname+" FOUND"
                else
 	          puts "access_points:"+cert+" KEY TO BE DELETED"
+	          redis.del("access_points:"+cert)
 	       end
             rescue Exception => e
                puts "Problem, exception "+e.to_s
