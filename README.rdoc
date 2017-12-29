@@ -1,13 +1,14 @@
 = OpenWISP Manager
 
-== About to be superseded by OpenWISP 2
+== Superseded by OpenWISP 2
 
-This project is about to be superseded by the {OpenWISP2 Controller}[https://github.com/openwisp/ansible-openwisp2].
+This project is deprecated in favour of the {OpenWISP2 Controller}[https://github.com/openwisp/ansible-openwisp2].
 
 <b>The development of OpenWISP Manager is discontinued and its use is discouraged</b>. If you are performing a new installation of OpenWISP, <b>we encourage you to try OpenWISP2</b>.
 
 For more information please read the following resources:
 
+* {OpenWISP 2: the modular configuration manager for OpenWRT - OpenWrt Summit 2017}[http://static.nemesisdesign.net/openwisp2-openwrt-summit-2017]
 * {netjsonconfig: convert NetJSON to OpenWRT UCI}[http://nemesisdesign.net/blog/coding/netjsonconfig-convert-netjson-to-openwrt-uci/]
 * {Introduction to OpenWISP2 (screencast)}[http://nemesisdesign.net/blog/coding/introduction-to-openwisp2/]
 * {How to install OpenWISP}[http://nemesisdesign.net/blog/coding/how-to-install-openwisp/]
