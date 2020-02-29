@@ -32,10 +32,12 @@ GEM
     capistrano_colors (0.5.5)
     chronic (0.4.4)
     columnize (0.3.3)
+    concurrent-ruby (1.1.6)
     exception_notification (2.3.3.0)
     geokit (1.6.0)
     highline (1.6.2)
-    i18n (0.4.2)
+    i18n (1.8.2)
+      concurrent-ruby (~> 1.0)
     libarchive (0.1.2)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
@@ -79,7 +81,7 @@ DEPENDENCIES
   chronic (>= 0.2.3)
   exception_notification (~> 2.3.3.0)
   geokit (>= 1.5.0)
-  i18n (~> 0.4.1)
+  i18n (~> 1.8.2)
   libarchive (>= 0.1.2)
   mysql
   packet (= 0.1.15)!
