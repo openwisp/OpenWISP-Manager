@@ -18,7 +18,7 @@ gem 'somehow_has_relation', '>= 0.0.7'
 gem 'chronic', '>= 0.2.3'
 gem 'packet', '0.1.15', :git => 'git://github.com/gnufied/packet.git'
 
-gem 'i18n', '~> 0.4.1'
+gem 'i18n', '~> 1.8.2'
 
 gem 'capistrano', '~> 2.9.0', :require => false
 gem 'capistrano-ext', '~> 1.2.1', :require => false
